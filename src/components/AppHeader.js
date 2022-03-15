@@ -3,12 +3,7 @@ import React from 'react'
 const AppHeader = () => {
     return (
         <div>
-            <div className="preloader flex-column justify-content-center align-items-center">
-                <span>Loanding...</span>
-            </div>
-            {/* Navbar */}
             <nav className="main-header navbar navbar-expand navbar-white navbar-light">
-                {/* Left navbar links */}
                 <ul className="navbar-nav">
                     <li className="nav-item">
                         <a className="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars" /></a>
@@ -20,9 +15,7 @@ const AppHeader = () => {
                         <a href="#" className="nav-link">Liên hệ</a>
                     </li>
                 </ul>
-                {/* Right navbar links */}
                 <ul className="navbar-nav ml-auto">
-                    {/* Navbar Search */}
                     <li className="nav-item">
                         <a className="nav-link" data-widget="navbar-search" href="#" role="button">
                             <i className="fas fa-search" />
@@ -43,7 +36,6 @@ const AppHeader = () => {
                             </form>
                         </div>
                     </li>
-                    {/* Messages Dropdown Menu */}
                     <li className="nav-item dropdown">
                         <a className="nav-link" data-toggle="dropdown" href="#">
                             <i className="far fa-comments" />
@@ -63,11 +55,9 @@ const AppHeader = () => {
                                         <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
                                     </div>
                                 </div>
-                                {/* Message End */}
                             </a>
                             <div className="dropdown-divider" />
                             <a href="#" className="dropdown-item">
-                                {/* Message Start */}
                                 <div className="media">
                                     <img src="dist/img/user8-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3" />
                                     <div className="media-body">
@@ -79,11 +69,9 @@ const AppHeader = () => {
                                         <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
                                     </div>
                                 </div>
-                                {/* Message End */}
                             </a>
                             <div className="dropdown-divider" />
                             <a href="#" className="dropdown-item">
-                                {/* Message Start */}
                                 <div className="media">
                                     <img src="dist/img/user3-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3" />
                                     <div className="media-body">
