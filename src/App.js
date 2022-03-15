@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { HashRouter, Redirect, Route, Switch } from 'react-router-dom'
 
+const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
+const Login = React.lazy(() => import('./views/pages/Login'))
+const Register = React.lazy(() => import('./views/pages/Register'))
+const Page404 = React.lazy(() => import('./views/pages/Page404'))
+
+//  fallback={loading}
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <HashRouter>
+        <React.Suspense fallback={<h1>Loading...</h1>}>
+          <Switch>
+            <Route exact path="/login" name="Login Page" render={(props) => <Login {...props} />} />
+            <Route exact path="/register" name="Register Page" render={(props) => <Register {...props} />} />
+            <Route exact path="/404" name="Page 404" render={(props) => <Page404 {...props} />} />
+            <Route path="/" name="Home" render={(props) => <DefaultLayout {...props} />} />
+          </Switch>
+        </React.Suspense>
+      </HashRouter>
+    </>
   );
 }
 
