@@ -23,7 +23,7 @@ const Warehouse = React.lazy(() => import('./views/warehouse/Warehouse'))
 // const ShelfWarehouse = React.lazy(() => import('./views/warehouses/Shelfwarehouse'))
 
 // //Categories
-// const Categories = React.lazy(() => import('./views/categories/Categories'))
+const Category = React.lazy(() => import('./views/category/Category'))
 // const EditCategories = React.lazy(() => import('./views/categories/Edit'))
 // const AddCategories = React.lazy(() => import('./views/categories/Add'))
 
@@ -70,7 +70,7 @@ const routes = [
 //   { path: '/warehouses-edit/:id', name: 'Chỉnh sửa kho', component: EditWarehouses },
 //   { path: '/warehouses-shelf/:id', name: 'kệ trong kho', component: ShelfWarehouse },
 
-//   { path: '/categories', name: 'Category', component: Categories },
+  { path: '/category', name: 'Category', component: Category },
 //   { path: '/categories-add', name: 'Tạo category', component: AddCategories },
 //   { path: '/categories-edit/:id', name: 'Chỉnh sửa category', component: EditCategories },
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-const Warehouse = () => {
+const Category = () => {
     const script = () => {
         const compile = document.createElement("script")
         compile.src = `js/DataTable.js`
@@ -11,14 +11,14 @@ const Warehouse = () => {
     useEffect(() => {
         script()
     }, [])
-
     return (
         <div className="content-wrapper">
+            {/* Content Header (Page header) */}
             <section className="content-header">
                 <div className="container-fluid">
                     <div className="row mb-2">
                         <div className="col-sm-6">
-                            <h1>DataTables</h1>
+                            <h1>Loại vật tư</h1>
                         </div>
                         <div className="col-sm-6">
                             <ol className="breadcrumb float-sm-right">
@@ -27,7 +27,7 @@ const Warehouse = () => {
                             </ol>
                         </div>
                     </div>
-                </div>
+                </div>{/* /.container-fluid */}
             </section>
             <section className="content">
                 <div className="container-fluid">
@@ -471,7 +471,6 @@ const Warehouse = () => {
                                 </div>
                                 {/* /.card-body */}
                             </div>
-                            {/* /.card */}
                         </div>
                         {/* /.col */}
                     </div>
@@ -480,7 +479,9 @@ const Warehouse = () => {
                 {/* /.container-fluid */}
             </section>
         </div>
+
+
     )
 }
 
-export default Warehouse
+export default Category
