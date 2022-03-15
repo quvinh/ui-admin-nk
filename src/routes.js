@@ -14,7 +14,7 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 // const HistoryTransfer = React.lazy(() => import('./views/history/HistoryTransfer'))
 // const HistoryExport = React.lazy(() => import('./views/history/HistoryExport'))
 
-// const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
+const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
 
 // //Warehouse
 const Warehouse = React.lazy(() => import('./views/warehouse/Warehouse'))
@@ -63,7 +63,7 @@ const routes = [
 //   { path: '/history_transfer', name: 'Kiểm kê tồn kho', component: HistoryTransfer },
 //   { path: '/history_export', name: 'Kiểm kê tồn kho', component: HistoryExport },
 //   { path: '/reports', name: 'Báo cáo', component: Reports },
-//   { path: '/transfer', name: 'Điều phối kho', component: Transfer },
+  { path: '/transfer', name: 'Điều phối kho', component: Transfer },
 
   { path: '/warehouse', name: 'Kho', component: Warehouse },
 //   { path: '/warehouses-add', name: 'Tạo kho', component: AddWarehouses },
