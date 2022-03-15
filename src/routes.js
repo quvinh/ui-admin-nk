@@ -6,7 +6,7 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
 // const Status = React.lazy(() => import('./views/status/Status'))
 
-// const Imports = React.lazy(() => import('./views/imports/Imports'))
+const Import = React.lazy(() => import('./views/import/Import'))
 // const Exports = React.lazy(() => import('./views/exports/Exports'))
 // const Reports = React.lazy(() => import('./views/reports/Reports'))
 
@@ -58,7 +58,7 @@ const routes = [
 //   { path: '/charts', name: 'Charts', component: Charts },
 //   { path: '/exports', name: 'Thông tin xuất kho', component: Exports },
 //   { path: '/status', name: 'Duyệt phiếu', component: Status },
-//   { path: '/imports', name: 'Thông tin nhập kho', component: Imports },
+  { path: '/import', name: 'Nhập kho', component: Import },
 //   { path: '/history_import', name: 'Kiểm kê tồn kho', component: HistoryImport },
 //   { path: '/history_transfer', name: 'Kiểm kê tồn kho', component: HistoryTransfer },
 //   { path: '/history_export', name: 'Kiểm kê tồn kho', component: HistoryExport },
