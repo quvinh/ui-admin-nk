@@ -14,6 +14,9 @@ const AppHeader = () => {
                     <li className="nav-item d-none d-sm-inline-block">
                         <a href="#" className="nav-link">Liên hệ</a>
                     </li>
+                    <li className="nav-item d-none d-sm-inline-block">
+                        <a href="#/export" className="nav-link">Xuất kho</a>
+                    </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
