@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 $(function () {
+    $.fn.dataTable.ext.errMode = 'none';
     $("#example1").DataTable({
         "responsive": true, "lengthChange": false, "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
@@ -13,4 +14,5 @@ $(function () {
         "autoWidth": false,
         "responsive": true,
     });
+
 });

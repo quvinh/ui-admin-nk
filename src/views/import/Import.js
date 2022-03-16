@@ -662,9 +662,6 @@ const Import = () => {
                                         })}
                                     </div>
                                 </div>
-                                <div className="col-md-6">
-                                    
-                                </div>
                             </div>
                         </div>
                         <div className="card-footer">
