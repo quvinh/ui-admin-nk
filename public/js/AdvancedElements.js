@@ -1,5 +1,8 @@
 /* eslint-disable no-undef */
 $(function () {
+    $("#unit").on("change", function(e) {
+        console.log($("#unit").val())
+    })
     //Initialize Select2 Elements
     $('.select2').select2()
 
