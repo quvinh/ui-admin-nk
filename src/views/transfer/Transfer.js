@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { getData } from '../../components/utils/Api'
+import { getData, postData } from '../../components/utils/Api'
 import { getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 import Validator from './Validation';
 import { Autocomplete, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Paper } from '@mui/material'
@@ -48,6 +48,7 @@ const Transfer = () => {
     const [isFromWarehouseSelected, setIsFromWarehouseSelected] = useState(false)
     const [isToWarehouseSelected, setIsToWarehouseSelected] = useState(false)
     const [showWarehouse, setShowWarehouse] = useState(false)
+    const [isSave, setIsSave] = React.useState(false)
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -224,6 +225,7 @@ const Transfer = () => {
     const reset = () => {
         setNull()
         setDataTable([])
+        setIsSave(false)
     }
 
     const onRemoveRow = (e, index) => {
@@ -314,6 +316,21 @@ const Transfer = () => {
         textAlign: 'center',
         color: theme.palette.text.secondary,
     }));
+
+    const handleSave = (e) => {
+        if (dataTable.length > 0) {
+            dataTable.map((item, index) => {
+                Promise.all([postData('http://127.0.0.1:8000/api/admin/transfer/store?token=' + getToken(), item)])
+                    .then(function (res) {
+                        console.log("SAVED")
+                        setIsSave(true)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            })
+        }
+    }
 
     const getIdWarehouseRole = () => {
         var nameRole = ''
@@ -452,10 +469,10 @@ const Transfer = () => {
                                             </LocalizationProvider>
                                         </div>
                                         <div className="col-md-1">
-                                            <Button size='sm' variant="outlined"  onClick={(e) => setNull()}>Làm mới</Button>
+                                            <Button size='sm' variant="outlined" onClick={(e) => setNull()}>Làm mới</Button>
                                         </div>
                                         <div className="col-md-1">
-                                            <Button size='sm' variant="outlined"  onClick={(e) => reset()}>Reset</Button>
+                                            <Button size='sm' variant="outlined" onClick={(e) => reset()}>Reset</Button>
                                         </div>
                                     </div>
                                     <br />
@@ -580,6 +597,22 @@ const Transfer = () => {
                             </div>
                             <div className='card'>
                                 <div className='card-body'>
+                                    <div className="row">
+                                        <div className="col" style={{ textAlign: "end" }}>
+                                            {
+                                                (isSave) ? (
+                                                    <button class="btn btn-sm btn-success" disabled>
+                                                        <i class="fas fa-edit"></i> Lưu thành công
+                                                    </button>
+                                                ) : (
+                                                    <button class="btn btn-sm btn-primary" onClick={handleSave}>
+                                                        <i class="fas fa-edit"></i> Lưu phiếu
+                                                    </button>
+                                                )
+                                            }
+                                        </div>
+                                    </div>
+                                    <br/>
                                     <table id="example1" className="table table-bordered table-striped">
                                         <thead>
                                             <tr>
@@ -613,7 +646,7 @@ const Transfer = () => {
                                                                 onRemoveRow(e, index)
                                                                 setKD(parseInt(kd) + parseInt(item.amount))
                                                             }}>
-                                                                 X
+                                                                X
                                                             </button>
                                                         </td>
                                                     </tr>
