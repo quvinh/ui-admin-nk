@@ -92,7 +92,7 @@ const Export = (props) => {
         console.log(dataItem)
         var checked = false
         dataItem.map((item) => {
-            if (item.name_item === newValue) {
+            if (item.itemname === newValue) {
                 setItemID(item.item_id)
                 setBatchCode(item.batch_code)
                 setCategory(item.category_id)
@@ -102,7 +102,7 @@ const Export = (props) => {
                 setUnit(item.unit)
                 setWarehouse(item.warehouse_id)
                 setPrice(item.price)
-                setName(item.name_item)
+                setName(item.itemname)
                 setNameWarehouse(item.name_warehouse)
                 setAmountCurrent(item.amount)
                 getDataShelf(item.warehouse_id)
@@ -359,7 +359,7 @@ const Export = (props) => {
                                         id="name_item"
                                         freeSolo
                                         size='small'
-                                        options={dataItem.map((option) => option.name_item)}
+                                        options={dataItem.map((option) => option.itemname)}
                                         // value={name}
                                         // onChange={(e, newValue) => onChangeName(e, newValue)}
                                         inputValue={name}
@@ -369,6 +369,11 @@ const Export = (props) => {
                                         renderInput={(params) => <TextField {...params} label="Tên vật tư" />}
                                         disableClearable
                                     />
+                                    {validator.message("name", name, "required", {
+                                        messages: {
+                                            required: "(*) Nhập tên vật tư"
+                                        }
+                                    })}
                                 </div>
                                 <div className="col-md-5">
                                     <Box>
@@ -407,6 +412,11 @@ const Export = (props) => {
                                             setAmount(parseInt(e.target.value) > kd ? kd : parseInt(e.target.value))
                                         }}
                                     />
+                                    {validator.message("amount", amount, "required", {
+                                        messages: {
+                                            required: "(*) Nhập số lượng"
+                                        }
+                                    })}
                                 </div>
                                 <div className="col-md-2">
                                     <TextField
