@@ -1,14 +1,17 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
-import { getData } from '../../components/utils/Api'
+import { getData, postData } from '../../components/utils/Api'
 import { getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
-import { Autocomplete, TextField, Box, InputLabel, MenuItem, FormControl, Select } from '@mui/material'
+import { Autocomplete, TextField, Box, InputLabel, MenuItem, FormControl, Select, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Slide } from '@mui/material'
 import Validator from './Validation'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import DateTimePicker from '@mui/lab/DateTimePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import CurrencyFormat from 'react-currency-format'
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const Import = () => {
     const [item_id, setItemID] = useState('')
@@ -46,6 +49,8 @@ const Import = () => {
     const [isUnitSelected, setIsUnitSelected] = useState(false)
     const [isCategorySelected, setIsCategorySelected] = useState(false)
 
+    const [alertSuccess, setAlertSuccess] = useState(false)
+
     const setNull = () => {
         setName('')
         setItemID('')
@@ -73,17 +78,6 @@ const Import = () => {
         setDataTable([])
     }
 
-    const optionUnit = [
-        { value: "Chiếc", label: "Chiếc" },
-        { value: "Bộ", label: "Bộ" },
-        { value: "Cái", label: "Cái" },
-        { value: "Can", label: "Can" },
-        { value: "Đôi", label: "Đôi" },
-        { value: "Lon", label: "Lon" },
-        { value: "Ông", label: "Ông" },
-        { value: "Lô", label: "Lô" },
-    ]
-
     const onChangeName = (e, newValue) => {
         setName(newValue)//)
         console.log("1: ", newValue)
@@ -92,7 +86,6 @@ const Import = () => {
 
         dataItemName.map((item) => {
             if (item.name === newValue) {
-                console.log("2.1: ", newValue)
                 setNull()
                 if (getRoleNames() !== 'admin') {
                     getDataShelf(getDataWarehouseID()[0])
@@ -110,7 +103,7 @@ const Import = () => {
 
         dataItem.map((item) => {
             if (item.name_item === newValue) {
-                console.log("2.2: ", newValue)
+                console.log("catee: ", item.category_id)
                 getDataShelf(item.warehouse_id)
                 setItemID(item.item_id)
                 setBatchCode(item.batch_code)
@@ -123,19 +116,20 @@ const Import = () => {
                 setPrice(item.price)
                 setSuppliers(item.supplier_id)
                 setName(item.name_item)
-                setTotalPrice((item.amount) * (item.price))
+                setTotalPrice(parseInt(item.amount) * parseInt(item.price))
                 setIsItemSelected(true)
                 setIsWarehouseSelected(true)
                 // console.log(item.name_item)
             }
         })
+        
     }
-
-    const onChangeWarehouse = (e, value) => {
+console.log(category_id)
+    const onChangeWarehouse = (e, newValue, value) => {
         if (value) {
-            let index = e.nativeEvent.target.selectedIndex;
+            // let index = e.nativeEvent.target.selectedIndex;
             setWarehouse(e.target.value)
-            setNameWarehouse(e.nativeEvent.target[index].text)
+            setNameWarehouse(newValue.props.children)
             setIsWarehouseSelected(true)
             setWarehouse(e.target.value)
             getDataShelf(e.target.value)
@@ -148,7 +142,7 @@ const Import = () => {
     }
     const onChangeCategory = (e, value) => {
         if (value) {
-            let index = e.nativeEvent.target.selectedIndex;
+            // let index = e.nativeEvent.target.selectedIndex;
             setCategory(e.target.value)
             setIsCategorySelected(true)
             console.log('category', e.target.value)
@@ -244,14 +238,40 @@ const Import = () => {
         } else {
             showValidationMessage(true)
         }
+        script()
     }
 
     const onRemoveRow = (e, index) => {
         var array = index > 0 ? [...dataTable.slice(0, index), ...dataTable.slice(index + 1, dataTable.length)] : [...dataTable.slice(1, dataTable.length)]
         setDataTable([...array])
     }
-    // console.log(dataItemName)
-    // console.log(name)
+
+    const handleSave = () => {
+        if (dataTable.length > 0) {
+            var checked = false
+            dataTable.map((item, index) => {
+                console.log(item)
+                Promise.all([postData('http://127.0.0.1:8000/api/admin/import/store?token=' + getToken(), item)])
+                    .then(function (res) {
+                        console.log("SAVED")
+                        checked = true
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        checked = false
+                    })
+            })
+            checked && setAlertSuccess(true); reset()
+        }
+    }
+
+    const script = () => {
+        const compile = document.createElement("script")
+        compile.src = `js/DataTable.js`
+        compile.async = true
+        document.body.appendChild(compile)
+    }
+
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
@@ -337,17 +357,24 @@ const Import = () => {
                                     />
                                 </div>
                                 <div className="col-md-6">
-                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                        <DateTimePicker
-                                            renderInput={(props) => <TextField size='small' {...props} />}
-                                            label="Ngày nhập"
-                                            value={date}
-                                            inputFormat={"dd/MM/yyyy hh:mm"}
-                                            onChange={(newValue) => {
-                                                setDate(newValue)
-                                            }}
-                                        />
-                                    </LocalizationProvider>
+                                    <div className="row">
+                                        <div className="col-md-8">
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                <DateTimePicker
+                                                    renderInput={(props) => <TextField size='small' {...props} />}
+                                                    label="Ngày nhập kho"
+                                                    value={date}
+                                                    inputFormat={"dd/MM/yyyy hh:mm"}
+                                                    onChange={(newValue) => {
+                                                        setDate(newValue)
+                                                    }}
+                                                />
+                                            </LocalizationProvider>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <button type="button" class="btn btn-block btn-secondary" onClick={(e) => setNull()}>Làm mới</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div className="row">
@@ -356,9 +383,9 @@ const Import = () => {
                                         fullWidth
                                         label="Mã vật tư"
                                         size="small"
-                                        value={subAmount}
+                                        value={item_id}
                                         onChange={(e) => {
-                                            setSubAmount(e.target.value)
+                                            setItemID(e.target.value)
                                         }}
                                     />
                                 </div>
@@ -445,9 +472,9 @@ const Import = () => {
                                         fullWidth
                                         label="Mã sản xuất"
                                         size="small"
-                                        value={subAmount}
+                                        value={batch_code}
                                         onChange={(e) => {
-                                            setSubAmount(e.target.value)
+                                            setBatchCode(e.target.value)
                                         }}
                                     />
                                 </div>
@@ -456,6 +483,7 @@ const Import = () => {
                                         <FormControl fullWidth>
                                             <InputLabel style={{ fontSize: 12 }}>Loại vật tư</InputLabel>
                                             <Select
+                                                disabled={isItemSelected}
                                                 label="Loại vật tư"
                                                 size="small"
                                                 value={category_id}
@@ -482,7 +510,7 @@ const Import = () => {
                             </div>
                             <div className="row" style={{ marginBottom: 10 }}>
                                 <div className="col-md-6">
-                                    <TextField
+                                    {/* <TextField
                                         fullWidth
                                         type="number"
                                         label="Số lượng"
@@ -494,7 +522,12 @@ const Import = () => {
                                             setAmount(e.target.value)
                                             setTotalPrice(e.target.value * amount * subAmount)
                                         }}
-                                    />
+                                    /> */}
+                                    <CurrencyFormat className="form-control" type="text" placeholder="Số lượng" name="amount" value={amount} thousandSeparator={true} prefix={'Số lượng: '} onValueChange={(values) => {
+                                        const { formattedValue, value } = values
+                                        setAmount(value)
+                                        setTotalPrice(value * price * subAmount)
+                                    }} />
                                     <div style={{ color: "red", fontStyle: "italic" }}>
                                         {validator.message("amount", amount, "required|numberic|min:1,num", {
                                             messages: {
@@ -532,7 +565,7 @@ const Import = () => {
                             </div>
                             <div className="row" style={{ marginBottom: 10 }}>
                                 <div className="col-md-6">
-                                    <TextField
+                                    {/* <TextField
                                         fullWidth
                                         type="number"
                                         label="Đơn giá"
@@ -541,10 +574,15 @@ const Import = () => {
                                         inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', min: 0 }}
                                         value={price}
                                         onChange={(e) => {
-                                            setAmount(e.target.value)
+                                            setPrice(e.target.value)
                                             setTotalPrice(e.target.value * amount * subAmount)
                                         }}
-                                    />
+                                    /> */}
+                                    <CurrencyFormat className="form-control" type="text" placeholder="Đơn giá" name="price" value={price} thousandSeparator={true} prefix={'Đơn giá:VND '} onValueChange={(values) => {
+                                        const { formattedValue, value } = values
+                                        setPrice(value)
+                                        setTotalPrice(value * amount * subAmount)
+                                    }} />
                                     <div style={{ color: "red", fontStyle: "italic" }}>
                                         {validator.message("price", price, "required|numberic|min:1,num", {
                                             messages: {
@@ -561,11 +599,11 @@ const Import = () => {
                                             <Select
                                                 disabled={showWarehouse}
                                                 size="small"
-                                                label="Nhà cung cấp"
+                                                label="Nhà kho"
                                                 name="warehouse_id"
                                                 value={warehouse_id}
-                                                onChange={(e) => {
-                                                    (parseInt(e.target.value)) ? onChangeWarehouse(e, true) : onChangeWarehouse(e, false)
+                                                onChange={(e, newValue) => {
+                                                    (parseInt(e.target.value)) ? onChangeWarehouse(e, newValue, true) : onChangeWarehouse(e, newValue, false)
                                                 }}
                                             >
                                                 {dataWarehouse.map((item, index) => (
@@ -581,27 +619,22 @@ const Import = () => {
                                             }
                                         })}
                                     </div>
-                                    <div style={{ color: "red", fontStyle: "italic" }}>
-                                        {validator.message("supplier_id", supplier_id, "required", {
-                                            messages: {
-                                                required: "(*) Chọn nhà cung cấp",
-                                            }
-                                        })}
-                                    </div>
                                 </div>
                             </div>
                             <div className="row" style={{ marginBottom: 10 }}>
                                 <div className="col-md-6">
-                                    <TextField
+                                    {/* <TextField
                                         fullWidth
+                                        aria-readonly
                                         label="Thành tiền"
                                         size="small"
-                                        disabled value={totalPrice}
-                                    />
+                                        value={totalPrice}
+                                    /> */}
+                                    <CurrencyFormat className="form-control" type="text" placeholder="Thành tiền" value={totalPrice} thousandSeparator={true} prefix={'Thành tiền:VND '} />
                                 </div>
                                 <div className="col-md-6">
                                     {
-                                        isWarehouseSelected && (
+                                        isWarehouseSelected ? (
                                             <>
                                                 <Box>
                                                     <FormControl fullWidth>
@@ -627,51 +660,133 @@ const Import = () => {
                                                     })}
                                                 </div>
                                             </>
+                                        ) : (
+                                            <Box>
+                                                <FormControl fullWidth>
+                                                    <InputLabel style={{ fontSize: 12 }}>Giá/kệ</InputLabel>
+                                                    <Select
+                                                        disabled
+                                                        size="small"
+                                                        label="Nhà cung cấp"
+                                                        name="shelf_id"
+                                                        value={shelf_id}
+                                                        onChange={(e) => setShelf(e.target.value)}
+                                                    >
+                                                    </Select>
+                                                </FormControl>
+                                            </Box>
                                         )
                                     }
-                                    <div style={{ color: "red", fontStyle: "italic" }}>
-                                        {validator.message("supplier_id", supplier_id, "required", {
-                                            messages: {
-                                                required: "(*) Chọn nhà cung cấp",
-                                            }
-                                        })}
-                                    </div>
                                 </div>
                             </div>
                             <div className="row" style={{ marginBottom: 10 }}>
                                 <div className="col-md-6">
                                     <TextField
                                         fullWidth
-                                        type="number"
-                                        label="Số lượng"
-                                        name="amount"
+                                        aria-readonly
+                                        label="Người tạo"
+                                        name='created_by'
+                                        value={userProfile}
                                         size="small"
-                                        inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', min: 0 }}
-                                        value={amount}
-                                        onChange={(e) => {
-                                            setAmount(e.target.value)
-                                            setTotalPrice(e.target.value * amount * subAmount)
-                                        }}
                                     />
-                                    <div style={{ color: "red", fontStyle: "italic" }}>
-                                        {validator.message("amount", amount, "required|numberic|min:1,num", {
-                                            messages: {
-                                                required: "(*) Nhập số lượng",
-                                                min: "(*) Số lượng nhập lớn hơn 0"
-                                            }
-                                        })}
-                                    </div>
                                 </div>
                                 <div className="col-md-6">
-                                    
+                                    <TextField
+                                        fullWidth
+                                        aria-readonly
+                                        label="Ghi chú"
+                                        value={note}
+                                        size="small"
+                                        onChange={(e) => setNote(e.target.value)}
+                                    />
                                 </div>
                             </div>
                         </div>
-                        <div className="card-footer">
+                        <div className="card-footer" style={{ textAlign: "end" }}>
+                            <button class="btn btn-sm btn-primary" onClick={(e) => onAddTable(e)}>
+                                <i class="fas fa-edit"></i> Thêm vào DS
+                            </button>
                         </div>
+                    </div>
+                    <div className="card">
+                        <div className="card-header">
+                            <div className="row">
+                                <div className="col" style={{ textAlign: "start" }}>
+                                    <h3 className="card-title">Danh sách nhập</h3>
+                                </div>
+                                <div className="col" style={{ textAlign: "end" }}>
+                                    <button className="btn btn-sm btn-success" onClick={handleSave}>
+                                        <i className="fas fa-save"></i> Lưu nhập
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <table id="example1" className="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã vật tư</th>
+                                        <th>Mã sản xuất</th>
+                                        <th>Tên vật tư</th>
+                                        <th>ĐVT</th>
+                                        <th>Số lượng</th>
+                                        <th>Đơn giá</th>
+                                        <th>Tiền hàng</th>
+                                        <th>Kho</th>
+                                        <th>Ghi chú</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        dataTable.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{String(index + 1)}</td>
+                                                <td>{item.item_id}</td>
+                                                <td>{item.batch_code}</td>
+                                                <td>{item.name}</td>
+                                                <td>{item.unit}</td>
+                                                <td>{item.amount}</td>
+                                                <td>{item.price}</td>
+                                                <td>{item.totalPrice}</td>
+                                                <td>{item.nameWarehouse}</td>
+                                                <td>{item.note}</td>
+                                                <td>
+                                                    <button className="btn btn-sm btn-danger" onClick={(e) => {
+                                                        onRemoveRow(e, index)
+                                                    }}>
+                                                        X
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+                            </table>
+                        </div>
+                        {/* /.card-body */}
                     </div>
                 </div>
             </section>
+            <Dialog
+                open={alertSuccess}
+                TransitionComponent={Transition}
+                keepMounted
+                // onClose={handleClose}
+                aria-describedby=""
+            >
+                <DialogTitle></DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Lưu thành công
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }
