@@ -1,4 +1,5 @@
 import React from 'react'
+import { getRoleNames } from './utils/Common'
 
 const AppHeader = () => {
     return (
@@ -89,7 +90,6 @@ const AppHeader = () => {
                             <a href="#" className="dropdown-item dropdown-footer">See All Messages</a>
                         </div>
                     </li>
-                    {/* Notifications Dropdown Menu */}
                     <li className="nav-item dropdown">
                         <a className="nav-link" data-toggle="dropdown" href="#">
                             <i className="far fa-bell" />
@@ -116,14 +116,37 @@ const AppHeader = () => {
                             <a href="#" className="dropdown-item dropdown-footer">See All Notifications</a>
                         </div>
                     </li>
-                    <li className="nav-item">
-                        <a className="nav-link" data-widget="fullscreen" href="#" role="button">
-                            <i className="fas fa-expand-arrows-alt" />
+                    <li className="nav-item dropdown user-menu">
+                        <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">
+                            <img src="../../dist/img/user2-160x160.jpg" className="user-image img-circle elevation-2" alt="User Image" />
+                            <span className="d-none d-md-inline">Alexander Pierce</span>
                         </a>
+                        <ul className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            {/* User image */}
+                            <li className="user-header bg-primary">
+                                <img src="../../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
+                                <p>
+                                    Alexander Pierce - Web Developer
+                                    <small></small>
+                                </p>
+                            </li>
+                            {/* Menu Body */}
+                            <li className="user-body">
+                                <div className="text-center">
+                                    <a>{getRoleNames()}</a>
+                                </div>
+                            </li>
+                            {/* Menu Footer*/}
+                            <li className="user-footer">
+                                <a className="btn btn-default btn-flat">Thông tin</a>
+                                <a className="btn btn-default btn-flat float-right">Đăng xuất</a>
+                            </li>
+                        </ul>
                     </li>
+
                     <li className="nav-item">
-                        <a className="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
-                            <i className="fas fa-th-large" />
+                        <a className="nav-link" data-widget="fullscreen" role="button">
+                            <i className="fas fa-expand-arrows-alt" />
                         </a>
                     </li>
                 </ul>

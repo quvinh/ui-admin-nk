@@ -1,17 +1,15 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
 import { getData, postData } from '../../components/utils/Api'
 import { getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
-import { Autocomplete, TextField, Box, InputLabel, MenuItem, FormControl, Select, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Slide } from '@mui/material'
+import { Autocomplete, TextField, Box, InputLabel, MenuItem, FormControl, Select } from '@mui/material'
 import Validator from './Validation'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import DateTimePicker from '@mui/lab/DateTimePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import CurrencyFormat from 'react-currency-format'
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
+import { useHistory } from 'react-router-dom'
 
 const Import = () => {
     const [item_id, setItemID] = useState('')
@@ -49,7 +47,7 @@ const Import = () => {
     const [isUnitSelected, setIsUnitSelected] = useState(false)
     const [isCategorySelected, setIsCategorySelected] = useState(false)
 
-    const [alertSuccess, setAlertSuccess] = useState(false)
+    const history = useHistory()
 
     const setNull = () => {
         setName('')
@@ -86,6 +84,7 @@ const Import = () => {
 
         dataItemName.map((item) => {
             if (item.name === newValue) {
+                console.log(item)
                 setNull()
                 if (getRoleNames() !== 'admin') {
                     getDataShelf(getDataWarehouseID()[0])
@@ -96,21 +95,20 @@ const Import = () => {
                 setCategory(item.category_id)
                 setUnit(item.unit)
                 setName(item.name)
-                setIsWarehouseSelected(true)
+                setIsWarehouseSelected(false)
                 setIsItemSelected(true)
             }
         })
-
-        dataItem.map((item) => {
+        console.log(dataItem)
+        dataItem && dataItem.map((item) => {
             if (item.name_item === newValue) {
-                console.log("catee: ", item.category_id)
                 getDataShelf(item.warehouse_id)
                 setItemID(item.item_id)
                 setBatchCode(item.batch_code)
-                setCategory(item.category_id)
+                // setCategory(item.category_id)
                 setShelf(item.shelf_id)
                 setAmount(item.amount)
-                setUnit(item.unit)
+                // setUnit(item.unit)
                 setWarehouse(item.warehouse_id)
                 setNameWarehouse(item.name_warehouse)
                 setPrice(item.price)
@@ -122,9 +120,9 @@ const Import = () => {
                 // console.log(item.name_item)
             }
         })
-        
+        setIsUnitSelected(false)
     }
-console.log(category_id)
+    console.log(category_id)
     const onChangeWarehouse = (e, newValue, value) => {
         if (value) {
             // let index = e.nativeEvent.target.selectedIndex;
@@ -254,20 +252,37 @@ console.log(category_id)
                 Promise.all([postData('http://127.0.0.1:8000/api/admin/import/store?token=' + getToken(), item)])
                     .then(function (res) {
                         console.log("SAVED")
-                        checked = true
+                        // alert()
+                        reset()
                     })
                     .catch(err => {
                         console.log(err)
                         checked = false
                     })
             })
-            checked && setAlertSuccess(true); reset()
         }
     }
 
     const script = () => {
         const compile = document.createElement("script")
         compile.src = `js/DataTable.js`
+        compile.async = true
+        document.body.appendChild(compile)
+    }
+
+    const alert = () => {
+        const compile = document.createElement("script")
+        compile.src = $(function () {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            $('.toastrDefaultSuccess').click(function () {
+                toastr.success('Lưu thành công')
+            });
+        })
         compile.async = true
         document.body.appendChild(compile)
     }
@@ -297,7 +312,6 @@ console.log(category_id)
                 setDataShelf(res[4].data)
                 setUserProfile(res[5].data[0].fullname)
                 setDataItemName(res[6].data)
-                console.log(getDataWarehouseID())
                 if (getRoleNames() !== 'admin') {
                     setShowWarehouse(true)
                     setIsWarehouseSelected(true)
@@ -307,7 +321,10 @@ console.log(category_id)
             })
             .catch(error => {
                 console.log(error)
+                history.push("/login")
             })
+
+        alert()
     }, [])
 
     return (
@@ -395,13 +412,18 @@ console.log(category_id)
                                             <div className="form-group">
                                                 <Box>
                                                     <FormControl fullWidth>
-                                                        <InputLabel style={{ fontSize: 12 }}>ĐVT</InputLabel>
+                                                        <InputLabel size="small">ĐVT</InputLabel>
                                                         <Select
                                                             size="small"
                                                             value={unit}
                                                             label="ĐVT"
-                                                            onChange={(e) => {
-                                                                (e.target.value === 'Lô') ? setIsUnitSelected(true) : setIsUnitSelected(false); setItemID(''); setCategory(''); setName(''); setIsItemSelected(false)
+                                                            onChange={(e, newValue) => {
+                                                                (e.target.value === 'Lô') ? setIsUnitSelected(true) : (
+                                                                    setIsUnitSelected(false),
+                                                                    setCategory(''),
+                                                                    setName(''),
+                                                                    setIsItemSelected(false)
+                                                                )
                                                                 setUnit(e.target.value)
                                                             }}
                                                         >
@@ -440,7 +462,7 @@ console.log(category_id)
                                                         <div className="form-group">
                                                             <Box>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel style={{ fontSize: 12 }}>ĐVT</InputLabel>
+                                                                    <InputLabel size="small">ĐVT</InputLabel>
                                                                     <Select
                                                                         size="small"
                                                                         value={subUnit}
@@ -481,12 +503,12 @@ console.log(category_id)
                                 <div className="col-md-6">
                                     <Box>
                                         <FormControl fullWidth>
-                                            <InputLabel style={{ fontSize: 12 }}>Loại vật tư</InputLabel>
+                                            <InputLabel size="small">Loại vật tư</InputLabel>
                                             <Select
                                                 disabled={isItemSelected}
                                                 label="Loại vật tư"
                                                 size="small"
-                                                value={category_id}
+                                                value={category_id > 0 ? parseInt(category_id) : ""}
                                                 onChange={(e) => {
                                                     (parseInt(e.target.value)) ? onChangeCategory(e, true) : onChangeCategory(e, false)
                                                 }}
@@ -523,7 +545,7 @@ console.log(category_id)
                                             setTotalPrice(e.target.value * amount * subAmount)
                                         }}
                                     /> */}
-                                    <CurrencyFormat className="form-control" type="text" placeholder="Số lượng" name="amount" value={amount} thousandSeparator={true} prefix={'Số lượng: '} onValueChange={(values) => {
+                                    <CurrencyFormat className="form-control" placeholder="Số lượng" name="amount" value={String(amount).length < 9 ? amount : 1} thousandSeparator={true} prefix={'Số lượng: '} onValueChange={(values) => {
                                         const { formattedValue, value } = values
                                         setAmount(value)
                                         setTotalPrice(value * price * subAmount)
@@ -540,7 +562,7 @@ console.log(category_id)
                                 <div className="col-md-6">
                                     <Box>
                                         <FormControl fullWidth>
-                                            <InputLabel style={{ fontSize: 12 }}>Nhà cung cấp</InputLabel>
+                                            <InputLabel size="small">Nhà cung cấp</InputLabel>
                                             <Select
                                                 size="small"
                                                 label="Nhà cung cấp"
@@ -578,7 +600,7 @@ console.log(category_id)
                                             setTotalPrice(e.target.value * amount * subAmount)
                                         }}
                                     /> */}
-                                    <CurrencyFormat className="form-control" type="text" placeholder="Đơn giá" name="price" value={price} thousandSeparator={true} prefix={'Đơn giá:VND '} onValueChange={(values) => {
+                                    <CurrencyFormat className="form-control" type="text" placeholder="Đơn giá" name="price" value={String(price).length < 12 ? price : 100000} thousandSeparator={true} prefix={'Đơn giá: '} suffix={' VND '} onValueChange={(values) => {
                                         const { formattedValue, value } = values
                                         setPrice(value)
                                         setTotalPrice(value * amount * subAmount)
@@ -595,7 +617,7 @@ console.log(category_id)
                                 <div className="col-md-6">
                                     <Box>
                                         <FormControl fullWidth>
-                                            <InputLabel style={{ fontSize: 12 }}>Nhà kho</InputLabel>
+                                            <InputLabel size="small">Nhà kho</InputLabel>
                                             <Select
                                                 disabled={showWarehouse}
                                                 size="small"
@@ -630,7 +652,7 @@ console.log(category_id)
                                         size="small"
                                         value={totalPrice}
                                     /> */}
-                                    <CurrencyFormat className="form-control" type="text" placeholder="Thành tiền" value={totalPrice} thousandSeparator={true} prefix={'Thành tiền:VND '} />
+                                    <CurrencyFormat disabled className="form-control" type="text" placeholder="Thành tiền" value={totalPrice} thousandSeparator={true} prefix={'Thành tiền: '} suffix={' VND '} />
                                 </div>
                                 <div className="col-md-6">
                                     {
@@ -638,7 +660,7 @@ console.log(category_id)
                                             <>
                                                 <Box>
                                                     <FormControl fullWidth>
-                                                        <InputLabel style={{ fontSize: 12 }}>Giá/kệ</InputLabel>
+                                                        <InputLabel size="small">Giá/kệ</InputLabel>
                                                         <Select
                                                             size="small"
                                                             label="Nhà cung cấp"
@@ -663,7 +685,7 @@ console.log(category_id)
                                         ) : (
                                             <Box>
                                                 <FormControl fullWidth>
-                                                    <InputLabel style={{ fontSize: 12 }}>Giá/kệ</InputLabel>
+                                                    <InputLabel size="small">Giá/kệ</InputLabel>
                                                     <Select
                                                         disabled
                                                         size="small"
@@ -703,7 +725,7 @@ console.log(category_id)
                             </div>
                         </div>
                         <div className="card-footer" style={{ textAlign: "end" }}>
-                            <button class="btn btn-sm btn-primary" onClick={(e) => onAddTable(e)}>
+                            <button class="btn btn-sm btn-primary" style={{ width: 200 }} onClick={(e) => onAddTable(e)}>
                                 <i class="fas fa-edit"></i> Thêm vào DS
                             </button>
                         </div>
@@ -715,7 +737,7 @@ console.log(category_id)
                                     <h3 className="card-title">Danh sách nhập</h3>
                                 </div>
                                 <div className="col" style={{ textAlign: "end" }}>
-                                    <button className="btn btn-sm btn-success" onClick={handleSave}>
+                                    <button style={{ width: 200 }} type="button" className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave}>
                                         <i className="fas fa-save"></i> Lưu nhập
                                     </button>
                                 </div>
@@ -770,24 +792,8 @@ console.log(category_id)
                         {/* /.card-body */}
                     </div>
                 </div>
-            </section>
-            <Dialog
-                open={alertSuccess}
-                TransitionComponent={Transition}
-                keepMounted
-                // onClose={handleClose}
-                aria-describedby=""
-            >
-                <DialogTitle></DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Lưu thành công
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                </DialogActions>
-            </Dialog>
-        </div>
+            </section >
+        </div >
     )
 }
 

@@ -39,8 +39,9 @@ const Category = React.lazy(() => import('./views/category/Category'))
 // const Charts = React.lazy(() => import('./views/charts/Charts'))
 
 // //Notification
-// const Notification = React.lazy(() => import('./views/notifications/Notification'))
-// const AddNotification = React.lazy(() => import('./views/notifications/AddNeedItem'))
+const Notification = React.lazy(() => import('./views/notification/Notification'))
+const AddNotification = React.lazy(() => import('./views/notification/AddNotification'))
+const ReadNotification = React.lazy(() => import('./views/notification/ReadNotification'))
 
 // //Supplier
 // const Suppliers = React.lazy(() => import('./views/suppliers/Suppliers'))
@@ -53,40 +54,41 @@ const Category = React.lazy(() => import('./views/category/Category'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/account', name: 'User', component: Account },
-//   { path: '/profile', name: 'Profile', component: Profile },
+  //   { path: '/profile', name: 'Profile', component: Profile },
   { path: '/dashboard', name: 'Bản tin', component: Dashboard },
-//   { path: '/charts', name: 'Charts', component: Charts },
+  //   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/export', name: 'Xuất kho', component: Export },
-//   { path: '/status', name: 'Duyệt phiếu', component: Status },
+  //   { path: '/status', name: 'Duyệt phiếu', component: Status },
   { path: '/import', name: 'Nhập kho', component: Import },
-//   { path: '/history_import', name: 'Kiểm kê tồn kho', component: HistoryImport },
-//   { path: '/history_transfer', name: 'Kiểm kê tồn kho', component: HistoryTransfer },
-//   { path: '/history_export', name: 'Kiểm kê tồn kho', component: HistoryExport },
-//   { path: '/reports', name: 'Báo cáo', component: Reports },
+  //   { path: '/history_import', name: 'Kiểm kê tồn kho', component: HistoryImport },
+  //   { path: '/history_transfer', name: 'Kiểm kê tồn kho', component: HistoryTransfer },
+  //   { path: '/history_export', name: 'Kiểm kê tồn kho', component: HistoryExport },
+  //   { path: '/reports', name: 'Báo cáo', component: Reports },
   { path: '/transfer', name: 'Điều phối kho', component: Transfer },
 
   { path: '/warehouse', name: 'Kho', component: Warehouse },
-//   { path: '/warehouses-add', name: 'Tạo kho', component: AddWarehouses },
-//   { path: '/warehouses-edit/:id', name: 'Chỉnh sửa kho', component: EditWarehouses },
-//   { path: '/warehouses-shelf/:id', name: 'kệ trong kho', component: ShelfWarehouse },
+  //   { path: '/warehouses-add', name: 'Tạo kho', component: AddWarehouses },
+  //   { path: '/warehouses-edit/:id', name: 'Chỉnh sửa kho', component: EditWarehouses },
+  //   { path: '/warehouses-shelf/:id', name: 'kệ trong kho', component: ShelfWarehouse },
 
   { path: '/category', name: 'Category', component: Category },
-//   { path: '/categories-add', name: 'Tạo category', component: AddCategories },
-//   { path: '/categories-edit/:id', name: 'Chỉnh sửa category', component: EditCategories },
+  //   { path: '/categories-add', name: 'Tạo category', component: AddCategories },
+  //   { path: '/categories-edit/:id', name: 'Chỉnh sửa category', component: EditCategories },
 
-//   { path: '/shelf', name: 'Giá', component: Shelves },
-//   { path: '/shelf-add/:id', name: 'Tạo giá', component: AddShelves },
-//   { path: '/shelf-edit/:id', name: 'Chỉnh sửa kho', component: EditShelves },
-//   { path: '/detail_item-edit/:id', name: 'Chỉnh sửa vật tư', component: EditDetailItem },
+  //   { path: '/shelf', name: 'Giá', component: Shelves },
+  //   { path: '/shelf-add/:id', name: 'Tạo giá', component: AddShelves },
+  //   { path: '/shelf-edit/:id', name: 'Chỉnh sửa kho', component: EditShelves },
+  //   { path: '/detail_item-edit/:id', name: 'Chỉnh sửa vật tư', component: EditDetailItem },
 
-//   { path: '/notification', name: 'Thông báo', component: Notification },
-//   { path: '/notification-add', name: 'Tạo thông báo', component: AddNotification },
+  { path: '/notification', name: 'Thông báo', component: Notification },
+  { path: '/notification-add', name: 'Tạo thông báo', component: AddNotification },
+  { path: '/notification-read/:id', name: 'Tạo thông báo', component: ReadNotification },
 
-//   { path: '/supplier', name: 'Nhà cung cấp', component: Suppliers },
-//   { path: '/supplier-add', name: 'Tạo mới nhà cung cấp', component: AddSuppliers },
-//   { path: '/supplier-edit/:id', name: 'Chỉnh sửa nhà cung cấp', component: EditSuppliers },
+  //   { path: '/supplier', name: 'Nhà cung cấp', component: Suppliers },
+  //   { path: '/supplier-add', name: 'Tạo mới nhà cung cấp', component: AddSuppliers },
+  //   { path: '/supplier-edit/:id', name: 'Chỉnh sửa nhà cung cấp', component: EditSuppliers },
 
-//   { path: '/role', name: 'Phân quyền', component: Role },
+  //   { path: '/role', name: 'Phân quyền', component: Role },
 ]
 
 export default routes

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import { textFilter } from 'react-bootstrap-table2-filter';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { getRoleNames, getToken, getUserID } from '../../components/utils/Common';
 import { getAllPermissions } from '../../components/utils/Common';
 import { delData, getData, postData, putData } from '../../components/utils/Api';
@@ -244,7 +244,11 @@ const Account = () => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header">
-                                    <h3 className="card-title"></h3>
+                                    <div style={{ textAlign: "end" }}>
+                                        <button class="btn btn-sm btn-primary">
+                                            <i class="fas fa-user-plus"></i> Thêm người dùng
+                                        </button>
+                                    </div>
                                 </div>
                                 {/* /.card-header */}
                                 <div className="card-body">
@@ -256,7 +260,7 @@ const Account = () => {
                                                 <th>Họ và tên</th>
                                                 <th>Chức vụ</th>
                                                 <th>Quyền hạn</th>
-                                                <th style={{ width: 15, textAlign: "center"}}>Thao tác</th>
+                                                <th style={{ width: 10 }}>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -290,12 +294,13 @@ const Account = () => {
                                                             </ul>
                                                         </td>
                                                         <td>
-                                                            <div className="input-group-prepend">
-                                                                <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                            <div style={{ textAlign: "center" }}>
+                                                                <button style={{ border: "none", backgroundColor: "white", borderRadius: "4rem" }} className="btn btn-default" data-toggle="dropdown">
+                                                                    <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                                 </button>
                                                                 <div className="dropdown-menu">
-                                                                    <a className="dropdown-item" href="#">Chi tiết</a>
-                                                                    <a className="dropdown-item" href="#">Cập nhật</a>
+                                                                    <Link className="dropdown-item" to={"/notification-read/1"}>Chi tiết</Link>
+                                                                    <a className="dropdown-item">Cập nhật</a>
                                                                 </div>
                                                             </div>
                                                         </td>
