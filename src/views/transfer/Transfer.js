@@ -329,6 +329,7 @@ const Transfer = () => {
                         console.log(err)
                     })
             })
+            reset()
         }
     }
 
