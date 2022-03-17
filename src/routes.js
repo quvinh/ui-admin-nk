@@ -10,9 +10,12 @@ const Import = React.lazy(() => import('./views/import/Import'))
 const Export = React.lazy(() => import('./views/export/Export'))
 // const Reports = React.lazy(() => import('./views/reports/Reports'))
 
-// const HistoryImport = React.lazy(() => import('./views/history/HistoryImport'))
-// const HistoryTransfer = React.lazy(() => import('./views/history/HistoryTransfer'))
-// const HistoryExport = React.lazy(() => import('./views/history/HistoryExport'))
+const CouponImport = React.lazy(() => import('./views/coupon/CouponImport'))
+const CouponTransfer = React.lazy(() => import('./views/coupon/CouponTransfer'))
+const CouponExport = React.lazy(() => import('./views/coupon/CouponExport'))
+const DetailImport = React.lazy(() => import('./views/coupon/DetailImport'))
+const DetailTransfer = React.lazy(() => import('./views/coupon/DetailTransfer'))
+const DetailExport = React.lazy(() => import('./views/coupon/DetailExport'))
 
 const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
 
@@ -59,9 +62,12 @@ const routes = [
   { path: '/export', name: 'Xuất kho', component: Export },
 //   { path: '/status', name: 'Duyệt phiếu', component: Status },
   { path: '/import', name: 'Nhập kho', component: Import },
-//   { path: '/history_import', name: 'Kiểm kê tồn kho', component: HistoryImport },
-//   { path: '/history_transfer', name: 'Kiểm kê tồn kho', component: HistoryTransfer },
-//   { path: '/history_export', name: 'Kiểm kê tồn kho', component: HistoryExport },
+  { path: '/coupon_import', name: 'Phiếu nhập', component: CouponImport },
+  { path: '/coupon_transfer', name: 'Phiếu luân chuyển', component: CouponTransfer },
+  { path: '/coupon_export', name: 'Phiếu xuất', component: CouponExport },
+  { path: '/detail_import/:code', name: 'Chi tiết phiếu nhập', component: DetailImport },
+  { path: '/detail_transfer/:code', name: 'Chi tiết phiếu luân chuyển', component: DetailTransfer },
+  { path: '/detail_export/:code', name: 'Chi tiết phiếu xuất', component: DetailExport },
 //   { path: '/reports', name: 'Báo cáo', component: Reports },
   { path: '/transfer', name: 'Điều phối kho', component: Transfer },
 

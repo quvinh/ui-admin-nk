@@ -220,6 +220,8 @@ const Transfer = () => {
         setFromShelf(null)
         setToShelf(null)
         setKD('')
+        setDataFromShelf([])
+        setDataToShelf([])
     }
 
     const reset = () => {
@@ -600,20 +602,21 @@ const Transfer = () => {
                                 <div className='card-body'>
                                     <div className="row">
                                         <div className="col" style={{ textAlign: "end" }}>
-                                            {
+                                            <div>
+                                                {   
                                                 (isSave) ? (
-                                                    <button class="btn btn-sm btn-success" disabled>
-                                                        <i class="fas fa-save"></i> Lưu thành công
-                                                    </button>
+                                                <button className="btn btn-sm btn-success" disabled>
+                                                    <i className="fas fa-save" /> Lưu thành công
+                                                </button>
                                                 ) : (
-                                                    <button class="btn btn-sm btn-primary" onClick={handleSave}>
-                                                        <i class="fas fa-save"></i> Lưu phiếu
-                                                    </button>
-                                                )
-                                            }
+                                                <button className="btn btn-sm btn-primary" onclick="{handleSave}">
+                                                    <i className="fas fa-save" /> Lưu phiếu
+                                                </button>
+                                                )} 
+                                            </div>
                                         </div>
                                     </div>
-                                    <br/>
+                                    <br />
                                     <table id="example1" className="table table-bordered table-striped">
                                         <thead>
                                             <tr>
