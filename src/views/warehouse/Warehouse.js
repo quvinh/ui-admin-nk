@@ -115,7 +115,16 @@ const Warehouse = () => {
                                                 dataWarehouse.map((item, index) => (
                                                     <tr key={index}>
                                                         <td>{String(index + 1)}</td>
-                                                        <td></td>
+                                                        <td>
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <span class="badge badge-success">Chưa hoàn thành</span>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <span class="badge badge-success">Chưa hoàn thành</span>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
                                                         <td>{item.name}</td>
                                                         <td>{item.id}</td>
                                                         <td>{item.location}</td>

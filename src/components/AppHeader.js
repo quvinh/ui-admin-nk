@@ -9,7 +9,7 @@ const AppHeader = () => {
                         <a className="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars" /></a>
                     </li>
                     <li className="nav-item d-none d-sm-inline-block">
-                        <a href="index3.html" className="nav-link">Trang chủ</a>
+                        <a href="#" className="nav-link">Trang chủ</a>
                     </li>
                     <li className="nav-item d-none d-sm-inline-block">
                         <a href="#" className="nav-link">Liên hệ</a>
