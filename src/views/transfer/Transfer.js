@@ -602,11 +602,11 @@ const Transfer = () => {
                                             {
                                                 (isSave) ? (
                                                     <button class="btn btn-sm btn-success" disabled>
-                                                        <i class="fas fa-edit"></i> Lưu thành công
+                                                        <i class="fas fa-save"></i> Lưu thành công
                                                     </button>
                                                 ) : (
                                                     <button class="btn btn-sm btn-primary" onClick={handleSave}>
-                                                        <i class="fas fa-edit"></i> Lưu phiếu
+                                                        <i class="fas fa-save"></i> Lưu phiếu
                                                     </button>
                                                 )
                                             }
