@@ -29,7 +29,6 @@ const Account = () => {
     const [isCheckedWarehouse, setIsCheckedWarehouse] = useState([])
 
     //Modal
-    const [visibleInfo, setVisibleInfo] = useState(false)
     const [visibleRoles, setVisibleRoles] = useState(false)
     const [visibleRemove, setVisibleRemove] = useState(false)
     const [visibleRemoveRole, setVisibleRemoveRole] = useState(false)
@@ -245,9 +244,9 @@ const Account = () => {
                             <div className="card">
                                 <div className="card-header">
                                     <div style={{ textAlign: "end" }}>
-                                        <button class="btn btn-sm btn-primary">
+                                        <Link to={"/account-add"} class="btn btn-sm btn-primary">
                                             <i class="fas fa-user-plus"></i> Thêm người dùng
-                                        </button>
+                                        </Link>
                                     </div>
                                 </div>
                                 {/* /.card-header */}
@@ -299,8 +298,17 @@ const Account = () => {
                                                                     <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                                 </button>
                                                                 <div className="dropdown-menu">
-                                                                    <Link className="dropdown-item" to={"/notification-read/1"}>Chi tiết</Link>
-                                                                    <a className="dropdown-item">Cập nhật</a>
+                                                                    <button
+                                                                        className="dropdown-item"
+                                                                        // to={"/notification-read/1"}
+                                                                        data-toggle="modal"
+                                                                        data-target="#modal-lg"
+                                                                        onClick={(e) => {
+                                                                            setDataUserClick(item)
+                                                                        }}>
+                                                                        Chi tiết
+                                                                    </button>
+                                                                    <Link className="dropdown-item">Cập nhật</Link>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -324,6 +332,66 @@ const Account = () => {
                     </div>
                 </div>
             </section>
+            <div className="modal fade" id="modal-lg">
+                <div className="modal-dialog modal-lg">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h4 className="modal-title">Thông tin người dùng</h4>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <table className="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td>Username</td>
+                                        <td>{dataUserClick.username}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Họ tên</td>
+                                        <td>{dataUserClick.fullname}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>SĐT</td>
+                                        <td>{dataUserClick.phone}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td>{dataUserClick.email}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Chức vụ</td>
+                                        <td>{
+                                            (dataUserClick.roles_id === null) ? ("Chưa phân quyền") : (
+                                                dataRoles.map((value) => {
+                                                    if (value.id === dataUserClick.roles_id) return value.name
+                                                })
+                                            )
+                                        }</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Địa chỉ</td>
+                                        <td>{dataUserClick.address ? dataUserClick.address : "Chưa cập nhật"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày sinh</td>
+                                        <td>{dataUserClick.birthday ? dataUserClick.birthday : "Chưa cập nhật"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Giới tính</td>
+                                        <td>{dataUserClick.gender ? dataUserClick.gender : "Chưa cập nhật"}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="modal-footer justify-content-between">
+                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     )
 }

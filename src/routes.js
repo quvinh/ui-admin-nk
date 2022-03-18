@@ -2,6 +2,7 @@ import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Account = React.lazy(() => import('./views/account/Account'))
+const AddAccount = React.lazy(() => import('./views/account/AddAccount'))
 // const Profile = React.lazy(() => import('./views/account/Profile'))
 
 // const Status = React.lazy(() => import('./views/status/Status'))
@@ -54,6 +55,7 @@ const ReadNotification = React.lazy(() => import('./views/notification/ReadNotif
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/account', name: 'User', component: Account },
+  { path: '/account-add', name: 'User', component: AddAccount },
   //   { path: '/profile', name: 'Profile', component: Profile },
   { path: '/dashboard', name: 'Bản tin', component: Dashboard },
   //   { path: '/charts', name: 'Charts', component: Charts },
