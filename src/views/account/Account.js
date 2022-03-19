@@ -270,10 +270,12 @@ const Account = () => {
                                                         <td>{item.username}</td>
                                                         <td>{item.fullname}</td>
                                                         <td>{
-                                                            (item.roles_id === null) ? ("Chưa phân quyền") : (
-                                                                dataRoles.map((value) => {
-                                                                    if (value.id === item.roles_id) return value.name
-                                                                })
+                                                            (item.roles_id === null) ? (<span className="badge badge-warning">Chưa phân quyền</span>) : (
+                                                                <span className="badge badge-primary">
+                                                                    {dataRoles.map((value) => {
+                                                                        if (value.id === item.roles_id) return value.name
+                                                                    })}
+                                                                </span>
                                                             )
                                                         }</td>
                                                         <td>
