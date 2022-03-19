@@ -1,7 +1,28 @@
-import React from 'react'
-import { getRoleNames } from './utils/Common'
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { getData } from './utils/Api'
+import { getRoleNames, getToken, getUserID, removeUserSession } from './utils/Common'
 
 const AppHeader = () => {
+    const [dataUserDetail, setUserDetail] = useState([])
+    const history = useHistory()
+    const handleLogout = () => {
+        removeUserSession()
+        history.push('/login')
+    }
+    useEffect(() => {
+        Promise.all([
+            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+        ])
+            .then(function (res) {
+                setUserDetail(res[0].data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [])
+    console.log(dataUserDetail)
     return (
         <div>
             <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -119,27 +140,27 @@ const AppHeader = () => {
                     <li className="nav-item dropdown user-menu">
                         <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">
                             <img src="../../dist/img/user2-160x160.jpg" className="user-image img-circle elevation-2" alt="User Image" />
-                            <span className="d-none d-md-inline">Alexander Pierce</span>
+                            <span className="d-none d-md-inline">{dataUserDetail[0].fullname}</span>
                         </a>
                         <ul className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             {/* User image */}
                             <li className="user-header bg-primary">
                                 <img src="../../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
                                 <p>
-                                    Alexander Pierce - Web Developer
-                                    <small></small>
+                                    <small>Tên đăng nhập</small>
+                                    {dataUserDetail[0].username}
                                 </p>
                             </li>
                             {/* Menu Body */}
                             <li className="user-body">
                                 <div className="text-center">
-                                    <a>{getRoleNames()}</a>
+                                    <a>Chức vụ: {getRoleNames()}</a>
                                 </div>
                             </li>
                             {/* Menu Footer*/}
                             <li className="user-footer">
                                 <a className="btn btn-default btn-flat">Thông tin</a>
-                                <a className="btn btn-default btn-flat float-right">Đăng xuất</a>
+                                <button className="btn btn-default btn-flat float-right" onClick={handleLogout}>Đăng xuất</button>
                             </li>
                         </ul>
                     </li>

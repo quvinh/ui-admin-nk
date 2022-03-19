@@ -310,7 +310,7 @@ const Role = () => {
                             </div>
                         </div>
                     </div>
-                    <h6><i>* Quyền hạn {roleName && (<span>- <u>{roleName}</u></span>)}</i></h6>
+                    <h6><i>* Quyền hạn {roleName && (<span style={{fontSize: 22, color: "blue"}}>- <u>{roleName}</u></span>)}</i></h6>
                     <div className="row">
                         <div className="col">
                             <div className="card">

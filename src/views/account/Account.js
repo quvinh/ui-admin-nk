@@ -202,7 +202,7 @@ const Account = () => {
             getData('http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()),
         ])
             .then(function (res) {
-
+                // console.log(res[1].permission.map(item => item.name))
                 setDataTable(res[0].data)
                 setUserDetail(res[1].data)
                 setRoles(res[2].data)
@@ -258,7 +258,8 @@ const Account = () => {
                                                 <th>Tên đăng nhập</th>
                                                 <th>Họ và tên</th>
                                                 <th>Chức vụ</th>
-                                                <th>Quyền hạn</th>
+                                                <th>SĐT</th>
+                                                <th>Địa chỉ</th>
                                                 <th style={{ width: 10 }}>Action</th>
                                             </tr>
                                         </thead>
@@ -278,22 +279,8 @@ const Account = () => {
                                                                 </span>
                                                             )
                                                         }</td>
-                                                        <td>
-                                                            {/* {
-                                                                getAllPermissions.map((item) => (
-                                                                    <span className="badge badge-success">Success</span>
-                                                                ))
-                                                            } */}
-
-                                                            <ul className="list-inline">
-                                                                <li className="list-inline-item">
-                                                                    <span className="badge badge-success">Chưa hoàn thành</span>
-                                                                </li>
-                                                                <li className="list-inline-item">
-                                                                    <span className="badge badge-success">Chưa hoàn thành</span>
-                                                                </li>
-                                                            </ul>
-                                                        </td>
+                                                        <td>{item.phone}</td>
+                                                        <td>{item.address ? item.address : "Chưa cập nhật"}</td>
                                                         <td>
                                                             <div style={{ textAlign: "center" }}>
                                                                 <button style={{ border: "none", backgroundColor: "white", borderRadius: "4rem" }} className="btn btn-default" data-toggle="dropdown">

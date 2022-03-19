@@ -15,11 +15,11 @@ const EditAccount = (props) => {
 
     const [isSelected, setIsSelected] = useState(false)
     const history = useHistory()
-    console.log(dataWarehouse)
+    // console.log(props)
 
     const handleCheckWarehouseAll = (e) => {
         setIsCheckedWarehouseAll(!isCheckedWarehouseAll)
-        setIsCheckedWarehouse(dataWarehouse.map(item => String(item.id)))
+        setIsCheckedWarehouse(dataWarehouse.map(item => parseInt(item.id)))
         isCheckedWarehouseAll && setIsCheckedWarehouse([])
         setIsSelected(true)
     }
@@ -28,9 +28,29 @@ const EditAccount = (props) => {
         const { id, checked } = e.target
         console.log(id)
         setIsCheckedWarehouse([...isCheckedWarehouse, id])
-        !checked && setIsCheckedWarehouse(isCheckedWarehouse.filter(item => String(item) !== String(id)))
+        !checked && setIsCheckedWarehouse(isCheckedWarehouse.filter(item => parseInt(item) !== parseInt(id)))
         setIsSelected(true)
     }
+
+    const handelSave = () => {
+        console.log("......")
+        if (roleID !== 0) {
+          Promise.all([postData('http://127.0.0.1:8000/api/admin/auth_model/user_roles?token=' + getToken(), {
+            user_id: dataUser[0].id,
+            roles_id: roleID,
+            warehouse_id: isCheckedWarehouse
+          })])
+            .then(function (res) {
+              console.log('SAVED roles')
+              history.push('/account')
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        } else {
+          console.log("NO")
+        }
+      }
 
     useEffect(() => {
         Promise.all([
@@ -39,9 +59,12 @@ const EditAccount = (props) => {
             getData('http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()),
         ])
             .then(function (res) {
+                // console.log(res)
                 setDataUser(res[0].data)
+                setRoleID(res[0].role_id)
                 setRoles(res[1].data)
                 setDataWarehouse(res[2].data)
+                setIsCheckedWarehouse(res[2].data.map(item => item.id))
             })
             .catch(error => {
 
@@ -77,7 +100,7 @@ const EditAccount = (props) => {
                         </div>
                         <div className="col">
                             <div style={{ textAlign: "end" }}>
-                                <button type="button" className="btn btn-sm btn-success">
+                                <button type="button" className="btn btn-sm btn-success" onClick={handelSave}>
                                     <i className="fas fa-save " /> Lưu
                                 </button>
                                 <Link to={"/account"} className="btn btn-sm btn-secondary" style={{ marginLeft: 5 }}>
@@ -111,7 +134,7 @@ const EditAccount = (props) => {
                                                         <div className="form-group" key={index}>
                                                             <div className="form-check">
                                                                 <input className="form-check-input" name="role" type="radio"
-                                                                    // value={item.id} checked={String(item.id) === String(isCheckedRole)} Chưa lm xong
+                                                                    value={item.id} checked={parseInt(item.id) === parseInt(roleID)}
                                                                     onClick={() => {
                                                                         // permissionChecked(item.id)
                                                                         // setRoleName(item.name)
@@ -142,7 +165,7 @@ const EditAccount = (props) => {
                                                     dataWarehouse && dataWarehouse.map((item, index) => (
                                                         <div className="form-check" key={index}>
                                                             <input className="form-check-input" type="checkbox"
-                                                                id={parseInt(item.id)} checked={isCheckedWarehouse.includes(String(item.id))} onChange={(e) => handleCheckWarehouse(e)} />
+                                                                id={item.id} checked={isCheckedWarehouse.includes(parseInt(item.id))} onChange={(e) => handleCheckWarehouse(e)} />
                                                             <label className="form-check-label">{item.name}</label>
                                                         </div>
                                                     ))
