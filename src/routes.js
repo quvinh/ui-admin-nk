@@ -18,6 +18,9 @@ const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
 
 // //Warehouse
 const Warehouse = React.lazy(() => import('./views/warehouse/Warehouse'))
+// const WarehouseInfo = React.lazy(() => import('./views/warehouse/WarehouseInfo'))
+const WarehouseShow = React.lazy(() => import('./views/warehouse/WarehouseShow'))
+// const WarehouseListItem = React.lazy(() => import('./views/warehouse/WarehouseListItem'))
 // const EditWarehouses = React.lazy(() => import('./views/warehouses/Edit'))
 // const AddWarehouses = React.lazy(() => import('./views/warehouses/Add'))
 // const ShelfWarehouse = React.lazy(() => import('./views/warehouses/Shelfwarehouse'))
@@ -66,6 +69,9 @@ const routes = [
   { path: '/transfer', name: 'Điều phối kho', component: Transfer },
 
   { path: '/warehouse', name: 'Kho', component: Warehouse },
+  // { path: '/warehouse-info', name: 'Thông tin chi tiết kho', component: WarehouseInfo },
+  { path: '/warehouse-show/:id', name: 'thông tin kho', component: WarehouseShow },
+  // { path: '/warehouse-listitem', name: 'thông tin kho', component: WarehouseListItem },
 //   { path: '/warehouses-add', name: 'Tạo kho', component: AddWarehouses },
 //   { path: '/warehouses-edit/:id', name: 'Chỉnh sửa kho', component: EditWarehouses },
 //   { path: '/warehouses-shelf/:id', name: 'kệ trong kho', component: ShelfWarehouse },
