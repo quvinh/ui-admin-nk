@@ -217,11 +217,13 @@ const Transfer = () => {
         setToWarehouse('')
         setDate(new Date())
         setIsAmountSelected(false)
-        setFromShelf(null)
-        setToShelf(null)
+        setFromShelf('')
+        setToShelf('')
         setKD('')
         setDataFromShelf([])
         setDataToShelf([])
+        setIsFromWarehouseSelected(false)
+        setIsToWarehouseSelected(false)
     }
 
     const reset = () => {
@@ -342,7 +344,6 @@ const Transfer = () => {
         })
         return nameRole
     }
-
 
     useEffect(() => {
         Promise.all([
@@ -567,7 +568,6 @@ const Transfer = () => {
                                                                 dataToShelf.map((item, index) => (
                                                                     <MenuItem value={item.shelf_id}>{item.shelf_name}</MenuItem>
                                                                 ))}
-
                                                         </Select>
                                                     </FormControl>
                                                 ) : (
@@ -609,7 +609,7 @@ const Transfer = () => {
                                                     <i className="fas fa-save" /> Lưu thành công
                                                 </button>
                                                 ) : (
-                                                <button className="btn btn-sm btn-primary" onclick="{handleSave}">
+                                                <button className="btn btn-sm btn-primary" onclick={handleSave}>
                                                     <i className="fas fa-save" /> Lưu phiếu
                                                 </button>
                                                 )} 
