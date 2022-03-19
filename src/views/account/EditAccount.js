@@ -1,43 +1,27 @@
-import React, { useState } from 'react'
-import { postData } from '../../components/utils/Api'
+import React, { useState, useEffect, createRef, useRef } from 'react'
+import { getData, postData } from '../../components/utils/Api'
 import { useHistory, Link } from 'react-router-dom'
 import Validator from '../../components/utils/Validation'
+import { getToken } from '../../components/utils/Common'
 
-const AddAccount = () => {
-    const [username, setUsername] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('123456')
-    const [password_confirmation, setPasswordConfirmation] = useState('123456')
-    const [fullname, setFullname] = useState('')
-    const [phone, setPhone] = useState('')
+const EditAccount = (props) => {
+    const [dataUser, setDataUser] = useState([])
+    // const myRef = useRef(null)
 
     const history = useHistory()
-    const [validator, showValidationMessage] = Validator()
+    useEffect(() => {
+        Promise.all([
+            getData('http://127.0.0.1:8000/api/auth/get-user/' + props.match.params.id + '?token=' + getToken())
+        ])
+            .then(function (res) {
 
-    const onRegister = () => {
-        if (validator.allValid()) {
-            console.log("button clicked")
-            const data = {
-                username: username,
-                email: email,
-                password: password,
-                password_confirmation: password_confirmation,
-                fullname: fullname,
-                phone: phone,
-            }
-            console.log(data)
-            Promise.all([postData('http://127.0.0.1:8000/api/auth/register', data)])
-                .then(function (res) {
-                    console.log("Successfully")
-                    // history.push("/login")
-                    history.push("/account")
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        } else showValidationMessage(true)
-    }
+                setDataUser(res[0].data)
+            })
+            .catch(error => {
 
+            })
+    }, [])
+    console.log(dataUser.length)
     return (
         <div className="content-wrapper">
             {/* Content Header (Page header) */}
@@ -45,12 +29,12 @@ const AddAccount = () => {
                 <div className="container-fluid">
                     <div className="row mb-2">
                         <div className="col-sm-6">
-                            <h1>Thêm người dùng</h1>
+                            <h1>Cập nhật người dùng <i style={{ color: "#007bff", fontSize: 18 }}>{dataUser.length === 1 && dataUser[0].fullname}</i></h1>
                         </div>
                         <div className="col-sm-6">
                             <ol className="breadcrumb float-sm-right">
                                 <li className="breadcrumb-item"><a>Trang chủ</a></li>
-                                <li className="breadcrumb-item active">Thêm người dùng</li>
+                                <li className="breadcrumb-item active">Cập nhật người dùng</li>
                             </ol>
                         </div>
                     </div>
@@ -61,7 +45,7 @@ const AddAccount = () => {
                 <div className="container-fluid">
                     <div className="card card-secondary">
                         <div className="card-header">
-                            <h3 className="card-title">Điền thông tin</h3>
+                            <h3 className="card-title">Phân quyền <i style={{ fontSize: 14 }}>{dataUser.length === 1 && ('Tên đăng nhập: ' + dataUser[0].username)}</i></h3>
                             <div className="card-tools">
                                 <button type="button" className="btn btn-tool" data-card-widget="collapse">
                                     <i className="fas fa-minus" />
@@ -76,95 +60,16 @@ const AddAccount = () => {
                                         <div className="form-group">
                                             <label style={{ fontSize: 11 }}>Tên đăng nhập</label>
                                             <input type="text" name="username" className="form-control" placeholder="Tên đăng nhập"
-                                                onChange={(e) => setUsername(e.target.value)} />
-                                            <div style={{ color: "red", fontStyle: "italic", fontSize: 11 }}>
-                                                {validator.message("username", username, "required", {
-                                                    messages: {
-                                                        required: "(*) Nhập tên đăng nhập"
-                                                    }
-                                                })}
-                                            </div>
+                                            />
                                         </div>
                                     </div>
-                                    <div className="col-sm-6">
-                                        <div className="form-group">
-                                            <label style={{ fontSize: 11 }}>Họ và tên</label>
-                                            <input type="text" name="fullname" className="form-control" placeholder="Họ và tên" onChange={(e) => setFullname(e.target.value)} />
-                                            <div style={{ color: "red", fontStyle: "italic", fontSize: 11 }}>
-                                                {validator.message("fullname", fullname, "required", {
-                                                    messages: {
-                                                        required: "(*) Nhập họ tên"
-                                                    }
-                                                })}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-sm-6">
-                                        <div className="form-group">
-                                            <label style={{ fontSize: 11 }}>Mật khẩu</label>
-                                            <input type="password" name="password" className="form-control" placeholder="Mật khẩu"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)} />
-                                            <div style={{ color: "red", fontStyle: "italic", fontSize: 11 }}>
-                                                {validator.message("password", password, "required", {
-                                                    messages: {
-                                                        required: "(*) Nhập mật khẩu"
-                                                    }
-                                                })}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6">
-                                        <div className="form-group">
-                                            <label style={{ fontSize: 11 }}>Số điện thoại</label>
-                                            <input type="text" name="phone" className="form-control" placeholder="0912345678" onChange={(e) => setPhone(e.target.value)} />
-                                            <div style={{ color: "red", fontStyle: "italic", fontSize: 11 }}>
-                                                {validator.message("phone", phone, "required", {
-                                                    messages: {
-                                                        required: "(*) Nhập SĐT"
-                                                    }
-                                                })}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-sm-6">
-                                        <div className="form-group">
-                                            <label style={{ fontSize: 11 }}>Nhập lại mật khẩu</label>
-                                            <input type="password" name="password_confirmation" className="form-control" placeholder="Nhập lại mật khẩu"
-                                                value={password_confirmation}
-                                                onChange={(e) => setPasswordConfirmation(e.target.value)} />
-                                            <div style={{ color: "red", fontStyle: "italic", fontSize: 11 }}>
-                                                {validator.message("password_confirmation", password_confirmation, "required", {
-                                                    messages: {
-                                                        required: "(*) Nhập xác nhận lại mật khẩu"
-                                                    }
-                                                })}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6">
-                                        <div className="form-group">
-                                            <label style={{ fontSize: 11 }}>Email</label>
-                                            <input type="email" className="form-control" name="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-                                            <div style={{ color: "red", fontStyle: "italic", fontSize: 11 }}>
-                                                {validator.message("email", email, "required", {
-                                                    messages: {
-                                                        required: "(*) Nhập email"
-                                                    }
-                                                })}
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </form>
                             <div className="card-footer p-0">
                                 <div style={{ textAlign: "end" }}>
-                                    <button className="btn btn-sm btn-primary" onClick={(e) => onRegister(e)}>
-                                        <i className="fas fa-user-plus"></i> Thêm người dùng
+                                    <button className="btn btn-sm btn-primary">
+                                        <i className="fas fa-user-plus" /> Thêm người dùng
                                     </button>
                                     <Link to={"/account"} className="btn btn-sm btn-secondary" style={{ marginLeft: 5 }}>
                                         <i className="fas fa-times"></i> Huỷ
@@ -286,4 +191,4 @@ const AddAccount = () => {
     )
 }
 
-export default AddAccount
+export default EditAccount

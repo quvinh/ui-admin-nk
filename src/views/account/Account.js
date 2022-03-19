@@ -244,8 +244,8 @@ const Account = () => {
                             <div className="card">
                                 <div className="card-header">
                                     <div style={{ textAlign: "end" }}>
-                                        <Link to={"/account-add"} class="btn btn-sm btn-primary">
-                                            <i class="fas fa-user-plus"></i> Thêm người dùng
+                                        <Link to={"/account-add"} className="btn btn-sm btn-primary">
+                                            <i className="fas fa-user-plus"></i> Thêm người dùng
                                         </Link>
                                     </div>
                                 </div>
@@ -279,16 +279,16 @@ const Account = () => {
                                                         <td>
                                                             {/* {
                                                                 getAllPermissions.map((item) => (
-                                                                    <span class="badge badge-success">Success</span>
+                                                                    <span className="badge badge-success">Success</span>
                                                                 ))
                                                             } */}
 
-                                                            <ul class="list-inline">
-                                                                <li class="list-inline-item">
-                                                                    <span class="badge badge-success">Chưa hoàn thành</span>
+                                                            <ul className="list-inline">
+                                                                <li className="list-inline-item">
+                                                                    <span className="badge badge-success">Chưa hoàn thành</span>
                                                                 </li>
-                                                                <li class="list-inline-item">
-                                                                    <span class="badge badge-success">Chưa hoàn thành</span>
+                                                                <li className="list-inline-item">
+                                                                    <span className="badge badge-success">Chưa hoàn thành</span>
                                                                 </li>
                                                             </ul>
                                                         </td>
@@ -308,7 +308,7 @@ const Account = () => {
                                                                         }}>
                                                                         Chi tiết
                                                                     </button>
-                                                                    <Link className="dropdown-item">Cập nhật</Link>
+                                                                    <Link to={"/account-edit/" + item.id} className="dropdown-item">Cập nhật</Link>
                                                                 </div>
                                                             </div>
                                                         </td>
