@@ -107,7 +107,7 @@ const Warehouse = () => {
                                                 <th>Tên kho</th>
                                                 <th>Mã kho</th>
                                                 <th>Địa chỉ</th>
-                                                <th>Thao tác</th>
+                                                <th style={{ width: 10 }}>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -115,13 +115,23 @@ const Warehouse = () => {
                                                 dataWarehouse.map((item, index) => (
                                                     <tr key={index}>
                                                         <td>{String(index + 1)}</td>
-                                                        <td></td>
+                                                        <td>
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <span class="badge badge-success">Chưa hoàn thành</span>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <span class="badge badge-success">Chưa hoàn thành</span>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
                                                         <td>{item.name}</td>
                                                         <td>{item.id}</td>
                                                         <td>{item.location}</td>
                                                         <td>
-                                                            <div className="input-group-prepend">
-                                                                <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                            <div style={{ textAlign: "center" }}>
+                                                                <button style={{ border: "none", backgroundColor: "white", borderRadius: "4rem" }} className="btn btn-default" data-toggle="dropdown">
+                                                                    <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                                 </button>
                                                                 <div className="dropdown-menu">
                                                                     <a className="dropdown-item" href="#">Chi tiết</a>

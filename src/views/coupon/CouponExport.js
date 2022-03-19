@@ -102,12 +102,13 @@ const CouponExport = () => {
                                                         }
                                                         </td>
                                                         <td>
-                                                            <div className="input-group-prepend">
-                                                                <button type="button" className="btn btn-default dropdown-toggle" size='small' data-toggle="dropdown">
+                                                        <div style={{ textAlign: "center" }}>
+                                                                <button style={{ border: "none", backgroundColor: "white", borderRadius: "4rem" }} className="btn btn-default" data-toggle="dropdown">
+                                                                    <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                                 </button>
                                                                 <div className="dropdown-menu" size='small'>
                                                                     <Link className="dropdown-item" to={'/detail_export/' + item.code} size='small'>Chi tiết</Link>
-                                                                    <a className="dropdown-item" onClick={(e) => { handleDelete(item.code) }} size='small'>X</a>
+                                                                    <a className="dropdown-item" onClick={(e) => { handleDelete(item.code) }} size='small'>Xóa</a>
                                                                 </div>
                                                             </div>
                                                         </td>

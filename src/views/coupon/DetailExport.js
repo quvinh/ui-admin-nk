@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { delData, getData, putData } from '../../components/utils/Api'
@@ -45,6 +47,23 @@ const DetailExport = (props) => {
             })
     }
 
+    const alert = () => {
+        const compile = document.createElement("script")
+        compile.src = $(function () {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            $('.toastrDefaultSuccess').click(function () {
+                toastr.success('Duyệt thành công')
+            });
+        })
+        compile.async = true
+        document.body.appendChild(compile)
+    }
+
     useEffect(() => {
         Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showHistoryExport/' + props.match.params.code + '?token=' + getToken())])
             .then(function (res) {
@@ -54,6 +73,7 @@ const DetailExport = (props) => {
             .catch((error) => {
                 console.log(error)
             })
+        alert()
     }, [])
 
     return (
@@ -82,8 +102,8 @@ const DetailExport = (props) => {
                                 <div className="card-header">
                                     <h3 className="card-title"></h3>
                                     <div style={{ textAlign: "end" }} >
-                                        {detailExport.length > 0 && (detailExport[0].status === '0' ? (<button className="btn btn-sm btn-primary" onClick={(e) => handleDStatus()}>Duyệt</button>)
-                                            : (detailExport[0].status === '1' ? (<button className="btn btn-sm btn-success" onClick={(e) => handleUpdateStatus()}>Duyệt</button>)
+                                        {detailExport.length > 0 && (detailExport[0].status === '0' ? (<button className="btn btn-sm btn-primary toastrDefaultSuccess" onClick={(e) => handleDStatus()}>Duyệt</button>)
+                                            : (detailExport[0].status === '1' ? (<button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={(e) => handleUpdateStatus()}>Duyệt</button>)
                                                 : <></>
                                             ))}
                                     </div>
@@ -190,14 +210,13 @@ const DetailExport = (props) => {
                                                 <table id="example1" className="table table-bordered table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th style={{ width:10 }}>STT</th>
+                                                            <th style={{ width: 10 }}>STT</th>
                                                             <th>Mã vật tư</th>
                                                             <th>Tên vật tư</th>
                                                             <th>Mã kệ</th>
                                                             <th>Giá xuất</th>
                                                             <th>SL</th>
                                                             <th>ĐVT</th>
-                                                            <th style={{ width:20 }}>Trạng thái</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -211,13 +230,6 @@ const DetailExport = (props) => {
                                                                     <td>{item.price}</td>
                                                                     <td>{item.luongXuat}</td>
                                                                     <td>{item.unit}</td>
-                                                                    <td>{
-                                                                        <span className={item.status === '2' ? "badge badge-success" :
-                                                                            (item.status === '1' ? 'badge badge-primary' : 'badge badge-secondary')}>
-                                                                            {item.status === '2' ? 'Đã duyệt' : (item.status === '1' ? 'Giao hàng' : 'Chờ duyệt')}
-                                                                        </span>
-                                                                    }
-                                                                    </td>
                                                                 </tr>
                                                             ))
                                                         }

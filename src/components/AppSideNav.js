@@ -7,8 +7,8 @@ const AppSideNav = () => {
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             <Link to={"/dashboard"} className="brand-link">
-                {/* <img src="%PUBLIC_URL%/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} /> */}
-                <span className="brand-text font-weight-light">AdminLTE 3</span>           
+                {/* <img src="../../public/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} /> */}
+                <span className="brand-text font-weight-light">LOGO</span>
             </Link>
             <div className="sidebar">
                 <div className="user-panel mt-3 pb-3 mb-3 d-flex">
@@ -65,6 +65,41 @@ const AppSideNav = () => {
                         </li>
                         <li className="nav-item">
                             <a className="nav-link">
+                                <i className="nav-icon fas fa-edit" />
+                                <p>
+                                    Chức năng
+                                    <i className="fas fa-angle-left right" />
+                                </p>
+                            </a>
+                            <ul className="nav nav-treeview">
+                                <li className="nav-item">
+                                    <Link to="/import" className="nav-link">
+                                        <i className="far fa-circle nav-icon" />
+                                        <p>Nhập kho</p>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/export" className="nav-link">
+                                        <i className="far fa-circle nav-icon" />
+                                        <p>Xuất kho</p>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/transfer" className="nav-link">
+                                        <i className="far fa-circle nav-icon" />
+                                        <p>Luân chuyển</p>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/statistic" className="nav-link">
+                                        <i className="far fa-circle nav-icon" />
+                                        <p>Thống kê</p>
+                                    </Link>
+                                </li>
+                            </ul>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link">
                                 <i className="nav-icon fas fa-chart-pie" />
                                 <p>
                                     Quản lý kho
@@ -115,41 +150,7 @@ const AppSideNav = () => {
                                 </li>
                             </ul>
                         </li>
-                        <li className="nav-item">
-                            <a className="nav-link">
-                                <i className="nav-icon fas fa-edit" />
-                                <p>
-                                    Chức năng
-                                    <i className="fas fa-angle-left right" />
-                                </p>
-                            </a>
-                            <ul className="nav nav-treeview">
-                                <li className="nav-item">
-                                    <Link to="/import" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Nhập kho</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/export" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Xuất kho</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/transfer" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Luân chuyển</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Thống kê</p>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </li>
+
                         <li className="nav-item">
                             <a className="nav-link">
                                 <i className="nav-icon far fa-envelope" />

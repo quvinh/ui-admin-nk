@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { getData, postData } from '../../components/utils/Api'
 import { getRoleNames, getToken, getUserID } from '../../components/utils/Common'
-import Validator from './Validation';
+import Validator from '../../components/utils/Validation'
 import { Autocomplete, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Paper } from '@mui/material'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DateTimePicker from '@mui/lab/DateTimePicker';
@@ -345,6 +347,23 @@ const Transfer = () => {
         return nameRole
     }
 
+    const alert = () => {
+        const compile = document.createElement("script")
+        compile.src = $(function () {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            $('.toastrDefaultSuccess').click(function () {
+                toastr.success('Lưu thành công')
+            });
+        })
+        compile.async = true
+        document.body.appendChild(compile)
+    }
+
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
@@ -372,6 +391,7 @@ const Transfer = () => {
                     history.push('/404')
                 }
             })
+        alert()    
     }, [])
     console.log('d', dataTable)
     const script = () => {
@@ -466,7 +486,9 @@ const Transfer = () => {
                                                     label="Ngày nhập"
                                                     value={date}
                                                     inputFormat={"dd/MM/yyyy hh:mm"}
+                                                    showM
                                                     onChange={(newValue) => {
+                                                        console.log(newValue.getDate())
                                                         setDate(newValue)
                                                     }}
                                                 />
@@ -609,7 +631,7 @@ const Transfer = () => {
                                                     <i className="fas fa-save" /> Lưu thành công
                                                 </button>
                                                 ) : (
-                                                <button className="btn btn-sm btn-primary" onclick={handleSave}>
+                                                <button className="btn btn-sm btn-success toastrDefaultSuccess" onclick={handleSave} disabled={dataTable.length > 0 ? false : true}>
                                                     <i className="fas fa-save" /> Lưu phiếu
                                                 </button>
                                                 )} 

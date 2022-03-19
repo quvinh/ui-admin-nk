@@ -68,7 +68,7 @@ const Category = () => {
                                                 <th>STT</th>
                                                 <th>Loại vật tư</th>
                                                 <th>Ghi chú</th>
-                                                <th>Action</th>
+                                                <th style={{ width: 10 }}>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -78,7 +78,17 @@ const Category = () => {
                                                         <td>{index + 1}</td>
                                                         <td>{item.name}</td>
                                                         <td>{item.note}</td>
-                                                        <td>Button</td>
+                                                        <td>
+                                                            <div style={{ textAlign: "center" }}>
+                                                                <button style={{ border: "none", backgroundColor: "white", borderRadius: "4rem" }} className="btn btn-default" data-toggle="dropdown">
+                                                                    <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                                </button>
+                                                                <div className="dropdown-menu">
+                                                                    <a className="dropdown-item" href="#">Chi tiết</a>
+                                                                    <a className="dropdown-item" href="#">Cập nhật</a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                 ))
                                             }
@@ -87,14 +97,10 @@ const Category = () => {
                                         </tfoot>
                                     </table>
                                 </div>
-                                {/* /.card-body */}
                             </div>
                         </div>
-                        {/* /.col */}
                     </div>
-                    {/* /.row */}
                 </div>
-                {/* /.container-fluid */}
             </section>
         </div>
 

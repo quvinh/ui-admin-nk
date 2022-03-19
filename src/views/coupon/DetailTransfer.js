@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { delData, getData, putData } from '../../components/utils/Api'
@@ -44,6 +46,23 @@ const DetailTransfer = (props) => {
             })
     }
 
+    const alert = () => {
+        const compile = document.createElement("script")
+        compile.src = $(function () {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            $('.toastrDefaultSuccess').click(function () {
+                toastr.success('Duyệt thành công')
+            });
+        })
+        compile.async = true
+        document.body.appendChild(compile)
+    }
+
     useEffect(() => {
         Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showHistoryTransfer/' + props.match.params.code + '?token=' + getToken())])
             .then(function (res) {
@@ -53,6 +72,7 @@ const DetailTransfer = (props) => {
             .catch((error) => {
                 console.log(error)
             })
+        alert()
     }, [])
 
     return (
@@ -81,8 +101,8 @@ const DetailTransfer = (props) => {
                                 <div className="card-header">
                                     <h3 className="card-title"></h3>
                                     <div style={{ textAlign: "end" }} >
-                                        {detailTransfer.length > 0 && (detailTransfer[0].status === '0' ? (<button className="btn btn-sm btn-primary" onClick={(e) => handleDStatus()}>Duyệt</button>)
-                                            : (detailTransfer[0].status === '1' ? (<button className="btn btn-sm btn-success" onClick={(e) => handleUpdateStatus()}>Duyệt</button>)
+                                        {detailTransfer.length > 0 && (detailTransfer[0].status === '0' ? (<button className="btn btn-sm btn-primary toastrDefaultSuccess" onClick={(e) => handleDStatus()}>Duyệt</button>)
+                                            : (detailTransfer[0].status === '1' ? (<button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={(e) => handleUpdateStatus()}>Duyệt</button>)
                                                 : <></>
                                             ))}
                                     </div>
