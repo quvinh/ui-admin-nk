@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { getData, putData, delData, postData } from '../../components/utils/Api'
 import { useHistory } from 'react-router-dom';
+import Validator from '../../components/utils/Validation'
 import { getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 
 
@@ -13,7 +14,7 @@ const WarehouseShow = (props) => {
         compile.async = true
         document.body.appendChild(compile)
     }
-
+    const [validator, showValidationMessage] = Validator()
     const [value, setValue] = React.useState(0);
     const [isSelected, setIsSelected] = useState(false);
 
@@ -55,11 +56,13 @@ const WarehouseShow = (props) => {
         Promise.all([postData('http://127.0.0.1:8000/api/admin/shelf/store/' + props.match.params.id + '?token=' + getToken(), data)])
             .then(function (res) {
                 console.log('Added succesfully', res)
-                setDataShelf([...dataShelf, data])
+                handleReloadShelf()
+                // setDataShelf([...dataShelf, data])
                 setIsSelected(false)
                 setNullShelf()
             }).catch(error => {
                 console.log(error)
+                showValidationMessage(true)
             })
     }
 
@@ -78,6 +81,7 @@ const WarehouseShow = (props) => {
                 setIsSelected(false)
             }).catch((err) => {
                 console.log(err)
+                showValidationMessage(true)
             })
     }
 
@@ -151,6 +155,7 @@ const WarehouseShow = (props) => {
                 setIsSelectedItem(false)
             }).catch((err) => {
                 console.log(err)
+                showValidationMessage(true)
             })
     }
 
@@ -239,6 +244,7 @@ const WarehouseShow = (props) => {
                 // history.push('/warehouses')
             }).catch((err) => {
                 console.log(err)
+                showValidationMessage(true)
             })
     }
 
@@ -325,11 +331,25 @@ const WarehouseShow = (props) => {
                                                                 <input type="text" className="form-control" onChange={handleName} id="warehouse_name" placeholder="Trống" value={name} />
                                                             </div>
                                                         </div>
+                                                        <div style={{ color: "red", fontStyle: "italic" }}>
+                                                            {validator.message("warehouse_name", name, "required", {
+                                                                messages: {
+                                                                    required: "(*) Nhập tên kho"
+                                                                }
+                                                            })}
+                                                        </div>
                                                         <div className="form-group row">
                                                             <label htmlFor="warehouse_name" className="col-sm-2 col-form-label">Địa chỉ</label>
                                                             <div className="col-sm-10">
-                                                                <input type="text" className="form-control" onChange={handleLocation} id="warehouse_name" placeholder="Trống" value={location} />
+                                                                <input type="text" className="form-control" onChange={handleLocation} id="location" placeholder="Trống" value={location} />
                                                             </div>
+                                                        </div>
+                                                        <div style={{ color: "red", fontStyle: "italic" }}>
+                                                            {validator.message("location", location, "required", {
+                                                                messages: {
+                                                                    required: "(*) Nhập vị trí"
+                                                                }
+                                                            })}
                                                         </div>
                                                         <div className="form-group row">
                                                             <label htmlFor="warehouse_note" className="col-sm-2 col-form-label">Mô tả</label>
@@ -362,7 +382,7 @@ const WarehouseShow = (props) => {
                                                         dataShelf.map((item, index) => (
                                                             <tr key={index}>
                                                                 <td>{String(index + 1)}</td>
-                                                                <td>{item.name}</td>
+                                                                <td>{item.shelf_name}</td>
                                                                 <td>{item.position}</td>
                                                                 <td className='text-center'>
                                                                     <div>
@@ -370,10 +390,10 @@ const WarehouseShow = (props) => {
                                                                             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                                         </button>
                                                                         <div className="dropdown-menu">
-                                                                            <a className="dropdown-item" onClick={(e) => { handleDeleteShelf(e, item.id) }}>Xóa</a>
+                                                                            <a className="dropdown-item" onClick={(e) => { handleDeleteShelf(e, item.shelf_id) }}>Xóa</a>
                                                                             <a className="dropdown-item" onClick={(e) => {
-                                                                                setIdShelf(item.id)
-                                                                                setNameShelf(item.name)
+                                                                                setIdShelf(item.shelf_id)
+                                                                                setNameShelf(item.shelf_name)
                                                                                 setPosition(item.position)
                                                                                 setStatus(item.status)
                                                                                 setIsSelected(true)
@@ -535,11 +555,25 @@ const WarehouseShow = (props) => {
                                                     <input type="text" className="form-control" onChange={handleNameShelf} id="shelf_name" placeholder="Trống" value={nameShelf} />
                                                 </div>
                                             </div>
+                                            <div style={{ color: "red", fontStyle: "italic" }}>
+                                                {validator.message("shelf_name", nameShelf, "required", {
+                                                    messages: {
+                                                        required: "(*) Nhập tên kệ"
+                                                    }
+                                                })}
+                                            </div>
                                             <div className="form-group row">
                                                 <label htmlFor="position" className="col-sm-2 col-form-label">Vị trí:</label>
                                                 <div className="col-sm-10">
                                                     <input type="text" className="form-control" onChange={handlePosition} id="position" placeholder="Trống" value={position} />
                                                 </div>
+                                            </div>
+                                            <div style={{ color: "red", fontStyle: "italic" }}>
+                                                {validator.message("position", position, "required", {
+                                                    messages: {
+                                                        required: "(*) Nhập vị trí"
+                                                    }
+                                                })}
                                             </div>
                                             {
                                                 (isSelected) ? (
@@ -562,7 +596,7 @@ const WarehouseShow = (props) => {
                                         (isSelected) ? (
                                             <button type="button" className="btn btn-success" data-dismiss="modal" onClick={(e) => { handleUpdateShelf(e) }}>Lưu</button>
                                         ) : (
-                                            <button type="button" className="btn btn-success" data-dismiss="modal" onClick={(e) => { handleAddShelf(e) }}>Lưu</button>
+                                            <button type="button" className="btn btn-success"  onClick={(e) => { handleAddShelf(e) }}>Lưu</button>
                                         )
                                     }
                                 </div>

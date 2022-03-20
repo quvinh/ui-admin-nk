@@ -1,6 +1,9 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
 import { getData, putData, delData, postData } from '../../components/utils/Api'
 import { useHistory } from 'react-router-dom';
+import Validator from '../../components/utils/Validation'
 import { getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 import { set } from 'date-fns';
 // import Box from '@mui/material/Box';
@@ -27,7 +30,24 @@ const Warehouse = () => {
         compile.async = true
         document.body.appendChild(compile)
     }
-    
+
+    const alert = () => {
+        const compile = document.createElement("script")
+        compile.src = $(function () {
+            $('.add').click(function () {
+                toastr.success('Thêm thành công')
+            });
+            $('.update').click(function () {
+                toastr.success('Cập nhật thành công')
+            });
+            $('.close').click(function () {
+                toastr.success('Cập nhật thành công')
+            });
+        })
+        compile.async = true
+        document.body.appendChild(compile)
+    }
+    const [validator, showValidationMessage] = Validator()
     const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [location, setLocation] = useState('');
@@ -75,6 +95,7 @@ const Warehouse = () => {
                 // validatorAll()
                 console.log(':(((')
                 console.log(error)
+                showValidationMessage(true)
             })
         // window.location.reload(false);
     }
@@ -96,6 +117,7 @@ const Warehouse = () => {
                 // history.goBack()
             }).catch((err) => {
                 console.log(err)
+                showValidationMessage(true)
             })
     }
 
@@ -116,7 +138,9 @@ const Warehouse = () => {
                 // history.goBack()
             }).catch((err) => {
                 console.log(err)
+                showValidationMessage(true)
             })
+
     }
 
 
@@ -148,6 +172,7 @@ const Warehouse = () => {
         Promise.all([delData('http://127.0.0.1:8000/api/admin/warehouse/delete/' + id + '?token=' + getToken())])
             .then(function (response) {
                 handleReload()
+                console.log(response)
                 // eClick.closest('tr').remove();
             })
             .catch(error => {
@@ -171,6 +196,7 @@ const Warehouse = () => {
             // getData('http://127.0.0.1:8000/api/admin/warehouse/countWarehouse')
         ])
             .then(function (res) {
+                console.log(res)
                 setDataWarehouse(res[0].data)
                 // setDataCountWarehouse(res[1].data)
                 script()
@@ -222,7 +248,7 @@ const Warehouse = () => {
                                 </div>
                                 {/* /.card-header */}
                                 <div className="card-body">
-                                    <table id="example1" className="table table-hover ">
+                                    <table id="item" className="table table-hover ">
                                         <thead>
                                             <tr>
                                                 <th className='text-center'>STT</th>
@@ -262,20 +288,24 @@ const Warehouse = () => {
                                                                     <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                                 </button>
                                                                 <div className="dropdown-menu">
-                                                                    <a className="dropdown-item" href={'#/warehouse-show/' + item.id}>Chi tiết</a>
-                                                                    <a className="dropdown-item" data-toggle="modal" data-target="#modal-lg" onClick={(e) => {
-                                                                        setId(item.id)
-                                                                        setName(item.name)
-                                                                        setLocation(item.location)
-                                                                        setNote(item.note)
-                                                                        setIsSelected(true)
-                                                                    }}>Cập nhật</a>
+
                                                                     {
                                                                         (item.status) ? (
-                                                                            <a className="dropdown-item" data-toggle="modal" data-target="#modal-sm" onClick={(e) => {
-                                                                                setStatus(false)
-                                                                                setId(item.id)
-                                                                            }}>Đóng Kho</a>
+                                                                            <>
+                                                                                <a className="dropdown-item" href={'#/warehouse-show/' + item.id}>Chi tiết</a>
+                                                                                <a className="dropdown-item" data-toggle="modal" data-target="#modal-lg" onClick={(e) => {
+                                                                                    setId(item.id)
+                                                                                    setName(item.name)
+                                                                                    setLocation(item.location)
+                                                                                    setNote(item.note)
+                                                                                    setIsSelected(true)
+                                                                                }}>Cập nhật</a>
+                                                                                <a className="dropdown-item" data-toggle="modal" data-target="#modal-sm" onClick={(e) => {
+                                                                                    setStatus(false)
+                                                                                    setId(item.id)
+                                                                                }}>Đóng Kho</a>
+                                                                            </>
+
                                                                         ) : (
                                                                             <a className="dropdown-item" data-toggle="modal" data-target="#modal-sm" onClick={(e) => {
                                                                                 setStatus(true)
@@ -328,11 +358,25 @@ const Warehouse = () => {
                                                     <input type="text" className="form-control" onChange={(e) => { handleName(e) }} id="name" placeholder="Trống" value={name} />
                                                 </div>
                                             </div>
+                                            <div style={{ color: "red", fontStyle: "italic" }}>
+                                                {validator.message("name", name, "required", {
+                                                    messages: {
+                                                        required: "(*) Nhập tên kho"
+                                                    }
+                                                })}
+                                            </div>
                                             <div className="form-group row">
                                                 <label htmlFor="position" className="col-sm-2 col-form-label">Địa chỉ:</label>
                                                 <div className="col-sm-10">
                                                     <input type="text" className="form-control" onChange={(e) => { handleLocation(e) }} id="location" placeholder="Trống" value={location} />
                                                 </div>
+                                            </div>
+                                            <div style={{ color: "red", fontStyle: "italic" }}>
+                                                {validator.message("location", location, "required", {
+                                                    messages: {
+                                                        required: "(*) Nhập địa chỉ"
+                                                    }
+                                                })}
                                             </div>
                                             <div className="form-group row">
                                                 <label htmlFor="position" className="col-sm-2 col-form-label">Ghi chú:</label>
@@ -346,11 +390,11 @@ const Warehouse = () => {
                                 {
                                     (isSelected) ? (
                                         <div className="modal-footer justify-content-end">
-                                            <button type="button" className="btn btn-success" data-dismiss="modal" onClick={(e) => { handleUpdate(e) }}>Lưu</button>
+                                            <button type="button" className="btn btn-success" onClick={(e) => { handleUpdate(e) }}>Lưu</button>
                                         </div>
                                     ) : (
                                         <div className="modal-footer justify-content-end">
-                                            <button type="button" className="btn btn-success" data-dismiss="modal" onClick={(e) => { handleAddWarehouse(e) }}>Lưu</button>
+                                            <button type="button" className="btn btn-success" onClick={(e) => { handleAddWarehouse(e) }}>Lưu</button>
                                         </div>
                                     )
                                 }
@@ -381,7 +425,7 @@ const Warehouse = () => {
 
                                 </div>
                                 <div className="modal-footer justify-content-end">
-                                    <button type="button" className="btn btn-success" onClick={(e) => { handleUpdateStatusWarehouse(e) }} data-dismiss="modal">Đông ý</button>
+                                    <button className="btn btn-success" onClick={(e) => { handleUpdateStatusWarehouse(e) }} data-dismiss="modal">Đông ý</button>
                                 </div>
                             </div>
                             {/* /.modal-content */}

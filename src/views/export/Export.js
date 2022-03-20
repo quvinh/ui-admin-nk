@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { getData, postData } from '../../components/utils/Api'
 import { getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 import { Autocomplete, TextField, Box, InputLabel, MenuItem, FormControl, Select } from '@mui/material'
-import Validator from '../import/Validation'
+import Validator from '../../components/utils/Validation'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import DateTimePicker from '@mui/lab/DateTimePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
@@ -88,8 +88,10 @@ const Export = (props) => {
     // const [isItemSelected, setIsItemSelected] = useState(false)
 
     const onChangeName = (e, newValue) => {
-        setName(e.target.value)
+        console.log(newValue)
+        console.log(e)
         console.log(dataItem)
+        setName(e.target.value)
         var checked = false
         dataItem.map((item) => {
             if (item.itemname === newValue) {
@@ -100,6 +102,7 @@ const Export = (props) => {
                 setShelfName(item.shelf_name)
                 setSuppliers(item.supplier_id)
                 setUnit(item.unit)
+                console.log(item.warehouse_id)
                 setWarehouse(item.warehouse_id)
                 setPrice(item.price)
                 setName(item.itemname)
@@ -157,6 +160,7 @@ const Export = (props) => {
     const onChangeWarehouse = (e, value) => {
         console.log(value)
         console.log(e)
+        console.log(dataItem)
         if (value) {
             setIsWarehouseSelected(true)
             setWarehouse(e.target.value)
@@ -189,6 +193,8 @@ const Export = (props) => {
         setIsAmountSelected(true)
         setShelfName(newValue.props.children)
         setShelfID(e.target.value)
+        console.log(e.target.value)
+        console.log(dataItem)
         Promise.all([
             getData('http://127.0.0.1:8000/api/admin/warehouse/itemShelf/' + warehouse_id + '/' + e.target.value + '?token=' + getToken())
         ])
@@ -217,6 +223,7 @@ const Export = (props) => {
     const getDataShelf = (id) => {
         Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
             .then(function (res) {
+                console.log(res[0].data)
                 setDataShelf(res[0].data)
             })
             .catch(err => {
@@ -250,10 +257,12 @@ const Export = (props) => {
                     amount: amountTotal,
                     price: price,
                     nameWarehouse: nameWarehouse,
-                    nameShelf: shelf_name,
+                    shelf_name: shelf_name,
                     note: note,
                     totalPrice: totalPrice
+
                 }
+                console.log(data)
                 console.log(dataTable)
                 array.length > 0 ? setDataTable([...array, data]) : (dataTable.length === 1 && dataTable[0].item_id === item_id ? setDataTable([data]) : setDataTable([...dataTable, data]))
                 console.log(dataTable)
@@ -272,12 +281,14 @@ const Export = (props) => {
                     amount: amount,
                     price: price,
                     nameWarehouse: nameWarehouse,
-                    nameShelf: shelf_name,
+                    shelf_name: shelf_name,
                     note: note,
                     totalPrice: totalPrice
                 }
                 setDataTable([...dataTable, data])
+                console.log(data)
             }
+            
             setAmount(0)
             // setAmountCurrent(0)
         } else {
@@ -306,6 +317,7 @@ const Export = (props) => {
             .then(res => {
                 console.log(res[0].data)
                 setDataItem(res[0].data)
+                console.log(res[1].data)
                 setDataWarehouse(res[1].data)
                 setCreatedBy(res[2].data[0].fullname)
                 if (getRoleNames() !== 'admin') {
@@ -369,11 +381,13 @@ const Export = (props) => {
                                         renderInput={(params) => <TextField {...params} label="Tên vật tư" />}
                                         disableClearable
                                     />
-                                    {validator.message("name", name, "required", {
-                                        messages: {
-                                            required: "(*) Nhập tên vật tư"
-                                        }
-                                    })}
+                                    <div style={{ color: "red", fontStyle: "italic" }}>
+                                        {validator.message("name_item", name, "required", {
+                                            messages: {
+                                                required: "(*) Nhập tên vật tư"
+                                            }
+                                        })}
+                                    </div>
                                 </div>
                                 <div className="col-md-5">
                                     <Box>
@@ -412,11 +426,14 @@ const Export = (props) => {
                                             setAmount(parseInt(e.target.value) > kd ? kd : parseInt(e.target.value))
                                         }}
                                     />
-                                    {validator.message("amount", amount, "required", {
-                                        messages: {
-                                            required: "(*) Nhập số lượng"
-                                        }
-                                    })}
+                                    <div style={{ color: "red", fontStyle: "italic" }}>
+                                        {validator.message("amount", amount, "required", {
+                                            messages: {
+                                                required: "(*) Nhập số lượng"
+                                            }
+                                        })}
+                                    </div>
+
                                 </div>
                                 <div className="col-md-2">
                                     <TextField
@@ -526,7 +543,7 @@ const Export = (props) => {
                                                         <td className='text-center'>{item.unit}</td>
                                                         <td className='text-center'>{item.amount}</td>
                                                         <td className='text-center'>{(item.price).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
-                                                        <td>{item.nameShelf}</td>
+                                                        <td>{item.shelf_name}</td>
                                                         <td className='text-center'><button className="btn btn-sm btn-danger"
                                                             onClick={(e) => {
                                                                 onRemoveRow(e, index)
