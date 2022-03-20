@@ -1,18 +1,16 @@
 /* eslint-disable no-undef */
 $(function () {
     $.fn.dataTable.ext.errMode = 'none';
-    $("#example1").DataTable({
+    $("#shelf").DataTable({
         "responsive": true, "lengthChange": false, "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-    });
-    
+    }).buttons().container().appendTo('#shelf_wrapper .col-md-6:eq(0)');
+    $("#manager").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#manager_wrapper .col-md-6:eq(0)');
+    $("#item").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#item_wrapper .col-md-6:eq(0)');
 });
