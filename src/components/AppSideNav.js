@@ -1,9 +1,26 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { getData } from './utils/Api'
+import { getToken, getUserID } from './utils/Common'
 import { Link } from 'react-router-dom'
 
 const AppSideNav = () => {
+    const [dataUserDetail, setUserDetail] = useState([])
+
+    useEffect(() => {
+        Promise.all([
+            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+        ])
+            .then(function (res) {
+                setUserDetail(res[0].data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [])
+
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             <Link to={"/dashboard"} className="brand-link">
@@ -13,10 +30,10 @@ const AppSideNav = () => {
             <div className="sidebar">
                 <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div className="image">
-                        {/* <img src="%PUBLIC_URL%/dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" /> */}
+                        <img src="../../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
                     </div>
                     <div className="info">
-                        <a href="#" className="d-block">Alexander Pierce</a>
+                        <a href="#" className="d-block">{dataUserDetail[0] && dataUserDetail[0].fullname}</a>
                     </div>
                 </div>
                 <div className="form-inline">
