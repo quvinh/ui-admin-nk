@@ -140,7 +140,7 @@ const AppHeader = () => {
                     <li className="nav-item dropdown user-menu">
                         <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">
                             <img src="../../dist/img/user2-160x160.jpg" className="user-image img-circle elevation-2" alt="User Image" />
-                            <span className="d-none d-md-inline">{dataUserDetail[0].fullname}</span>
+                            <span className="d-none d-md-inline">{dataUserDetail[0] && dataUserDetail[0].fullname}</span>
                         </a>
                         <ul className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             {/* User image */}
@@ -148,7 +148,7 @@ const AppHeader = () => {
                                 <img src="../../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
                                 <p>
                                     <small>Tên đăng nhập</small>
-                                    {dataUserDetail[0].username}
+                                    {dataUserDetail[0] && dataUserDetail[0].username}
                                 </p>
                             </li>
                             {/* Menu Body */}
