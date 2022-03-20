@@ -54,7 +54,7 @@ const ReadNotification = React.lazy(() => import('./views/notification/ReadNotif
 // const EditSuppliers = React.lazy(() => import('./views/suppliers/Edit'))
 
 // //Role
-// const Role = React.lazy(() => import('./views/roles/Role'))
+const Role = React.lazy(() => import('./views/role/Role'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -72,6 +72,8 @@ const routes = [
   //   { path: '/history_export', name: 'Kiểm kê tồn kho', component: HistoryExport },
   //   { path: '/reports', name: 'Báo cáo', component: Reports },
   { path: '/transfer', name: 'Điều phối kho', component: Transfer },
+
+  { path: '/role', name: 'Chức vụ', component: Role },
 
   { path: '/warehouse', name: 'Kho', component: Warehouse },
   // { path: '/warehouse-info', name: 'Thông tin chi tiết kho', component: WarehouseInfo },
