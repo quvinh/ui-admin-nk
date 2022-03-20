@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { getData, postData } from '../../components/utils/Api'
 import { getRoleNames, getToken, getUserID } from '../../components/utils/Common'
-import Validator from './Validation';
+import Validator from '../../components/utils/Validation'
 import { Autocomplete, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Paper } from '@mui/material'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DateTimePicker from '@mui/lab/DateTimePicker';
@@ -217,9 +219,13 @@ const Transfer = () => {
         setToWarehouse('')
         setDate(new Date())
         setIsAmountSelected(false)
-        setFromShelf(null)
-        setToShelf(null)
+        setFromShelf('')
+        setToShelf('')
         setKD('')
+        setDataFromShelf([])
+        setDataToShelf([])
+        setIsFromWarehouseSelected(false)
+        setIsToWarehouseSelected(false)
     }
 
     const reset = () => {
@@ -317,8 +323,9 @@ const Transfer = () => {
         color: theme.palette.text.secondary,
     }));
 
-    const handleSave = (e) => {
-        if (dataTable.length > 0) {
+    const handleSave = () => {
+        console.log('--', dataTable)
+        if (dataTable) {
             dataTable.map((item, index) => {
                 Promise.all([postData('http://127.0.0.1:8000/api/admin/transfer/store?token=' + getToken(), item)])
                     .then(function (res) {
@@ -341,6 +348,22 @@ const Transfer = () => {
         return nameRole
     }
 
+    const alert = () => {
+        const compile = document.createElement("script")
+        compile.src = $(function () {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            $('.toastrDefaultSuccess').click(function () {
+                toastr.success('Lưu thành công')
+            });
+        })
+        compile.async = true
+        document.body.appendChild(compile)
+    }
 
     useEffect(() => {
         Promise.all([
@@ -369,6 +392,7 @@ const Transfer = () => {
                     history.push('/404')
                 }
             })
+        alert()    
     }, [])
     console.log('d', dataTable)
     const script = () => {
@@ -463,7 +487,9 @@ const Transfer = () => {
                                                     label="Ngày nhập"
                                                     value={date}
                                                     inputFormat={"dd/MM/yyyy hh:mm"}
+                                                    showM
                                                     onChange={(newValue) => {
+                                                        console.log(newValue.getDate())
                                                         setDate(newValue)
                                                     }}
                                                 />
@@ -565,7 +591,6 @@ const Transfer = () => {
                                                                 dataToShelf.map((item, index) => (
                                                                     <MenuItem value={item.shelf_id}>{item.shelf_name}</MenuItem>
                                                                 ))}
-
                                                         </Select>
                                                     </FormControl>
                                                 ) : (
@@ -600,20 +625,21 @@ const Transfer = () => {
                                 <div className='card-body'>
                                     <div className="row">
                                         <div className="col" style={{ textAlign: "end" }}>
-                                            {
-                                                (isSave) ? (
-                                                    <button class="btn btn-sm btn-success" disabled>
-                                                        <i class="fas fa-edit"></i> Lưu thành công
-                                                    </button>
-                                                ) : (
-                                                    <button class="btn btn-sm btn-primary" onClick={handleSave}>
-                                                        <i class="fas fa-edit"></i> Lưu phiếu
-                                                    </button>
-                                                )
-                                            }
+                                            <div>
+                                                {
+                                                    (isSave) ? (
+                                                        <button className="btn btn-sm btn-success" disabled>
+                                                            <i className="fas fa-save" /> Lưu thành công
+                                                        </button>
+                                                    ) : (
+                                                        <button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave} disabled={dataTable.length > 0 ? false : true}>
+                                                            <i className="fas fa-save" /> Lưu phiếu
+                                                        </button>
+                                                    )}
+                                            </div>
                                         </div>
                                     </div>
-                                    <br/>
+                                    <br />
                                     <table id="example1" className="table table-bordered table-striped">
                                         <thead>
                                             <tr>

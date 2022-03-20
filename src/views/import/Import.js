@@ -289,9 +289,7 @@ const Import = () => {
 
     useEffect(() => {
         Promise.all([
-            getData(getRoleNames() === 'admin' ?
-                'http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken() :
-                'http://127.0.0.1:8000/api/admin/warehouse/show/' + getDataWarehouseID()[0] + '?token=' + getToken()),
+            getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
             getData('http://127.0.0.1:8000/api/admin/suppliers?token=' + getToken()),
             getData('http://127.0.0.1:8000/api/admin/category?token=' + getToken()),
             getData(getRoleNames() === 'admin' ?
@@ -304,7 +302,6 @@ const Import = () => {
             .then(res => {
 
                 console.log(res[0].data)
-                setWarehouse(getDataWarehouseID())
                 setDataWarehouse(res[0].data)
                 setDataSuppliers(res[1].data)
                 setDataCategory(res[2].data)
@@ -737,7 +734,7 @@ const Import = () => {
                                     <h3 className="card-title">Danh sách nhập</h3>
                                 </div>
                                 <div className="col" style={{ textAlign: "end" }}>
-                                    <button style={{ width: 200 }} type="button" className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave}>
+                                    <button style={{ width: 200 }} type="button" className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave} disabled={dataTable.length > 0 ? false : true}>
                                         <i className="fas fa-save"></i> Lưu nhập
                                     </button>
                                 </div>
