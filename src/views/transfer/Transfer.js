@@ -631,7 +631,7 @@ const Transfer = () => {
                                                     <i className="fas fa-save" /> Lưu thành công
                                                 </button>
                                                 ) : (
-                                                <button className="btn btn-sm btn-success toastrDefaultSuccess" onclick={handleSave} disabled={dataTable.length > 0 ? false : true}>
+                                                <button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave} disabled={dataTable.length > 0 ? false : true}>
                                                     <i className="fas fa-save" /> Lưu phiếu
                                                 </button>
                                                 )} 
