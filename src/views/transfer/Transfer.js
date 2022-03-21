@@ -323,8 +323,9 @@ const Transfer = () => {
         color: theme.palette.text.secondary,
     }));
 
-    const handleSave = (e) => {
-        if (dataTable.length > 0) {
+    const handleSave = () => {
+        console.log('--', dataTable)
+        if (dataTable) {
             dataTable.map((item, index) => {
                 Promise.all([postData('http://127.0.0.1:8000/api/admin/transfer/store?token=' + getToken(), item)])
                     .then(function (res) {
@@ -391,7 +392,7 @@ const Transfer = () => {
                     history.push('/404')
                 }
             })
-        alert()    
+        alert()
     }, [])
     console.log('d', dataTable)
     const script = () => {
@@ -625,16 +626,16 @@ const Transfer = () => {
                                     <div className="row">
                                         <div className="col" style={{ textAlign: "end" }}>
                                             <div>
-                                                {   
-                                                (isSave) ? (
-                                                <button className="btn btn-sm btn-success" disabled>
-                                                    <i className="fas fa-save" /> Lưu thành công
-                                                </button>
-                                                ) : (
-                                                <button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave} disabled={dataTable.length > 0 ? false : true}>
-                                                    <i className="fas fa-save" /> Lưu phiếu
-                                                </button>
-                                                )} 
+                                                {
+                                                    (isSave) ? (
+                                                        <button className="btn btn-sm btn-success" disabled>
+                                                            <i className="fas fa-save" /> Lưu thành công
+                                                        </button>
+                                                    ) : (
+                                                        <button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave} disabled={dataTable.length > 0 ? false : true}>
+                                                            <i className="fas fa-save" /> Lưu phiếu
+                                                        </button>
+                                                    )}
                                             </div>
                                         </div>
                                     </div>
