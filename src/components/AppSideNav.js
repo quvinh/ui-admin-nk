@@ -108,7 +108,7 @@ const AppSideNav = () => {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/" className="nav-link">
+                                    <Link to="/statistic" className="nav-link">
                                         <i className="far fa-circle nav-icon" />
                                         <p>Thống kê</p>
                                     </Link>
@@ -148,19 +148,19 @@ const AppSideNav = () => {
                             </a>
                             <ul className="nav nav-treeview">
                                 <li className="nav-item">
-                                    <Link to="/history-import" className="nav-link">
+                                    <Link to="/coupon_import" className="nav-link">
                                         <i className="far fa-circle nav-icon" />
                                         <p>Phiếu nhập</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/history-export" className="nav-link">
+                                    <Link to="/coupon_export" className="nav-link">
                                         <i className="far fa-circle nav-icon" />
                                         <p>Phiếu xuất</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/history-transfer" className="nav-link">
+                                    <Link to="/coupon_transfer" className="nav-link">
                                         <i className="far fa-circle nav-icon" />
                                         <p>Phiếu luân chuyển</p>
                                     </Link>
