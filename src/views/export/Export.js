@@ -368,7 +368,7 @@ const Export = (props) => {
                             <div className="row" style={{ marginBottom: 10 }}>
                                 <div className="col-md-7">
                                     <Autocomplete
-                                        id="name_item"
+                                        id="itemname"
                                         freeSolo
                                         size='small'
                                         options={dataItem.map((option) => option.itemname)}
@@ -382,7 +382,7 @@ const Export = (props) => {
                                         disableClearable
                                     />
                                     <div style={{ color: "red", fontStyle: "italic" }}>
-                                        {validator.message("name_item", name, "required", {
+                                        {validator.message("itemname", name, "required", {
                                             messages: {
                                                 required: "(*) Nhập tên vật tư"
                                             }
@@ -543,7 +543,7 @@ const Export = (props) => {
                                                         <td className='text-center'>{item.unit}</td>
                                                         <td className='text-center'>{item.amount}</td>
                                                         <td className='text-center'>{(item.price).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
-                                                        <td>{item.shelf_name}</td>
+                                                        <td className='text-center'>{item.shelf_name}</td>
                                                         <td className='text-center'><button className="btn btn-sm btn-danger"
                                                             onClick={(e) => {
                                                                 onRemoveRow(e, index)

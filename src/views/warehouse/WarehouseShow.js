@@ -312,9 +312,12 @@ const WarehouseShow = (props) => {
                                                 <hr style={{ border: "1px solid red" }} />
                                                 {/* <div className="row"> */}
                                                 <h6><strong>Detail</strong></h6>
-                                                <button className="btn btn-sm btn-primary" onClick={(e) => handleUpdate(e)} style={{ marginTop: "-50px", marginLeft: "1484px" }}>
-                                                    <i className="fas fa-edit"></i> Cập nhật
-                                                </button>
+                                                <div className='justify-content-end'>
+                                                    <button className="btn btn-sm btn-primary" onClick={(e) => handleUpdate(e)} style={{ marginTop: "-50px", marginLeft: "1484px" }}>
+                                                        <i className="fas fa-edit"></i> Cập nhật
+                                                    </button>
+                                                </div>
+
                                                 {/* </div> */}
                                                 <div style={{ marginTop: "-10px", marginBottom: "10px" }}>
                                                     <hr />
@@ -596,7 +599,7 @@ const WarehouseShow = (props) => {
                                         (isSelected) ? (
                                             <button type="button" className="btn btn-success" data-dismiss="modal" onClick={(e) => { handleUpdateShelf(e) }}>Lưu</button>
                                         ) : (
-                                            <button type="button" className="btn btn-success"  onClick={(e) => { handleAddShelf(e) }}>Lưu</button>
+                                            <button type="button" className="btn btn-success" onClick={(e) => { handleAddShelf(e) }}>Lưu</button>
                                         )
                                     }
                                 </div>

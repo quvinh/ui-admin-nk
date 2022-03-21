@@ -101,7 +101,7 @@ const Import = () => {
         })
         console.log(dataItem)
         dataItem && dataItem.map((item) => {
-            if (item.name_item === newValue) {
+            if (item.itemname === newValue) {
                 getDataShelf(item.warehouse_id)
                 setItemID(item.item_id)
                 setBatchCode(item.batch_code)
@@ -113,11 +113,11 @@ const Import = () => {
                 setNameWarehouse(item.name_warehouse)
                 setPrice(item.price)
                 setSuppliers(item.supplier_id)
-                setName(item.name_item)
+                setName(item.itemname)
                 setTotalPrice(parseInt(item.amount) * parseInt(item.price))
                 setIsItemSelected(true)
                 setIsWarehouseSelected(true)
-                // console.log(item.name_item)
+                // console.log(item.itemname)
             }
         })
         setIsUnitSelected(false)
@@ -359,7 +359,7 @@ const Import = () => {
                             <div className="row" style={{ marginBottom: 10 }}>
                                 <div className="col-md-6">
                                     <Autocomplete
-                                        id="name_item"
+                                        id="itemname"
                                         freeSolo
                                         size='small'
                                         options={dataItemName.map((option) => option.name)}

@@ -285,7 +285,7 @@ const Dashboard = () => {
                               <tr key={index}>
                                 <td className='text-center'>{index + 1}</td>
                                 <td className='text-center'>{item.item_id}</td>
-                                <td className='text-center'>{item.item_name}</td>
+                                <td className='text-center'>{item.name}</td>
                                 <td className='text-center'>{item.total}</td>
                                 <td className='text-center'>{item.tonKho}</td>
                               </tr>
@@ -324,7 +324,7 @@ const Dashboard = () => {
                   </div> */}
                   {/* /.d-flex */}
                   <div className="position-relative mb-4">
-                    <canvas id="myChart" width="400" height="400"></canvas>
+                    <canvas id="myChart"height="400"></canvas>
                     {/* <BarChart /> */}
                     {/* <canvas id="sales-chart" height={200} /> */}
                     {/* <div className="chart">
