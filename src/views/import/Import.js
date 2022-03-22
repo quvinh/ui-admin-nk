@@ -106,26 +106,26 @@ const Import = () => {
             }
         })
         console.log(dataItem)
-        dataItem && dataItem.map((item) => {
-            if (item.itemname === newValue) {
-                getDataShelf(item.warehouse_id)
-                setItemID(item.item_id)
-                setBatchCode(item.batch_code)
-                // setCategory(item.category_id)
-                setShelf(item.shelf_id)
-                setAmount(item.amount)
-                // setUnit(item.unit)
-                setWarehouse(item.warehouse_id)
-                setNameWarehouse(item.name_warehouse)
-                setPrice(item.price)
-                setSuppliers(item.supplier_id)
-                setName(item.itemname)
-                setTotalPrice(parseInt(item.amount) * parseInt(item.price))
-                setIsItemSelected(true)
-                setIsWarehouseSelected(true)
-                // console.log(item.itemname)
-            }
-        })
+        // dataItem && dataItem.map((item) => {
+        //     if (item.name_item === newValue) {
+        //         getDataShelf(item.warehouse_id)
+        //         setItemID(item.item_id)
+        //         setBatchCode(item.batch_code)
+        //         // setCategory(item.category_id)
+        //         setShelf(item.shelf_id)
+        //         setAmount(item.amount)
+        //         // setUnit(item.unit)
+        //         setWarehouse(item.warehouse_id)
+        //         setNameWarehouse(item.name_warehouse)
+        //         setPrice(item.price)
+        //         setSuppliers(item.supplier_id)
+        //         setName(item.name_item)
+        //         setTotalPrice(parseInt(item.amount) * parseInt(item.price))
+        //         setIsItemSelected(true)
+        //         setIsWarehouseSelected(true)
+        //         // console.log(item.name_item)
+        //     }
+        // })
         setIsUnitSelected(false)
     }
 

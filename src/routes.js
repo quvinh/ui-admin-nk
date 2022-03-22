@@ -4,7 +4,7 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Account = React.lazy(() => import('./views/account/Account'))
 const AddAccount = React.lazy(() => import('./views/account/AddAccount'))
 const EditAccount = React.lazy(() => import('./views/account/EditAccount'))
-// const Profile = React.lazy(() => import('./views/account/Profile'))
+const Profile = React.lazy(() => import('./views/account/Profile'))
 
 // const Status = React.lazy(() => import('./views/status/Status'))
 
@@ -68,7 +68,7 @@ const routes = [
   { path: '/account', name: 'User', component: Account },
   { path: '/account-add', name: 'User', component: AddAccount },
   { path: '/account-edit/:id', name: 'User', component: EditAccount },
-  //   { path: '/profile', name: 'Profile', component: Profile },
+    { path: '/profile', name: 'Profile', component: Profile },
   { path: '/dashboard', name: 'Bản tin', component: Dashboard },
   //   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/export', name: 'Xuất kho', component: Export },

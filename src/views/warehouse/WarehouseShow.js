@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
 import { getData, putData, delData, postData } from '../../components/utils/Api'
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Validator from '../../components/utils/Validation'
 import { getAllPermissions, getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 
@@ -51,9 +51,9 @@ const WarehouseShow = (props) => {
         const data = {
             name: nameShelf,
             position: position,
-            warehouse_id: props.match.params.id,
-        }
-        Promise.all([postData('http://127.0.0.1:8000/api/admin/shelf/store' + '?token=' + getToken(), data)])
+            warehouse_id: props.match.params.id,}
+        console.log(data)
+        Promise.all([postData('http://127.0.0.1:8000/api/admin/shelf/store/?token=' + getToken(), data)])
             .then(function (res) {
                 console.log('Added succesfully', res)
                 handleReloadShelf()
@@ -338,7 +338,7 @@ const WarehouseShow = (props) => {
                         <div className="col-sm-6">
                             <ol className="breadcrumb float-sm-right">
                                 <li className="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                                <li className="breadcrumb-item active">Kho</li>
+                                <Link className="breadcrumb-item active" to={'/warehouse'}>Kho</Link>
                             </ol>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { getData } from './utils/Api'
 import { getRoleNames, getToken, getUserID, removeUserSession } from './utils/Common'
 
@@ -175,7 +175,7 @@ const AppHeader = (props) => {
                             </li>
                             {/* Menu Footer*/}
                             <li className="user-footer">
-                                <a className="btn btn-default btn-flat">Thông tin</a>
+                                <Link to={'/profile'} className="btn btn-default btn-flat">Thông tin</Link>
                                 <button className="btn btn-default btn-flat float-right" onClick={handleLogout}>Đăng xuất</button>
                             </li>
                         </ul>
