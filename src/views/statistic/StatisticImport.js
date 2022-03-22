@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
-import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Select, TextField, Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { getData, postData } from '../../components/utils/Api'
 import DatePicker from 'react-datepicker'
@@ -8,23 +8,16 @@ import "react-datepicker/dist/react-datepicker.css"
 import { getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 
 const StatisticImport = () => {
-    const [date, setDate] = useState(new Date())
     const [dataTable, setDataTable] = useState([])
     const [dataWarehouse, setDataWarehouse] = useState([])
-    const [isDaySelected, setIsDaySelected] = useState(false)
-    const [isMonthSelected, setIsMonthSelected] = useState(false)
-    const [isYearSelected, setIsYearSelected] = useState(false)
-
-    const [day, setDay] = useState(date.getDate())
-    const [month, setMonth] = useState(date.getMonth() + 1)
-    const [year, setYear] = useState(date.getFullYear())
+    const [startDate, setStartDate] = useState(null)
+    const [endDate, setEndDate] = useState(null)
     const [warehouse, setWarehouse] = useState(getDataWarehouseID()[0])
+    const date = new Date()
 
 
     const data = {
-        day: day,
-        month: month,
-        year: year,
+        year: date.getFullYear(),
         warehouse_id: warehouse
     }
 
@@ -35,40 +28,12 @@ const StatisticImport = () => {
         document.body.appendChild(compile)
     }
 
-    const handleReloadYear = (e) => {
+    const handleReload = () => {
         const data = {
             warehouse_id: warehouse,
-            year: e.getFullYear()
+            startDate: startDate.getDate() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getFullYear(),
+            endDate: endDate.getDate() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getFullYear()
         }
-        setDate(e)
-        setYear(e.getFullYear())
-        Promise.all([postData('http://127.0.0.1:8000/api/admin/statistic/importByYear?token=' + getToken(), data)])
-            .then(function (res) {
-                setDataTable(res[0].data.data)
-            })
-    }
-    const handleReloadMonth = (e) => {
-        const data = {
-            warehouse_id: warehouse,
-            year: e.getFullYear(),
-            month: e.getMonth() + 1
-        }
-        setDate(e)
-        setMonth(e.getMonth()+1)
-        Promise.all([postData('http://127.0.0.1:8000/api/admin/statistic/importByMonth?token=' + getToken(), data)])
-            .then(function (res) {
-                setDataTable(res[0].data.data)
-            })
-    }
-    const handleReloadDay = (e) => {
-        const data = {
-            warehouse_id: warehouse,
-            year: e.getFullYear(),
-            month: e.getMonth() + 1,
-            day: e.getDate()
-        }
-        setDate(e)
-        setDay(e.getDate())
         Promise.all([postData('http://127.0.0.1:8000/api/admin/statistic/importByDay?token=' + getToken(), data)])
             .then(function (res) {
                 setDataTable(res[0].data.data)
@@ -85,7 +50,7 @@ const StatisticImport = () => {
             script()
             setDataWarehouse(res[1].data)
         })
-        
+
     }, [])
 
     return (
@@ -97,50 +62,35 @@ const StatisticImport = () => {
                             <div className="card">
                                 <div className="card-header">
                                     <div className='row'>
-                                        <div className='col-md-3'>
-                                            <button className='btn btn-sm btn-primary' onClick={(e) => {
-                                                setIsDaySelected(true)
-                                                setIsMonthSelected(false)
-                                                setIsYearSelected(false)
-                                            }}>Chọn ngày</button>
-                                            <button className='btn btn-sm btn-primary' onClick={(e) => {
-                                                setIsMonthSelected(true)
-                                                setIsDaySelected(false)
-                                                setIsYearSelected(false)
-                                            }}>Chọn tháng</button>
-                                            <button className='btn btn-sm btn-primary' onClick={(e) => {
-                                                setIsYearSelected(true)
-                                                setIsMonthSelected(false)
-                                                setIsDaySelected(false)
-                                            }}>Chọn Năm</button>
+                                        <div className="col-md-3">
+                                            <DatePicker
+                                                placeholderText='Từ ngày'
+                                                selected={startDate}
+                                                onChange={(e) => {
+                                                    setStartDate(e)
+                                                }}
+                                                selectsStart
+                                                showMonthDropdown
+                                                startDate={startDate}
+                                                endDate={endDate}
+                                            />
                                         </div>
-                                        <div className="col-md-2">
-                                            {
-                                                isDaySelected ?
-                                                    <DatePicker
-                                                        selected={date}
-                                                        onChange={e => handleReloadDay(e)}
-                                                        dateFormat="dd/MM/yyyy"
-                                                    /> : <></>
-                                            }
-                                            {
-                                                isMonthSelected ?
-                                                    <DatePicker
-                                                        selected={date}
-                                                        onChange={(e) => handleReloadMonth(e)}
-                                                        dateFormat="MM/yyyy"
-                                                        showMonthYearPicker
-                                                        showFullMonthYearPicker
-                                                    /> : <></>}
-                                            {
-                                                isYearSelected ?
-                                                    <DatePicker
-                                                        selected={date}
-                                                        onChange={(e) => handleReloadYear(e)}
-                                                        showYearPicker
-                                                        dateFormat="yyyy"
-                                                    /> : <></>
-                                            }
+                                        <div className='col-md-3'>
+                                            <DatePicker
+                                                placeholderText='Đến ngày'
+                                                selected={endDate}
+                                                onChange={(date) => {
+                                                    setEndDate(date)
+                                                }}
+                                                selectsEnd
+                                                showMonthDropdown
+                                                startDate={startDate}
+                                                endDate={endDate}
+                                                minDate={startDate}
+                                            />
+                                        </div>
+                                        <div className='col-md-2'>
+                                            <Button size='sm' variant="outlined" onClick={(e) => handleReload()}>Load</Button>
                                         </div>
                                         <div className='col-md-2'>
                                             <FormControl fullWidth>

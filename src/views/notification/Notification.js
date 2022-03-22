@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { getData } from '../../components/utils/Api'
+import { getToken, getUserID } from '../../components/utils/Common'
 
 const Notification = () => {
     const script = () => {
@@ -12,6 +14,19 @@ const Notification = () => {
     useEffect(() => {
         script()
     }, []);
+    // useEffect(() => {
+    //     // const header = `Authorization: Bearer ${getToken()}`
+    //     Promise.all([
+    //         getData('http://127.0.0.1:8000/api/admin/notification/show/' + getUserID() + '?token=' + getToken()),
+    //     ])
+    //         .then(function (res) {
+    //             setDataWarehouse(res[0].warehouse_id)
+    //             setIsCheckedWarehouse(res[0].warehouse_id.map(item => item.id))
+    //         })
+    //         .catch(error => {
+    //             console.log(error)
+    //         })
+    // }, [])
 
     return (
         <div className="content-wrapper">
@@ -128,8 +143,8 @@ const Notification = () => {
                                         } */}
                                         <tr>
                                             <td>1</td>
-                                            <td className="mailbox-name">1ádfasdf</td>
-                                            <td className="mailbox-subject"><b>1ádfadf</b></td>
+                                            <td className="mailbox-name">admin</td>
+                                            <td className="mailbox-subject"><b>THÔNG BÁO</b></td>
                                             <td>1</td>
                                             <td>
                                                 <div style={{ textAlign: "center" }}>
@@ -142,13 +157,6 @@ const Notification = () => {
                                                     </div>
                                                 </div>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td className="mailbox-name">abc</td>
-                                            <td className="mailbox-subject"><b>1ádfadf</b></td>
-                                            <td>1</td>
-                                            <td>1</td>
                                         </tr>
                                     </tbody>
                                     <tfoot>

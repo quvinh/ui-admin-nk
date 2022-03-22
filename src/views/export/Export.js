@@ -9,6 +9,8 @@ import DateTimePicker from '@mui/lab/DateTimePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import CurrencyFormat from 'react-currency-format'
 import { useHistory } from 'react-router-dom'
+import SelectSearch, { fuzzySearch } from 'react-select-search'
+import "./select-search.css"
 
 const Export = (props) => {
     const script = () => {
@@ -24,6 +26,7 @@ const Export = (props) => {
     const [shelf_id, setShelfID] = useState('')
     const [category_id, setCategory] = useState()
     const [name, setName] = useState('')
+    const [nameSelect, setNameSelect] = useState('')
     const [shelf_name, setShelfName] = useState('')
     const [unit, setUnit] = useState('')
     const [created_by, setCreatedBy] = useState('')
@@ -50,20 +53,6 @@ const Export = (props) => {
     const [isWarehouseSelected, setIsWarehouseSelected] = useState(false)
     const [showWarehouse, setShowWarehouse] = useState(false)
 
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = event => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-    const emptyRows =
-        rowsPerPage - Math.min(rowsPerPage, dataTable.length - page * rowsPerPage);
-
     const history = useHistory()
 
 
@@ -88,11 +77,10 @@ const Export = (props) => {
     // const [isItemSelected, setIsItemSelected] = useState(false)
 
     const onChangeName = (e, newValue) => {
-        setName(e.target.value)
-        console.log(dataItem)
+        setNameSelect(newValue)
         var checked = false
         dataItem.map((item) => {
-            if (item.itemname === newValue) {
+            if (item.itemname === newValue.name && item.id === newValue.value) {
                 setItemID(item.item_id)
                 setBatchCode(item.batch_code)
                 setCategory(item.category_id)
@@ -100,9 +88,10 @@ const Export = (props) => {
                 setShelfName(item.shelf_name)
                 setSuppliers(item.supplier_id)
                 setUnit(item.unit)
+                setName(item.itemname)
+                console.log(item.warehouse_id)
                 setWarehouse(item.warehouse_id)
                 setPrice(item.price)
-                setName(item.itemname)
                 setNameWarehouse(item.name_warehouse)
                 setAmountCurrent(item.amount)
                 getDataShelf(item.warehouse_id)
@@ -157,6 +146,7 @@ const Export = (props) => {
     const onChangeWarehouse = (e, value) => {
         console.log(value)
         console.log(e)
+        console.log(dataItem)
         if (value) {
             setIsWarehouseSelected(true)
             setWarehouse(e.target.value)
@@ -189,6 +179,8 @@ const Export = (props) => {
         setIsAmountSelected(true)
         setShelfName(newValue.props.children)
         setShelfID(e.target.value)
+        console.log(e.target.value)
+        console.log(dataItem)
         Promise.all([
             getData('http://127.0.0.1:8000/api/admin/warehouse/itemShelf/' + warehouse_id + '/' + e.target.value + '?token=' + getToken())
         ])
@@ -217,6 +209,7 @@ const Export = (props) => {
     const getDataShelf = (id) => {
         Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
             .then(function (res) {
+                console.log(res[0].data)
                 setDataShelf(res[0].data)
             })
             .catch(err => {
@@ -230,7 +223,7 @@ const Export = (props) => {
                 let amountTotal = 0
                 let array = []
                 dataTable.map((item, index) => {
-                    if (item.item_id === item_id && item.shelf_id === shelf_id && item.warehouse_id === warehouse_id) {
+                    if (item.item_id === item_id && item.warehouse_id === warehouse_id && item.shelf_id === shelf_id) {
                         amountTotal = parseInt(item.amount) + parseInt(amount)
                         array = index > 0 ? [...dataTable.slice(0, index), ...dataTable.slice(index + 1, dataTable.length)] : [...dataTable.slice(1, dataTable.length)]
                     }
@@ -250,12 +243,16 @@ const Export = (props) => {
                     amount: amountTotal,
                     price: price,
                     nameWarehouse: nameWarehouse,
-                    nameShelf: shelf_name,
+                    shelf_name: shelf_name,
                     note: note,
                     totalPrice: totalPrice
+
                 }
+                console.log(data)
                 console.log(dataTable)
-                array.length > 0 ? setDataTable([...array, data]) : (dataTable.length === 1 && dataTable[0].item_id === item_id ? setDataTable([data]) : setDataTable([...dataTable, data]))
+                array.length > 0 ? setDataTable([...array, data]) : (dataTable.length === 1 && dataTable[0].item_id === item_id &&
+                    dataTable[0].warehouse_id === warehouse_id && dataTable[0].shelf_id === shelf_id ?
+                    setDataTable([data]) : setDataTable([...dataTable, data]))
                 console.log(dataTable)
             } else {
                 const data = {
@@ -272,12 +269,14 @@ const Export = (props) => {
                     amount: amount,
                     price: price,
                     nameWarehouse: nameWarehouse,
-                    nameShelf: shelf_name,
+                    shelf_name: shelf_name,
                     note: note,
                     totalPrice: totalPrice
                 }
                 setDataTable([...dataTable, data])
+                console.log(data)
             }
+
             setAmount(0)
             // setAmountCurrent(0)
         } else {
@@ -286,6 +285,7 @@ const Export = (props) => {
             // setAmountCurrent(0)
         }
         script()
+        console.log(dataTable)
     }
 
     const getIdWarehouseRole = () => {
@@ -300,11 +300,10 @@ const Export = (props) => {
             getData(getRoleNames() === 'admin' ?
                 'http://127.0.0.1:8000/api/admin/items/itemInWarehouse?token=' + getToken() :
                 getDataWarehouseID().length > 0 && 'http://127.0.0.1:8000/api/admin/items/searchItem/' + getDataWarehouseID()[0] + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()),
+            getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
             getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
         ])
             .then(res => {
-                console.log(res[0].data)
                 setDataItem(res[0].data)
                 setDataWarehouse(res[1].data)
                 setCreatedBy(res[2].data[0].fullname)
@@ -324,6 +323,12 @@ const Export = (props) => {
                 history.push('/404')
             })
     }, [])
+
+    const dataOption = dataItem.map((item, index) => ({
+        name: item.itemname,
+        value: item.id
+    }))
+
     return (
         <div className="content-wrapper">
             <section className="content-header">
@@ -355,11 +360,11 @@ const Export = (props) => {
                         <div className="card-body">
                             <div className="row" style={{ marginBottom: 10 }}>
                                 <div className="col-md-7">
-                                    <Autocomplete
+                                    {/* <Autocomplete
                                         id="name_item"
                                         freeSolo
                                         size='small'
-                                        options={dataItem.map((option) => option.itemname)}
+                                        options={dataOption}
                                         // value={name}
                                         // onChange={(e, newValue) => onChangeName(e, newValue)}
                                         inputValue={name}
@@ -368,17 +373,26 @@ const Export = (props) => {
                                         }}
                                         renderInput={(params) => <TextField {...params} label="Tên vật tư" />}
                                         disableClearable
+                                    /> */}
+                                    <SelectSearch
+                                        options={dataOption}
+                                        value={nameSelect}
+                                        onChange={(e, newValue) => onChangeName(e, newValue)}
+                                        search
+                                        filterOptions={fuzzySearch}
                                     />
-                                    {validator.message("name", name, "required", {
-                                        messages: {
-                                            required: "(*) Nhập tên vật tư"
-                                        }
-                                    })}
+                                    <div style={{ color: "red", fontStyle: "italic" }}>
+                                        {validator.message("name_item", name, "required", {
+                                            messages: {
+                                                required: "(*) Nhập tên vật tư"
+                                            }
+                                        })}
+                                    </div>
                                 </div>
                                 <div className="col-md-5">
                                     <Box>
                                         <FormControl fullWidth>
-                                            <InputLabel style={{ fontSize: 12 }}>Nhà kho</InputLabel>
+                                            <InputLabel size='small' style={{ fontSize: 12 }}>Nhà kho</InputLabel>
                                             <Select
                                                 disabled={showWarehouse}
                                                 size="small"
@@ -412,11 +426,14 @@ const Export = (props) => {
                                             setAmount(parseInt(e.target.value) > kd ? kd : parseInt(e.target.value))
                                         }}
                                     />
-                                    {validator.message("amount", amount, "required", {
-                                        messages: {
-                                            required: "(*) Nhập số lượng"
-                                        }
-                                    })}
+                                    <div style={{ color: "red", fontStyle: "italic" }}>
+                                        {validator.message("amount", amount, "required", {
+                                            messages: {
+                                                required: "(*) Nhập số lượng"
+                                            }
+                                        })}
+                                    </div>
+
                                 </div>
                                 <div className="col-md-2">
                                     <TextField
@@ -448,7 +465,7 @@ const Export = (props) => {
                                 <div className="col-md-5">
                                     <Box>
                                         <FormControl fullWidth>
-                                            <InputLabel style={{ fontSize: 12 }}>Giá/kệ</InputLabel>
+                                            <InputLabel size='small' style={{ fontSize: 12 }}>Giá/kệ</InputLabel>
                                             <Select
                                                 size="small"
                                                 label="Nhà cung cấp"
@@ -472,14 +489,14 @@ const Export = (props) => {
 
                             <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <button style={{ width: "6%", marginRight: "10px" }} type="button"
-                                    class="btn btn-block btn-primary btn-sm"
+                                    className="btn btn-block btn-primary btn-sm"
                                     onClick={(e) => reset()}>Reset
                                 </button>
-                                <button class="btn btn-sm btn-primary" onClick={(e) => {
+                                <button className="btn btn-sm btn-primary" onClick={(e) => {
                                     onAddTable(e)
                                     setKD(parseInt(kd) - parseInt(amount))
                                 }}>
-                                    <i class="fas fa-edit"></i> Thêm vào DS
+                                    <i className="fas fa-edit"></i> Thêm vào DS
                                 </button>
                             </div>
                         </div>
@@ -494,7 +511,7 @@ const Export = (props) => {
                                 <div className="card-header">
                                     <h3 className="card-title">Thông tin xuất kho</h3>
                                     <div className="col" style={{ textAlign: "end" }}>
-                                        <button class="btn btn-sm btn-success" onClick={(e) => handleSave(e)}>
+                                        <button className="btn btn-sm btn-success" onClick={(e) => handleSave(e)}>
                                             <i className="fas fa-save"></i> Lưu nhập
                                         </button>
                                     </div>
@@ -526,7 +543,7 @@ const Export = (props) => {
                                                         <td className='text-center'>{item.unit}</td>
                                                         <td className='text-center'>{item.amount}</td>
                                                         <td className='text-center'>{(item.price).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
-                                                        <td>{item.nameShelf}</td>
+                                                        <td>{item.shelf_name}</td>
                                                         <td className='text-center'><button className="btn btn-sm btn-danger"
                                                             onClick={(e) => {
                                                                 onRemoveRow(e, index)

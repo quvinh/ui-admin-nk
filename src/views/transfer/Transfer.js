@@ -10,6 +10,8 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { styled } from '@mui/material/styles';
+import '../export/select-search.css'
+import SelectSearch, {fuzzySearch} from 'react-select-search'
 
 const Transfer = () => {
     const history = useHistory()
@@ -22,6 +24,7 @@ const Transfer = () => {
     const [toShelf, setToShelf] = useState('')
     const [category_id, setCategory] = useState()
     const [name, setName] = useState('')
+    const [nameSelect, setNameSelect] = useState('')
     const [unit, setUnit] = useState('')
     const [created_by, setCreatedBy] = useState('')
     const [amount, setAmount] = useState('')
@@ -176,13 +179,13 @@ const Transfer = () => {
     }
 
     const onChangeName = (e, newValue) => {
-        setName(e.target.value)
+        setNameSelect(newValue)
         if (dataTable.length === 0) createCode()
         setIsAmountSelected(false)
         setAmount(0)
 
         dataItem.map((item) => {
-            if (item.itemname === newValue) {
+            if (item.itemname === newValue.name && item.id === newValue.value) {
                 setItemID(item.item_id)
                 setBatchCode(item.batch_code)
                 setCategory(item.category_id)
@@ -323,8 +326,9 @@ const Transfer = () => {
         color: theme.palette.text.secondary,
     }));
 
-    const handleSave = (e) => {
-        if (dataTable.length > 0) {
+    const handleSave = () => {
+        console.log('--', dataTable)
+        if (dataTable) {
             dataTable.map((item, index) => {
                 Promise.all([postData('http://127.0.0.1:8000/api/admin/transfer/store?token=' + getToken(), item)])
                     .then(function (res) {
@@ -364,12 +368,17 @@ const Transfer = () => {
         document.body.appendChild(compile)
     }
 
+    const dataOption = dataItem.map((item, index) => ({
+        name: item.itemname,
+        value: item.id
+    }))
+
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
                 'http://127.0.0.1:8000/api/admin/items/itemInWarehouse?token=' + getToken() :
                 'http://127.0.0.1:8000/api/admin/items/searchItem/' + getIdWarehouseRole() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()),
+            getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
             getData('http://127.0.0.1:8000/api/auth/user-profile?token=' + getToken())
         ])
             .then(res => {
@@ -391,7 +400,7 @@ const Transfer = () => {
                     history.push('/404')
                 }
             })
-        alert()    
+        alert()
     }, [])
     console.log('d', dataTable)
     const script = () => {
@@ -431,7 +440,7 @@ const Transfer = () => {
                                 <div className="card-body">
                                     <div className='row'>
                                         <div className="col-md-6">
-                                            <Autocomplete
+                                            {/* <Autocomplete
                                                 id="itemname"
                                                 freeSolo
                                                 size='small'
@@ -440,6 +449,13 @@ const Transfer = () => {
                                                 onInputChange={(e, newValue) => onChangeName(e, newValue)}
                                                 renderInput={(params) => <TextField {...params} label="Tên vật tư" />}
                                                 disableClearable
+                                            /> */}
+                                            <SelectSearch
+                                                options={dataOption}
+                                                value={nameSelect}
+                                                onChange={(e, newValue) => onChangeName(e, newValue)}
+                                                search
+                                                filterOptions={fuzzySearch}
                                             />
                                             {validator.message("name", name, "required", {
                                                 messages: {
@@ -625,16 +641,16 @@ const Transfer = () => {
                                     <div className="row">
                                         <div className="col" style={{ textAlign: "end" }}>
                                             <div>
-                                                {   
-                                                (isSave) ? (
-                                                <button className="btn btn-sm btn-success" disabled>
-                                                    <i className="fas fa-save" /> Lưu thành công
-                                                </button>
-                                                ) : (
-                                                <button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave} disabled={dataTable.length > 0 ? false : true}>
-                                                    <i className="fas fa-save" /> Lưu phiếu
-                                                </button>
-                                                )} 
+                                                {
+                                                    (isSave) ? (
+                                                        <button className="btn btn-sm btn-success" disabled>
+                                                            <i className="fas fa-save" /> Lưu thành công
+                                                        </button>
+                                                    ) : (
+                                                        <button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave} disabled={dataTable.length > 0 ? false : true}>
+                                                            <i className="fas fa-save" /> Lưu phiếu
+                                                        </button>
+                                                    )}
                                             </div>
                                         </div>
                                     </div>

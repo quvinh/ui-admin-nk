@@ -4,7 +4,7 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Account = React.lazy(() => import('./views/account/Account'))
 const AddAccount = React.lazy(() => import('./views/account/AddAccount'))
 const EditAccount = React.lazy(() => import('./views/account/EditAccount'))
-// const Profile = React.lazy(() => import('./views/account/Profile'))
+const Profile = React.lazy(() => import('./views/account/Profile'))
 
 // const Status = React.lazy(() => import('./views/status/Status'))
 
@@ -24,6 +24,9 @@ const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
 
 // //Warehouse
 const Warehouse = React.lazy(() => import('./views/warehouse/Warehouse'))
+// const WarehouseInfo = React.lazy(() => import('./views/warehouse/WarehouseInfo'))
+const WarehouseShow = React.lazy(() => import('./views/warehouse/WarehouseShow'))
+// const WarehouseListItem = React.lazy(() => import('./views/warehouse/WarehouseListItem'))
 // const EditWarehouses = React.lazy(() => import('./views/warehouses/Edit'))
 // const AddWarehouses = React.lazy(() => import('./views/warehouses/Add'))
 // const ShelfWarehouse = React.lazy(() => import('./views/warehouses/Shelfwarehouse'))
@@ -55,14 +58,14 @@ const ReadNotification = React.lazy(() => import('./views/notification/ReadNotif
 // const EditSuppliers = React.lazy(() => import('./views/suppliers/Edit'))
 
 // //Role
-// const Role = React.lazy(() => import('./views/roles/Role'))
+const Role = React.lazy(() => import('./views/role/Role'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/account', name: 'User', component: Account },
   { path: '/account-add', name: 'User', component: AddAccount },
   { path: '/account-edit/:id', name: 'User', component: EditAccount },
-  //   { path: '/profile', name: 'Profile', component: Profile },
+    { path: '/profile', name: 'Profile', component: Profile },
   { path: '/dashboard', name: 'Bản tin', component: Dashboard },
   //   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/export', name: 'Xuất kho', component: Export },
@@ -78,10 +81,15 @@ const routes = [
   { path: '/statistic', name: 'Thống kê', component: Statistical },
   { path: '/transfer', name: 'Điều phối kho', component: Transfer },
 
+  { path: '/role', name: 'Chức vụ', component: Role },
+
   { path: '/warehouse', name: 'Kho', component: Warehouse },
-  //   { path: '/warehouses-add', name: 'Tạo kho', component: AddWarehouses },
-  //   { path: '/warehouses-edit/:id', name: 'Chỉnh sửa kho', component: EditWarehouses },
-  //   { path: '/warehouses-shelf/:id', name: 'kệ trong kho', component: ShelfWarehouse },
+  // { path: '/warehouse-info', name: 'Thông tin chi tiết kho', component: WarehouseInfo },
+  { path: '/warehouse-show/:id', name: 'thông tin kho', component: WarehouseShow },
+  // { path: '/warehouse-listitem', name: 'thông tin kho', component: WarehouseListItem },
+//   { path: '/warehouses-add', name: 'Tạo kho', component: AddWarehouses },
+//   { path: '/warehouses-edit/:id', name: 'Chỉnh sửa kho', component: EditWarehouses },
+//   { path: '/warehouses-shelf/:id', name: 'kệ trong kho', component: ShelfWarehouse },
 
   { path: '/category', name: 'Category', component: Category },
   //   { path: '/categories-add', name: 'Tạo category', component: AddCategories },
