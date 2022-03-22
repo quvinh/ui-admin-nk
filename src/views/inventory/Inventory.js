@@ -54,7 +54,7 @@ const Inventory = () => {
                                 </div>
                                 <div className="card card-info card-outline">
                                     <div className="card-header">
-                                        <h4 className="card-title">Danh sách vật tư</h4>
+                                        <h4 className="card-title">Kiểm kê</h4>
                                         <div className="card-tools">
                                             <button type="button" className="btn btn-tool" data-card-widget="collapse">
                                                 <i className="fas fa-minus" />
@@ -62,6 +62,8 @@ const Inventory = () => {
                                         </div>
                                     </div>
                                     <div className="card-body">
+                                        
+                                        <hr/>
                                         <table id="item" className="table table-hover">
                                             <thead>
                                                 <tr>
@@ -83,9 +85,7 @@ const Inventory = () => {
                                                     <td className="text-center"></td>
                                                     <td className="text-center"></td>
                                                     <td className="text-center"></td>
-                                                    <td className="text-center">
-                                                        <input style={{border: "none"}} onChange={(e) => {handleDifference()}}></input>
-                                                    </td>
+                                                    <td className="text-center"></td>
                                                     <td className="text-center"></td>
                                                     <td className="text-center"></td>
                                                     <td className="text-center"></td>
