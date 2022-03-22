@@ -15,7 +15,7 @@ const Import = () => {
     const [item_id, setItemID] = useState('')
     const [batch_code, setBatchCode] = useState('')
     const [warehouse_id, setWarehouse] = useState('')
-    const [supplier_id, setSuppliers] = useState()
+    const [supplier_id, setSuppliers] = useState('')
     const [shelf_id, setShelf] = useState('')
     const [category_id, setCategory] = useState()
     const [name, setName] = useState('')
@@ -47,6 +47,11 @@ const Import = () => {
     const [isUnitSelected, setIsUnitSelected] = useState(false)
     const [isCategorySelected, setIsCategorySelected] = useState(false)
 
+    const handleChangeSuppliers = (e) => {
+        setSuppliers(e.target.value)
+        console.log(e.target.value)
+    }
+
     const history = useHistory()
 
     const setNull = () => {
@@ -74,6 +79,7 @@ const Import = () => {
         setIsCategorySelected(false)
         setIsItemSelected(false)
         setDataTable([])
+
     }
 
     const onChangeName = (e, newValue) => {
@@ -122,7 +128,7 @@ const Import = () => {
         })
         setIsUnitSelected(false)
     }
-    console.log(category_id)
+
     const onChangeWarehouse = (e, newValue, value) => {
         if (value) {
             // let index = e.nativeEvent.target.selectedIndex;
@@ -289,9 +295,7 @@ const Import = () => {
 
     useEffect(() => {
         Promise.all([
-            getData(getRoleNames() === 'admin' ?
-                'http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken() :
-                'http://127.0.0.1:8000/api/admin/warehouse/show/' + getDataWarehouseID()[0] + '?token=' + getToken()),
+            getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
             getData('http://127.0.0.1:8000/api/admin/suppliers?token=' + getToken()),
             getData('http://127.0.0.1:8000/api/admin/category?token=' + getToken()),
             getData(getRoleNames() === 'admin' ?
@@ -303,8 +307,7 @@ const Import = () => {
         ])
             .then(res => {
 
-                console.log(res[0].data)
-                setWarehouse(getDataWarehouseID())
+                console.log(res[1].data)
                 setDataWarehouse(res[0].data)
                 setDataSuppliers(res[1].data)
                 setDataCategory(res[2].data)
@@ -515,7 +518,7 @@ const Import = () => {
                                             >
                                                 {
                                                     dataCategory.map((item, index) => (
-                                                        <MenuItem key={index} value={item.id}>{item.name}</MenuItem>
+                                                        <option key={index} value={item.id}>{item.name}</option>
                                                     ))
                                                 }
                                             </Select>
@@ -663,7 +666,7 @@ const Import = () => {
                                                         <InputLabel size="small">Giá/kệ</InputLabel>
                                                         <Select
                                                             size="small"
-                                                            label="Nhà cung cấp"
+                                                            label="Nhà giá/kệ"
                                                             name="shelf_id"
                                                             value={shelf_id}
                                                             onChange={(e) => setShelf(e.target.value)}
@@ -737,7 +740,7 @@ const Import = () => {
                                     <h3 className="card-title">Danh sách nhập</h3>
                                 </div>
                                 <div className="col" style={{ textAlign: "end" }}>
-                                    <button style={{ width: 200 }} type="button" className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave}>
+                                    <button style={{ width: 200 }} type="button" className="btn btn-sm btn-success toastrDefaultSuccess" onClick={handleSave} disabled={dataTable.length > 0 ? false : true}>
                                         <i className="fas fa-save"></i> Lưu nhập
                                     </button>
                                 </div>

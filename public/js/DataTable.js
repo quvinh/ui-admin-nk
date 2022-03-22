@@ -13,4 +13,8 @@ $(function () {
         "responsive": true, "lengthChange": false, "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#item_wrapper .col-md-6:eq(0)');
+    $("#supplier").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#supplier_wrapper .col-md-6:eq(0)');
 });

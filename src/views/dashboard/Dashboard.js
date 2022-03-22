@@ -2,8 +2,8 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
 // import Chart from './Charts'
-import { Bar } from 'react-chartjs-2';
-import BarChart from './Chart2';
+// import { Bar } from 'react-chartjs-2';
+// import BarChart from './Chart2';
 import { getData } from '../../components/utils/Api'
 import { getDataWarehouseID, getRoleNames, getToken } from '../../components/utils/Common'
 
@@ -20,8 +20,10 @@ const Dashboard = () => {
   const [status, setStatus] = useState('')
 
   const arrImportAmount = []
+  const arrImportLabel = []
   importVT.map((item, index) => {
     arrImportAmount.push(item.importAmount)
+    arrImportLabel.push(item.warehouse_name)
   })
   console.log(arrImportAmount)
   const arrImportMonth = []
@@ -32,9 +34,11 @@ const Dashboard = () => {
   exportVT.map((item, index) => {
     arrExportMonth.push(item.month)
   })
+  const arrExportLabel = []
   const arrExportAmount = []
   exportVT.map((item, index) => {
     arrExportAmount.push(item.exportAmount)
+    arrExportLabel.push(item.warehouse_name)
   })
 
   const Charts = () => {
@@ -111,17 +115,18 @@ const Dashboard = () => {
         maintainAspectRatio: false,
         scales: {
           yAxes: [
-              {
-                  ticks: {
-                      beginAtZero: true
-                  }
+            {
+              ticks: {
+                beginAtZero: true
               }
+            }
           ]
-      },
+        },
         datasetFill: false
       }
     })
   }
+  
 
   useEffect(() => {
     {
@@ -139,6 +144,7 @@ const Dashboard = () => {
             setImportVT(res[1].data)
             console.log(res[2].data)
             setExportVT(res[2].data)
+            Charts()
           })
           .catch((error) => {
             console.log(error)
@@ -162,12 +168,14 @@ const Dashboard = () => {
             console.log(res)
             setTonKho(res[0].data)
             setImportVT(res[1].data)
+
             setExportVT(res[2].data)
             setNameWarehouse(res[4].data.name)
             setIdWarehouse(res[4].warehouse_id)
             setTotalItem(res[4].total)
             setAmountItem(res[4].tonKho)
             setStatus(res[4].status)
+            Charts()
             // setTonKho(res[4].data)
           })
           .catch((error) => {
@@ -175,7 +183,7 @@ const Dashboard = () => {
           })
       )
     }
-    Charts()
+    
 
   }, [])
   // Promise.all([
@@ -269,7 +277,7 @@ const Dashboard = () => {
                         </tbody>
                       </table>
                     ) : getDataWarehouseID().length > 0 && (
-                      <table id="item" className="table table-hover ">
+                      <table id="item" className="table table-hover " style={{ height: "404px" }}>
                         <thead>
                           <tr>
                             <th className='text-center'>STT</th>
@@ -324,7 +332,8 @@ const Dashboard = () => {
                   </div> */}
                   {/* /.d-flex */}
                   <div className="position-relative mb-4">
-                    <canvas id="myChart"height="400"></canvas>
+                    <canvas id="myChart" height="400"></canvas>
+                    {/* <Chart /> */}
                     {/* <BarChart /> */}
                     {/* <canvas id="sales-chart" height={200} /> */}
                     {/* <div className="chart">

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { getData, putData, delData, postData } from '../../components/utils/Api'
 import { useHistory } from 'react-router-dom';
 import Validator from '../../components/utils/Validation'
-import { getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
+import { getAllPermissions, getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 
 
 
@@ -53,7 +53,7 @@ const WarehouseShow = (props) => {
             position: position,
             warehouse_id: props.match.params.id,
         }
-        Promise.all([postData('http://127.0.0.1:8000/api/admin/shelf/store/' + props.match.params.id + '?token=' + getToken(), data)])
+        Promise.all([postData('http://127.0.0.1:8000/api/admin/shelf/store' + '?token=' + getToken(), data)])
             .then(function (res) {
                 console.log('Added succesfully', res)
                 handleReloadShelf()
@@ -252,11 +252,12 @@ const WarehouseShow = (props) => {
     const [dataManager, setDataManager] = useState([])
 
     useEffect(() => {
-        console.log(props)
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + props.match.params.id + '?token=' + getToken()),
-        getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + props.match.params.id + '?token=' + getToken()),
-        getData('http://127.0.0.1:8000/api/admin/warehouse/listItem/' + props.match.params.id + '?token=' + getToken()),
-        getData('http://127.0.0.1:8000/api/admin/warehouse/managerShow/' + props.match.params.id + '?token=' + getToken()),
+        // console.log(props)
+        Promise.all([
+            getData('http://127.0.0.1:8000/api/admin/warehouse/show2/' + props.match.params.id + '?token=' + getToken()),
+            getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + props.match.params.id + '?token=' + getToken()),
+            getData('http://127.0.0.1:8000/api/admin/warehouse/listItem/' + props.match.params.id + '?token=' + getToken()),
+            getData('http://127.0.0.1:8000/api/admin/warehouse/managerShow/' + props.match.params.id + '?token=' + getToken())
         ])
             .then(function (response) {
                 setName(response[0].data.name)
@@ -268,8 +269,63 @@ const WarehouseShow = (props) => {
                 console.log(response[3].data)
                 setDataManager(response[3].data)
                 script()
-                console.log(response[1].data)
+
+
+                // console.log(response[0].data)
+                // setName(response[0].data[0].name)
+                // setLocation(response[0].data[0].location)
+                // setNote(response[0].data[0].note)
+                // setDataShelf(response[1].data)
+                // console.log('-------')
+                // setListItem(response[2].data)
+                // console.log(response[0].data)
+                // setDataManager(response[3].data)
+                // script()
+                // console.log(response[1].data)
             })
+        // {
+        //     getRoleNames() === 'admin' ? (
+        //         Promise.all([
+        //             getData('http://127.0.0.1:8000/api/admin/warehouse/show2/' + props.match.params.id + '?token=' + getToken()),
+        //             getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + props.match.params.id + '?token=' + getToken()),
+        //             getData('http://127.0.0.1:8000/api/admin/warehouse/listItem/' + props.match.params.id + '?token=' + getToken()),
+        //             getData('http://127.0.0.1:8000/api/admin/warehouse/managerShow/' + props.match.params.id + '?token=' + getToken()),
+        //         ])
+        //             .then(function (response) {
+        //                 setName(response[0].data.name)
+        //                 setLocation(response[0].data.location)
+        //                 setNote(response[0].data.note)
+        //                 setDataShelf(response[1].data)
+        //                 setListItem(response[2].data)
+        //                 setDataManager(response[3].data)
+        //                 script()
+        //             })
+        //             .catch((error) => {
+        //                 console.log(error)
+        //             })
+
+        //     ) : getDataWarehouseID().length > 0 && (
+        //         Promise.all([
+        //             getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + props.match.params.id + '?token=' + getToken()),
+        //             getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + props.match.params.id + '?token=' + getToken()),
+        //             getData('http://127.0.0.1:8000/api/admin/warehouse/listItem/' + props.match.params.id + '?token=' + getToken()),
+        //             getData('http://127.0.0.1:8000/api/admin/warehouse/managerShow/' + props.match.params.id + '?token=' + getToken()),
+        //         ])
+        //             .then(function (res) {
+        //                 // res.header('Access-Control-Allow-Origin: *')
+        //                 setName(response[0].data[0].name)
+        //                 setLocation(response[0].data[0].location)
+        //                 setNote(response[0].data[0].note)
+        //                 setDataShelf(response[1].data)
+        //                 setListItem(response[2].data)
+        //                 setDataManager(response[3].data)
+        //                 script()
+        //             })
+        //             .catch((error) => {
+        //                 console.log(error)
+        //             })
+        //     )
+        // }
     }, []);
     return (
         < div className="content-wrapper" >
@@ -311,11 +367,21 @@ const WarehouseShow = (props) => {
                                             <form className="form-horizontal">
                                                 <hr style={{ border: "1px solid red" }} />
                                                 {/* <div className="row"> */}
-                                                <h6><strong>Detail</strong></h6>
-                                                <div className='justify-content-end'>
-                                                    <button className="btn btn-sm btn-primary" onClick={(e) => handleUpdate(e)} style={{ marginTop: "-50px", marginLeft: "1484px" }}>
-                                                        <i className="fas fa-edit"></i> Cập nhật
-                                                    </button>
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <h6><strong>Chi tiết kho</strong></h6>
+                                                    </div>
+                                                    <div className="col">
+                                                        <div style={{ textAlign: "end" }}>
+                                                            {
+                                                                getAllPermissions().includes("Sửa kho") && (
+                                                                    <button className="btn btn-sm btn-primary" onClick={(e) => handleUpdate(e)} >
+                                                                        <i className="fas fa-edit"></i> Cập nhật
+                                                                    </button>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                                 {/* </div> */}
@@ -366,11 +432,19 @@ const WarehouseShow = (props) => {
                                             <hr />
                                             <br />
                                             <hr style={{ border: "1px solid blue" }} />
-                                            <h6><strong>Danh sách kệ</strong></h6>
-                                            <button style={{ marginTop: "-50px", marginLeft: "1495px" }} type="button" className="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-lg">
-                                                <i class="fa fa-plus" aria-hidden="true"></i> tạo mới
-                                            </button>
-
+                                            <div className="row">
+                                                <div className="col">
+                                                    <h6><strong>Danh sách kệ</strong></h6>
+                                                </div>
+                                                <div className="col">
+                                                    <div style={{ textAlign: "end" }}>
+                                                        <button type="button" className="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-lg">
+                                                            <i class="fa fa-plus" aria-hidden="true"></i> Tạo mới
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
                                             <table id="shelf" className="table table-hover">
                                                 <thead>
                                                     <tr>
@@ -490,10 +564,19 @@ const WarehouseShow = (props) => {
                                                                                 handleDetailItem(item.id, item.shelf_id, item.warehouse_id)
                                                                                 handleValid(item.id, item.shelf_id, item.warehouse_id)
                                                                             }} data-toggle="modal" data-target="#modal-item">Chi tiết</a>
-                                                                            <a className="dropdown-item" onClick={(e) => {
-                                                                                handleDetailItem(item.id, item.shelf_id, item.warehouse_id)
-                                                                                setIsSelectedItem(true)
-                                                                            }} data-toggle="modal" data-target="#modal-item">Cập nhật</a>
+                                                                            {
+                                                                                getRoleNames() === 'admin' ? (
+                                                                                    <>
+                                                                                        <a className="dropdown-item" onClick={(e) => {
+                                                                                            handleDetailItem(item.id, item.shelf_id, item.warehouse_id)
+                                                                                            setIsSelectedItem(true)
+                                                                                        }} data-toggle="modal" data-target="#modal-item">Cập nhật</a>
+                                                                                    </>
+                                                                                ) : (
+                                                                                    <></>
+                                                                                )
+                                                                            }
+
                                                                         </div>
                                                                     </div>
 

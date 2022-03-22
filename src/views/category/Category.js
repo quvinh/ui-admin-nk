@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { delData, getData } from '../../components/utils/Api'
-import { getToken } from '../../components/utils/Common'
+import { getAllPermissions, getToken } from '../../components/utils/Common'
 
 const Category = () => {
     const script = () => {
@@ -62,7 +62,7 @@ const Category = () => {
                                 </div>
                                 {/* /.card-header */}
                                 <div className="card-body">
-                                    <table id="example1" className="table table-bordered table-striped">
+                                    <table id="item" className="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th>STT</th>
@@ -85,7 +85,11 @@ const Category = () => {
                                                                 </button>
                                                                 <div className="dropdown-menu">
                                                                     <a className="dropdown-item" href="#">Chi tiết</a>
-                                                                    <a className="dropdown-item" href="#">Cập nhật</a>
+                                                                    {
+                                                                        getAllPermissions().includes("Sửa loại vật tư") && (
+                                                                            <a className="dropdown-item" href="#">Cập nhật</a>
+                                                                        )
+                                                                    }
                                                                 </div>
                                                             </div>
                                                         </td>

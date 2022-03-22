@@ -1,21 +1,74 @@
 /* eslint-disable no-undef */
-import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
-
+import React, { useEffect, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import AppHeader from '../../components/AppHeader'
+import { getData, postData } from '../../components/utils/Api'
+import { getToken, getUserID } from '../../components/utils/Common'
+import Notification from './Notification'
+// import Select, { components } from 'react-select'
 const AddNotification = () => {
+    const [title, setTitle] = useState()
+    const [content, setContent] = useState('Nội dung')
+    const [dataWarehouse, setDataWarehouse] = useState([])
+    const [dataNotification, setDataNotification] = useState([])
+    const [isCheckedWarehouse, setIsCheckedWarehouse] = useState([])
+    const [isSelected, setIsSelected] = useState(false)
+    const [test, setTest] = useState('')
+    const history = useHistory()
 
-    const script = () => {
-        const compile = document.createElement("script")
-        compile.src = $(function () {
-            $('#compose-textarea').summernote()
+    const handleChangeData = () => {
+
+    }
+
+    const handleCheckWarehouse = (e) => {
+        const { id, checked } = e.target
+        console.log(id)
+        setIsCheckedWarehouse([...isCheckedWarehouse, parseInt(id)])
+        !checked && setIsCheckedWarehouse(isCheckedWarehouse.filter(item => parseInt(item) !== parseInt(id)))
+        // setIsSelected(true)
+    }
+
+    const handleSave = () => {
+        isCheckedWarehouse.map(item => {
+            console.log(title)
+            console.log(item)
+            console.log(content)
+            const data = {
+                title: title,
+                content: content,
+                status: 0,
+                created_by: getUserID(),
+                warehouse_id: item
+            }
+            console.log(data)
+            Promise.all([
+                postData('http://127.0.0.1:8000/api/admin/notification/store?token=' + getToken(), data),
+            ])
+                .then(function (res) {
+                    setTest('test')
+                    // history.push('/notification')
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         })
-        compile.async = true
-        document.body.appendChild(compile)
+        console.log(dataNotification)
+        history.push('/notification')
     }
 
     useEffect(() => {
-        script()
-    }, []);
+        // const header = `Authorization: Bearer ${getToken()}`
+        Promise.all([
+            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
+        ])
+            .then(function (res) {
+                setDataWarehouse(res[0].warehouse_id)
+                setIsCheckedWarehouse(res[0].warehouse_id.map(item => item.id))
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [])
     return (
         <div className="content-wrapper">
             {/* Content Header (Page header) */}
@@ -119,29 +172,50 @@ const AddNotification = () => {
                                 {/* /.card-header */}
                                 <div className="card-body">
                                     <div className="form-group">
-                                        <input className="form-control" placeholder="Tới:" />
+                                        {/* <input className="form-control" placeholder="Tới:" /> */}
+                                        <div className="card">
+                                            <div className="card-header">
+                                                <h3 className="card-title"><b>Gửi tới:</b></h3>
+                                                <div className="card-tools">
+                                                    <button type="button" className="btn btn-tool" data-card-widget="collapse">
+                                                        <i className="fas fa-minus" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="card-body">
+                                                {
+                                                    dataWarehouse && dataWarehouse.map((item, index) => (
+                                                        <div className="form-check" key={index}>
+                                                            <input className="form-check-input" type="checkbox"
+                                                                id={item.id} checked={isCheckedWarehouse.includes(parseInt(item.id))} onChange={(e) => handleCheckWarehouse(e)} />
+                                                            <label className="form-check-label">{item.name}</label>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="form-group">
-                                        <input className="form-control" placeholder="Tiêu đề:" />
+                                        <input className="form-control" placeholder="Tiêu đề:" onChange={(e) => setTitle(e.target.value)} />
                                     </div>
                                     <div className="form-group">
-                                        <textarea id="compose-textarea" className="form-control" style={{ height: 300 }} defaultValue={"                      <h3>Tiêu đề</h3>\n                        <p>Nội dung</p>\n                      <ul>\n                        <li>Nội dung 1</li>\n                        <li>Nội dung 2</li>\n                     </ul>\n                    "} />
+                                        <textarea className="form-control" style={{ height: 300 }} onChange={(e) => setContent(e.target.value)} />
                                     </div>
                                     <div className="form-group">
-                                        <div className="btn btn-default btn-file">
+                                        {/* <div className="btn btn-default btn-file">
                                             <i className="fas fa-paperclip" /> Attachment
                                             <input type="file" name="attachment" />
                                         </div>
-                                        <p className="help-block">Max. 32MB</p>
+                                        <p className="help-block">Max. 32MB</p> */}
                                     </div>
                                 </div>
                                 {/* /.card-body */}
                                 <div className="card-footer">
                                     <div className="float-right">
-                                        <button type="button" className="btn btn-default"><i className="fas fa-pencil-alt" /> Draft</button>
-                                        <button type="submit" className="btn btn-primary"><i className="far fa-envelope" /> Send</button>
+                                        {/* <button type="button" className="btn btn-default"><i className="fas fa-pencil-alt" /> Draft</button> */}
+                                        <button type="submit" className="btn btn-primary" onClick={handleSave}><i className="far fa-envelope" /> Tạo</button>
                                     </div>
-                                    <button type="reset" className="btn btn-default"><i className="fas fa-times" /> Discard</button>
+                                    {/* <button type="reset" className="btn btn-default"><i className="fas fa-times" /> Discard</button> */}
                                 </div>
                                 {/* /.card-footer */}
                             </div>

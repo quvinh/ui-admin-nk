@@ -27,7 +27,7 @@ const EditAccount = (props) => {
     const handleCheckWarehouse = (e) => {
         const { id, checked } = e.target
         console.log(id)
-        setIsCheckedWarehouse([...isCheckedWarehouse, id])
+        setIsCheckedWarehouse([...isCheckedWarehouse, parseInt(id)])
         !checked && setIsCheckedWarehouse(isCheckedWarehouse.filter(item => parseInt(item) !== parseInt(id)))
         setIsSelected(true)
     }

@@ -1,9 +1,26 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { getData } from './utils/Api'
+import { getAllPermissions, getToken, getUserID } from './utils/Common'
 import { Link } from 'react-router-dom'
 
 const AppSideNav = () => {
+    const [dataUserDetail, setUserDetail] = useState([])
+
+    useEffect(() => {
+        Promise.all([
+            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+        ])
+            .then(function (res) {
+                setUserDetail(res[0].data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [])
+
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             <Link to={"/dashboard"} className="brand-link">
@@ -13,10 +30,10 @@ const AppSideNav = () => {
             <div className="sidebar">
                 <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div className="image">
-                        {/* <img src="%PUBLIC_URL%/dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" /> */}
+                        <img src="../../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
                     </div>
                     <div className="info">
-                        <a href="#" className="d-block">Alexander Pierce</a>
+                        <a href="#" className="d-block">{dataUserDetail[0] && dataUserDetail[0].fullname}</a>
                     </div>
                 </div>
                 <div className="form-inline">
@@ -48,132 +65,188 @@ const AppSideNav = () => {
                                     <i className="fas fa-angle-left right" />
                                 </p>
                             </a>
-                            <ul className="nav nav-treeview">
-                                <li className="nav-item">
-                                    <Link to="/category" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Loại vật tư</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/supplier" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Nhà cung cấp</p>
-                                    </Link>
-                                </li>
-                            </ul>
+                            {
+                                getAllPermissions().includes("Thêm loại vật tư", "Sửa loại vật tư", "Xóa loại vật tư", "Xem loại vật tư") && (
+                                    <ul className="nav nav-treeview">
+                                        <li className="nav-item">
+                                            <Link to="/category" className="nav-link">
+                                                <i className="far fa-circle nav-icon" />
+                                                <p>Loại vật tư</p>
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to="/supplier" className="nav-link">
+                                                <i className="far fa-circle nav-icon" />
+                                                <p>Nhà cung cấp</p>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                )
+                            }
                         </li>
-                        <li className="nav-item">
-                            <a className="nav-link">
-                                <i className="nav-icon fas fa-edit" />
-                                <p>
-                                    Chức năng
-                                    <i className="fas fa-angle-left right" />
-                                </p>
-                            </a>
-                            <ul className="nav nav-treeview">
+                        {
+                            getAllPermissions().includes("Thêm phiếu nhập", "Thêm phiếu xuất", "Thêm phiếu chuyển", "Thêm phiếu kiểm kê") && (
                                 <li className="nav-item">
-                                    <Link to="/import" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Nhập kho</p>
-                                    </Link>
+                                    <a className="nav-link">
+                                        <i className="nav-icon fas fa-edit" />
+                                        <p>
+                                            Chức năng
+                                            <i className="fas fa-angle-left right" />
+                                        </p>
+                                    </a>
+                                    <ul className="nav nav-treeview">
+                                        {
+                                            getAllPermissions().includes("Thêm phiếu nhập") && (
+                                                <li className="nav-item">
+                                                    <Link to="/import" className="nav-link">
+                                                        <i className="far fa-circle nav-icon" />
+                                                        <p>Nhập kho</p>
+                                                    </Link>
+                                                </li>
+                                            )
+                                        }
+                                        {
+                                            getAllPermissions().includes("Thêm phiếu xuất") && (
+                                                <li className="nav-item">
+                                                    <Link to="/export" className="nav-link">
+                                                        <i className="far fa-circle nav-icon" />
+                                                        <p>Xuất kho</p>
+                                                    </Link>
+                                                </li>
+                                            )
+                                        }
+                                        {
+                                            getAllPermissions().includes("Thêm phiếu chuyển") && (
+                                                <li className="nav-item">
+                                                    <Link to="/transfer" className="nav-link">
+                                                        <i className="far fa-circle nav-icon" />
+                                                        <p>Luân chuyển</p>
+                                                    </Link>
+                                                </li>
+                                            )
+                                        }
+                                        {
+                                            getAllPermissions().includes("Thống kê") && (
+                                                <li className="nav-item">
+                                                    <Link to="/statistic" className="nav-link">
+                                                        <i className="far fa-circle nav-icon" />
+                                                        <p>Thống kê</p>
+                                                    </Link>
+                                                </li>
+                                            )
+                                        }
+                                        <li className="nav-item">
+                                            <Link to="/inventory" className="nav-link">
+                                                <i className="far fa-circle nav-icon" />
+                                                <p>Kiểm kê</p>
+                                            </Link>
+                                        </li>
+                                    </ul>
                                 </li>
+                            )
+                        }
+                        {
+                            getAllPermissions().includes("Thêm kho", "Sửa kho", "Xóa kho", "Xem kho") && (
                                 <li className="nav-item">
-                                    <Link to="/export" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Xuất kho</p>
-                                    </Link>
+                                    <a className="nav-link">
+                                        <i className="nav-icon fas fa-chart-pie" />
+                                        <p>
+                                            Quản lý kho
+                                            <i className="right fas fa-angle-left" />
+                                        </p>
+                                    </a>
+                                    <ul className="nav nav-treeview">
+                                        <li className="nav-item">
+                                            <Link to="/warehouse" className="nav-link">
+                                                <i className="far fa-circle nav-icon" />
+                                                <p>Kho</p>
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to="/shelf" className="nav-link">
+                                                <i className="far fa-circle nav-icon" />
+                                                <p>Giá/kệ</p>
+                                            </Link>
+                                        </li>
+                                    </ul>
                                 </li>
+                            )
+                        }
+                        {
+                            getAllPermissions().includes("Sửa phiếu nhập", "Xóa phiếu nhập", "Xem phiếu nhập", "Duyệt phiếu nhập",
+                                "Sửa phiếu xuất", "Xóa phiếu xuất", "Xem phiếu xuất", "Duyệt phiếu xuất",
+                                "Sửa phiếu chuyển", "Xóa phiếu chuyển", "Xem phiếu chuyển", "Duyệt phiếu chuyển") && (
                                 <li className="nav-item">
-                                    <Link to="/transfer" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Luân chuyển</p>
-                                    </Link>
+                                    <a className="nav-link">
+                                        <i className="nav-icon fas fa-tree" />
+                                        <p>
+                                            Quản lý phiếu
+                                            <i className="fas fa-angle-left right" />
+                                        </p>
+                                    </a>
+                                    <ul className="nav nav-treeview">
+                                        {
+                                            getAllPermissions().includes("Sửa phiếu nhập", "Xóa phiếu nhập", "Xem phiếu nhập", "Duyệt phiếu nhập") && (
+                                                <li className="nav-item">
+                                                    <Link to="/coupon_import" className="nav-link">
+                                                        <i className="far fa-circle nav-icon" />
+                                                        <p>Phiếu nhập</p>
+                                                    </Link>
+                                                </li>
+                                            )
+                                        }
+                                        {
+                                            getAllPermissions().includes("Sửa phiếu xuất", "Xóa phiếu xuất", "Xem phiếu xuất", "Duyệt phiếu xuất") && (
+                                                <li className="nav-item">
+                                                    <Link to="/coupon_export" className="nav-link">
+                                                        <i className="far fa-circle nav-icon" />
+                                                        <p>Phiếu xuất</p>
+                                                    </Link>
+                                                </li>
+                                            )
+                                        }
+                                        {
+                                            getAllPermissions().includes("Sửa phiếu chuyển", "Xóa phiếu chuyển", "Xem phiếu chuyển", "Duyệt phiếu chuyển") && (
+                                                <li className="nav-item">
+                                                    <Link to="/coupon_transfer" className="nav-link">
+                                                        <i className="far fa-circle nav-icon" />
+                                                        <p>Phiếu luân chuyển</p>
+                                                    </Link>
+                                                </li>
+                                            )
+                                        }
+                                    </ul>
                                 </li>
-                                <li className="nav-item">
-                                    <Link to="/" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Thống kê</p>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link">
-                                <i className="nav-icon fas fa-chart-pie" />
-                                <p>
-                                    Quản lý kho
-                                    <i className="right fas fa-angle-left" />
-                                </p>
-                            </a>
-                            <ul className="nav nav-treeview">
-                                <li className="nav-item">
-                                    <Link to="/warehouse" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Kho</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/shelf" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Giá/kệ</p>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link">
-                                <i className="nav-icon fas fa-tree" />
-                                <p>
-                                    Quản lý phiếu
-                                    <i className="fas fa-angle-left right" />
-                                </p>
-                            </a>
-                            <ul className="nav nav-treeview">
-                                <li className="nav-item">
-                                    <Link to="/history-import" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Phiếu nhập</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/history-export" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Phiếu xuất</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/history-transfer" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Phiếu luân chuyển</p>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </li>
+                            )
+                        }
 
-                        <li className="nav-item">
-                            <a className="nav-link">
-                                <i className="nav-icon far fa-envelope" />
-                                <p>
-                                    Admin
-                                    <i className="fas fa-angle-left right" />
-                                </p>
-                            </a>
-                            <ul className="nav nav-treeview">
+                        {
+                            getAllPermissions().includes("Thêm tài khoản", "Sửa tài khoản", "Xóa tài khoản", "Xem tài khoản") && (
                                 <li className="nav-item">
-                                    <Link to="/account" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Người dùng</p>
-                                    </Link>
+                                    <a className="nav-link">
+                                        <i className="nav-icon far fa-envelope" />
+                                        <p>
+                                            Admin
+                                            <i className="fas fa-angle-left right" />
+                                        </p>
+                                    </a>
+                                    <ul className="nav nav-treeview">
+                                        <li className="nav-item">
+                                            <Link to="/account" className="nav-link">
+                                                <i className="far fa-circle nav-icon" />
+                                                <p>Người dùng</p>
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to="/role" className="nav-link">
+                                                <i className="far fa-circle nav-icon" />
+                                                <p>Chức vụ - Quyền hạn</p>
+                                            </Link>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li className="nav-item">
-                                    <Link to="/role" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Chức vụ - Quyền hạn</p>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </li>
+                            )
+                        }
                         <li className="nav-item">
                             <Link to="/profile" className="nav-link">
                                 <i className="nav-icon fas fa-table" />
@@ -182,14 +255,18 @@ const AppSideNav = () => {
                                 </p>
                             </Link>
                         </li>
-                        <li className="nav-item">
-                            <Link to="/notification" className="nav-link">
-                                <i className="nav-icon fas fa-table" />
-                                <p>
-                                    Thông báo
-                                </p>
-                            </Link>
-                        </li>
+                        {
+                            getAllPermissions().includes("Thêm thông báo", "Sửa thông báo", "Xóa thông báo", "Xem thông báo") && (
+                                <li className="nav-item">
+                                    <Link to="/notification" className="nav-link">
+                                        <i className="nav-icon fas fa-table" />
+                                        <p>
+                                            Thông báo
+                                        </p>
+                                    </Link>
+                                </li>
+                            )
+                        }
                     </ul>
                 </nav>
             </div>
