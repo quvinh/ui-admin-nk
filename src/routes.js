@@ -19,6 +19,9 @@ const CouponExport = React.lazy(() => import('./views/coupon/CouponExport'))
 const DetailImport = React.lazy(() => import('./views/coupon/DetailImport'))
 const DetailTransfer = React.lazy(() => import('./views/coupon/DetailTransfer'))
 const DetailExport = React.lazy(() => import('./views/coupon/DetailExport'))
+const PrintImport = React.lazy(() => import('./views/coupon/PrintImport'))
+const PrintExport = React.lazy(() => import('./views/coupon/PrintExport'))
+const PrintTransfer = React.lazy(() => import('./views/coupon/PrintTransfer'))
 
 const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
 
@@ -68,7 +71,7 @@ const routes = [
   { path: '/account', name: 'User', component: Account },
   { path: '/account-add', name: 'User', component: AddAccount },
   { path: '/account-edit/:id', name: 'User', component: EditAccount },
-    { path: '/profile', name: 'Profile', component: Profile },
+  { path: '/profile', name: 'Profile', component: Profile },
   { path: '/dashboard', name: 'Bản tin', component: Dashboard },
   //   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/export', name: 'Xuất kho', component: Export },
@@ -80,6 +83,9 @@ const routes = [
   { path: '/detail_import/:code', name: 'Chi tiết phiếu nhập', component: DetailImport },
   { path: '/detail_transfer/:code', name: 'Chi tiết phiếu luân chuyển', component: DetailTransfer },
   { path: '/detail_export/:code', name: 'Chi tiết phiếu xuất', component: DetailExport },
+  { path: '/print_import/:code', name: 'In phiếu nhập', component: PrintImport },
+  { path: '/print_export/:code', name: 'In phiếu nhập', component: PrintExport },
+  { path: '/print_transfer/:code', name: 'In phiếu nhập', component: PrintTransfer },
   //   { path: '/reports', name: 'Báo cáo', component: Reports },
   { path: '/statistic', name: 'Thống kê', component: Statistical },
   { path: '/transfer', name: 'Điều phối kho', component: Transfer },
@@ -90,9 +96,9 @@ const routes = [
   // { path: '/warehouse-info', name: 'Thông tin chi tiết kho', component: WarehouseInfo },
   { path: '/warehouse-show/:id', name: 'thông tin kho', component: WarehouseShow },
   // { path: '/warehouse-listitem', name: 'thông tin kho', component: WarehouseListItem },
-//   { path: '/warehouses-add', name: 'Tạo kho', component: AddWarehouses },
-//   { path: '/warehouses-edit/:id', name: 'Chỉnh sửa kho', component: EditWarehouses },
-//   { path: '/warehouses-shelf/:id', name: 'kệ trong kho', component: ShelfWarehouse },
+  //   { path: '/warehouses-add', name: 'Tạo kho', component: AddWarehouses },
+  //   { path: '/warehouses-edit/:id', name: 'Chỉnh sửa kho', component: EditWarehouses },
+  //   { path: '/warehouses-shelf/:id', name: 'kệ trong kho', component: ShelfWarehouse },
 
   { path: '/category', name: 'Category', component: Category },
   //   { path: '/categories-add', name: 'Tạo category', component: AddCategories },
@@ -107,7 +113,7 @@ const routes = [
   { path: '/notification-add', name: 'Tạo thông báo', component: AddNotification },
   { path: '/notification-read/:id', name: 'Tạo thông báo', component: ReadNotification },
 
-    { path: '/supplier', name: 'Nhà cung cấp', component: Supplier },
+  { path: '/supplier', name: 'Nhà cung cấp', component: Supplier },
   //   { path: '/supplier-add', name: 'Tạo mới nhà cung cấp', component: AddSuppliers },
   //   { path: '/supplier-edit/:id', name: 'Chỉnh sửa nhà cung cấp', component: EditSuppliers },
 

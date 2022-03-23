@@ -364,20 +364,6 @@ const Export = (props) => {
                         <div className="card-body">
                             <div className="row" style={{ marginBottom: 10 }}>
                                 <div className="col-md-7">
-                                    {/* <Autocomplete
-                                        id="name_item"
-                                        freeSolo
-                                        size='small'
-                                        options={dataOption}
-                                        // value={name}
-                                        // onChange={(e, newValue) => onChangeName(e, newValue)}
-                                        inputValue={name}
-                                        onInputChange={(e, newValue) => {
-                                            onChangeName(e, newValue)
-                                        }}
-                                        renderInput={(params) => <TextField {...params} label="Tên vật tư" />}
-                                        disableClearable
-                                    /> */}
                                     <SelectSearch
                                         options={dataOption}
                                         value={nameSelect}

@@ -159,70 +159,72 @@ const Dashboard = () => {
       <div className="content">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-lg-6">
+            <div className="col-lg-12">
               <div className="card card-info card-outline">
-                <div className="card-header border-0">
-                  <div className="d-flex justify-content-between">
-                    <h3 className="card-title">Danh sách kho</h3>
+                <div className="card-body">
+                  <div className='row'>
+                    {
+                      tonKho.map((item, index) => (
+                        <div className="col-md-3 small-box bg-white card-warning card-outline ml-1" >
+                          <div className="inner">
+                            <h5 className="info-box-text">Nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
+                            <p className="info-box-number">Giá trị kho : {item.total}</p>
+                          </div>
+                          <div className='icon'>
+                            <i className="far fa-home"></i>
+                          </div>
+                          <Link to={"/warehouse-show/" + item.warehouse_id} class="small-box-footer">Chi tiết kho<i class="fas fa-arrow-circle-right"></i></Link>
+                          {/* /.info-box-content */}
+                        </div>
+
+                      ))
+                    }
                   </div>
                 </div>
-                <div className="card-body">
-                  {
-                    tonKho.map((item, index) => (
-                      <div className="small-box bg-white card-warning card-outline">
-                        <div className="inner">
-                          <h5 className="info-box-text">Tên nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
-                          <p className="info-box-number">Giá trị kho : {item.total}</p>
-                        </div>
-                        <div className='icon'>
-                          <i className="far fa-home"></i>
-                        </div>
-                        <Link to={"/warehouse-show/" + item.warehouse_id} class="small-box-footer">Chi tiết kho<i class="fas fa-arrow-circle-right"></i></Link>
-                        {/* /.info-box-content */}
-                      </div>
-
-                    ))
-                  }
-                </div>
               </div>
-
             </div>
-            {/* /.col-md-6 */}
+          </div>
+          {/* /.col-md-6 */}
+          <div className="row">
             <div className="col-lg-6">
               <div className="card">
-                <div className="card-header border-0">
-                  {/* <div className="d-flex justify-content-between">
-                    <h3 className="card-title">Sales</h3>
-                    <a href="javascript:void(0);">View Report</a>
-                  </div> */}
-                </div>
                 <div className="card-body">
                   <div className='row'>
                     <div className='col-md-8'></div>
-                  <div className="col-md-4" >
-                    <Box>
-                      <FormControl fullWidth>
-                        <InputLabel size='small' style={{ fontSize: 12 }}>Nhà kho</InputLabel>
-                        <Select
-                          size="small"
-                          label="Nhà kho"
-                          name="warehouse"
-                          value={warehouse}
-                          onChange={(e) => {
-                            onChangeWarehouse(e)
-                            setWarehouse(e.target.value)
-                          }}
-                        >
-                          {dataWarehouse.map((item, index) => (
-                            <MenuItem key={index} value={item.id}>{item.name}</MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </div></div>
+                    <div className="col-md-4" >
+                      <Box>
+                        <FormControl fullWidth>
+                          <InputLabel size='small' style={{ fontSize: 12 }}>Nhà kho</InputLabel>
+                          <Select
+                            size="small"
+                            label="Nhà kho"
+                            name="warehouse"
+                            value={warehouse}
+                            onChange={(e) => {
+                              onChangeWarehouse(e)
+                              setWarehouse(e.target.value)
+                            }}
+                          >
+                            {dataWarehouse.map((item, index) => (
+                              <MenuItem key={index} value={item.id}>{item.name}</MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </div>
+                  </div>
                   <div className="position-relative mb-4">
                     <Bar options={options} data={data} />
                   </div>
+                </div>
+              </div>
+            </div>
+            <div className='col-lg-6'>
+              <div className='card'>
+                <div className='card-body'>
+                  <table>
+                    <th>a</th>
+                  </table>
                 </div>
               </div>
             </div>

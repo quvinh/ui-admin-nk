@@ -8,6 +8,8 @@ import CurrencyFormat from 'react-currency-format'
 
 const DetailImport = (props) => {
     const [detailImport, setDetailImport] = useState([])
+    const code = props.match.params.code
+    console.log(code)
 
     const handleDStatus = () => {
         if (detailImport.length > 0) {
@@ -102,6 +104,7 @@ const DetailImport = (props) => {
                             <div className="card">
                                 <div className="card-header">
                                     <h3 className="card-title"></h3>
+                                    <Link className='btn btn-sm btn-primary' to={'/print_import/' + code}>Xem Phiếu</Link>
                                     {
                                         getAllPermissions().includes("Duyệt phiếu nhập") && (
                                             <div style={{ textAlign: "end" }} >
@@ -111,6 +114,7 @@ const DetailImport = (props) => {
                                                     ))}
                                             </div>
                                         )
+
                                     }
                                 </div>
                                 <div className="card-body">
@@ -154,115 +158,6 @@ const DetailImport = (props) => {
                                     </table>
                                 </div>
                             </div>
-                            {/* end card 1 */}
-                            {/* <div className='card'> */}
-                            <section className="content">
-                                <div className="container-fluid">
-                                    <div className="row">
-                                        <div className="col-12">
-                                            <div className="callout callout-info">
-                                                <h5><i className="fas fa-info" /> PHIẾU XUẤT:</h5>
-                                            </div>
-                                            {/* Main content */}
-                                            <div className="invoice p-3 mb-3">
-                                                {/* title row */}
-                                                <div className="row">
-                                                    <div className="col-12">
-                                                        <h4>
-                                                            <i className="fas fa-globe" /> {detailImport.length > 0 && detailImport[0].tenKho}
-                                                            <small className="float-right">Date: {detailImport.length > 0 && detailImport[0].created_at} </small>
-                                                        </h4>
-                                                    </div>
-                                                    {/* /.col */}
-                                                </div>
-                                                {/* info row */}
-                                                <div className="row invoice-info">
-                                                    <div className="col-sm-4 invoice-col">
-                                                        {/* From
-                                                            <address>
-                                                                <strong>Admin, Inc.</strong><br />
-                                                                795 Folsom Ave, Suite 600<br />
-                                                                San Francisco, CA 94107<br />
-                                                                Phone: (804) 123-5432<br />
-                                                                Email: info@almasaeedstudio.com
-                                                            </address> */}
-                                                    </div>
-                                                    {/* /.col */}
-                                                    <div className="col-sm-4 invoice-col">
-                                                        {/* To
-                                                            <address>
-                                                                <strong>John Doe</strong><br />
-                                                                795 Folsom Ave, Suite 600<br />
-                                                                San Francisco, CA 94107<br />
-                                                                Phone: (555) 539-1037<br />
-                                                                Email: john.doe@example.com
-                                                            </address> */}
-                                                    </div>
-                                                    {/* /.col */}
-                                                    <div className="col-sm-4 invoice-col">
-                                                        <b>Mã Phiếu: {props.match.params.code}</b><br />
-                                                        <b>Người tạo: {detailImport.length > 0 && detailImport[0].fullname}</b>
-                                                        {/* <br />
-                                                            
-                                                            <b>Order ID:</b> 4F3S8J<br />
-                                                            <b>Payment Due:</b> 2/22/2014<br />
-                                                            <b>Account:</b> 968-34567 */}
-                                                    </div>
-                                                    {/* /.col */}
-                                                </div>
-                                                {/* /.row */}
-                                                <table id="example1" className="table table-bordered table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style={{ width: 10 }}>STT</th>
-                                                            <th>Mã vật tư</th>
-                                                            <th>Tên vật tư</th>
-                                                            <th>Mã kệ</th>
-                                                            <th>Giá xuất</th>
-                                                            <th>SL</th>
-                                                            <th>ĐVT</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {
-                                                            detailImport.map((item, index) => (
-                                                                <tr>
-                                                                    <td>{index + 1}</td>
-                                                                    <td>{item.item_id}</td>
-                                                                    <td>{item.name}</td>
-                                                                    <td>{item.tenKe}</td>
-                                                                    <td>{item.price}</td>
-                                                                    <td>{item.luongNhap}</td>
-                                                                    <td>{item.unit}</td>
-                                                                </tr>
-                                                            ))
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                                <div className="row">
-                                                    {/* accepted payments column */}
-                                                    <div className="col-6">
-                                                    </div>
-                                                    {/* /.col */}
-                                                    <div className="col-6">
-                                                        {/* <p className="lead">Amount Due 2/22/2014</p> */}
-                                                        <div className="table-responsive">
-                                                            <table className="table">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <th>{detailImport.length > 0 && <CurrencyFormat className="form-control" type="text" name="total" value={total} thousandSeparator={true} prefix={'Tổng tiền: '} suffix={' VND'} disabled />}</th>
-                                                                    </tr>
-                                                                </tbody></table>
-                                                        </div>
-                                                    </div>
-                                                    {/* /.col */}
-                                                </div>
-                                            </div>
-                                            {/* <button className='btn btn-sm btn-primary' onClick={(e) => window.print()}>Print</button> */}
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
                         </div>
                     </div>
                 </div>
