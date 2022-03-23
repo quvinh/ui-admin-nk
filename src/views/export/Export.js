@@ -199,6 +199,7 @@ const Export = (props) => {
             })
         // }
         setName('')
+        setNameSelect('')
         setAmount(0)
         setAmountCurrent(0)
     }
