@@ -79,6 +79,7 @@ const Export = (props) => {
     const onChangeName = (e, newValue) => {
         setNameSelect(newValue)
         var checked = false
+        console.log(newValue)
         dataItem.map((item) => {
             if (item.itemname === newValue.name && item.id === newValue.value) {
                 setItemID(item.item_id)
@@ -97,8 +98,9 @@ const Export = (props) => {
                 getDataShelf(item.warehouse_id)
                 setIsWarehouseSelected(true)
                 checked = true
-                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '?token=' + getToken())])
+                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.id + '/' + item.warehouse_id + '/' + item.shelf_id + '?token=' + getToken())])
                     .then(function (res) {
+                        console.log(kd)
                         setKD(res[0].data)
                     })
             }
@@ -328,6 +330,7 @@ const Export = (props) => {
         name: item.itemname,
         value: item.id
     }))
+    console.log(dataOption)
 
     return (
         <div className="content-wrapper">

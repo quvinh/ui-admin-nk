@@ -2,8 +2,8 @@
  * Main wrapper
  */
  .select-search {
-    width: 300px;
-    position: relative;
+    /* width: 520px; */
+    /* position: relative; */
     font-family: "Nunito Sans", sans-serif;
     box-sizing: border-box;
   }
@@ -41,7 +41,7 @@
     width: 100%;
     padding: 0 16px;
     background: #fff;
-    border: 1px solid transparent;
+    border: 1px solid rgba(39, 35, 35, 0.15);
     box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.15);
     border-radius: 3px;
     outline: none;
@@ -181,7 +181,7 @@
   }
   
   .select-search:not(.select-search--multiple) .select-search__input:hover {
-    border-color: #2fcc8b;
+    border-color: #131414;
   }
   
   .select-search:not(.select-search--multiple) .select-search__select {
