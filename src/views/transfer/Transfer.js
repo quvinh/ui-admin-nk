@@ -396,9 +396,9 @@ const Transfer = () => {
 
             })
             .catch(error => {
-                if (error.response.status === 403) {
-                    history.push('/404')
-                }
+                // if (error.response.status === 403) {
+                //     history.push('/404')
+                // }
             })
         alert()
     }, [])

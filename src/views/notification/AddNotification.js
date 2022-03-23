@@ -7,7 +7,6 @@ import { getDataWarehouseID, getToken, getUserID } from '../../components/utils/
 import Notification from './Notification'
 import Select, { components } from 'react-select'
 import SelectSearch, { fuzzySearch } from 'react-select-search'
-import '../../css/select-search.css'
 const AddNotification = () => {
     const [title, setTitle] = useState()
     const [content, setContent] = useState('Nội dung')
