@@ -3,14 +3,19 @@ import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import AppHeader from '../../components/AppHeader'
 import { getData, postData } from '../../components/utils/Api'
-import { getToken, getUserID } from '../../components/utils/Common'
+import { getDataWarehouseID, getToken, getUserID } from '../../components/utils/Common'
 import Notification from './Notification'
-// import Select, { components } from 'react-select'
+import Select, { components } from 'react-select'
+import SelectSearch, { fuzzySearch } from 'react-select-search'
+import '../../css/select-search.css'
 const AddNotification = () => {
     const [title, setTitle] = useState()
     const [content, setContent] = useState('Nội dung')
     const [dataWarehouse, setDataWarehouse] = useState([])
     const [dataNotification, setDataNotification] = useState([])
+    const [person, setPerson] = useState([])
+    const [valueDefault, setValueDefault] = useState()
+    const [personChecked, setPersonChecked] = useState([])
     const [isCheckedWarehouse, setIsCheckedWarehouse] = useState([])
     const [isSelected, setIsSelected] = useState(false)
     const [test, setTest] = useState('')
@@ -29,41 +34,64 @@ const AddNotification = () => {
     }
 
     const handleSave = () => {
-        isCheckedWarehouse.map(item => {
-            console.log(title)
-            console.log(item)
-            console.log(content)
-            const data = {
+        // isCheckedWarehouse.map(item => {
+        //     console.log(title)
+        //     console.log(item)
+        //     console.log(content)
+        //     const data = {
+        //         title: title,
+        //         content: content,
+        //         status: 0,
+        //         created_by: getUserID(),
+        //         warehouse_id: item
+        //     }
+        //     console.log(data)
+        //     Promise.all([
+        //         postData('http://127.0.0.1:8000/api/admin/notification/store?token=' + getToken(), data),
+        //     ])
+        //         .then(function (res) {
+        //             setTest('test')
+        //             // history.push('/notification')
+        //         })
+        //         .catch(error => {
+        //             console.log(error)
+        //         })
+        // })
+        // console.log(dataNotification)
+        // history.push('/notification')
+        Promise.all([
+            postData('http://127.0.0.1:8000/api/admin/notification/store?token=' + getToken(), {
                 title: title,
                 content: content,
-                status: 0,
                 created_by: getUserID(),
-                warehouse_id: item
-            }
-            console.log(data)
-            Promise.all([
-                postData('http://127.0.0.1:8000/api/admin/notification/store?token=' + getToken(), data),
-            ])
-                .then(function (res) {
-                    setTest('test')
-                    // history.push('/notification')
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-        })
-        console.log(dataNotification)
-        history.push('/notification')
+                status: 0,
+                send_to: personChecked.map(item => item.value)
+            }),
+        ])
+            .then(function (res) {
+                setTest('test')
+                history.push('/notification')
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
+
+    console.log(personChecked)
 
     useEffect(() => {
         // const header = `Authorization: Bearer ${getToken()}`
         Promise.all([
             getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
+            getData('http://127.0.0.1:8000/api/admin/notification/get-person/' + getUserID() + '?token=' + getToken()),
         ])
             .then(function (res) {
                 setDataWarehouse(res[0].warehouse_id)
                 setIsCheckedWarehouse(res[0].warehouse_id.map(item => item.id))
+                setPerson(res[1].data.map((item, index) => ({
+                    label: item.fullname + " - " + item.role + " - " + item.warehouse,
+                    value: item.id
+                })))
             })
             .catch(error => {
                 console.log(error)
@@ -183,7 +211,7 @@ const AddNotification = () => {
                                                 </div>
                                             </div>
                                             <div className="card-body">
-                                                {
+                                                {/* {
                                                     dataWarehouse && dataWarehouse.map((item, index) => (
                                                         <div className="form-check" key={index}>
                                                             <input className="form-check-input" type="checkbox"
@@ -191,9 +219,37 @@ const AddNotification = () => {
                                                             <label className="form-check-label">{item.name}</label>
                                                         </div>
                                                     ))
-                                                }
+                                                } */}
+                                                {/* <div className="col">
+                                                    <SelectSearch
+                                                        options={person}
+                                                        isMu
+                                                        onChange={(name, value) => {
+                                                            !personChecked.includes(value.send) ? setPersonChecked([...personChecked, value.send]) : setPersonChecked([...personChecked.filter(item => item !== value.send)])
+                                                        }}
+                                                        search
+                                                        filterOptions={fuzzySearch}
+                                                        placeholder="Gửi tới ..."
+                                                        // renderValue={(valueProps) => <input className="select-search__input" {...valueProps} />}
+                                                    />
+                                                </div> */}
+                                                <Select
+                                                    isMulti
+                                                    // value={personChecked}
+                                                    onChange={(name, value) => {
+                                                        // !personChecked.includes(name.send) ? setPersonChecked([...personChecked, name.send]) : setPersonChecked([...personChecked.filter(item => item !== name.send)])
+                                                        // console.log(name, value)
+                                                        setPersonChecked(name)
+                                                    }}
+                                                    options={person}
+                                                />
+                                                <div className="col">
+
+                                                </div>
                                             </div>
                                         </div>
+
+
                                     </div>
                                     <div className="form-group">
                                         <input className="form-control" placeholder="Tiêu đề:" onChange={(e) => setTitle(e.target.value)} />
