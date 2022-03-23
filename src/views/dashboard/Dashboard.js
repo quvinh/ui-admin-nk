@@ -2,10 +2,21 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
 // import Chart from './Charts'
-// import { Bar } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 // import BarChart from './Chart2';
 import { getData } from '../../components/utils/Api'
 import { getDataWarehouseID, getRoleNames, getToken } from '../../components/utils/Common'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Link } from 'react-router-dom';
+
 
 
 const Dashboard = () => {
@@ -19,9 +30,63 @@ const Dashboard = () => {
   const [amountItem, setAmountItem] = useState('')
   const [status, setStatus] = useState('')
 
-  
+  const arrImportAmount = []
+  importVT.map((item, index) => {
+    arrImportAmount.push(item.importAmount)
+  })
+  console.log(arrImportAmount)
+  const arrImportMonth = []
+  importVT.map((item, index) => {
+    arrImportMonth.push(item.month)
+  })
+  const arrExportMonth = []
+  exportVT.map((item, index) => {
+    arrExportMonth.push(item.month)
+  })
+  const arrExportAmount = []
+  exportVT.map((item, index) => {
+    arrExportAmount.push(item.exportAmount)
+  })
 
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
 
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top'
+      },
+      title: {
+        display: true,
+        text: 'Biểu đồ số lượng nhập xuất',
+      },
+    },
+  };
+
+  const labels = arrImportMonth;
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Nhập',
+        data: arrImportAmount,
+        backgroundColor: 'rgba(248, 117, 5, 0.5)',
+      },
+      {
+        label: 'Xuất',
+        data: arrExportAmount,
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      }
+    ]
+  }
 
   useEffect(() => {
     {
@@ -60,24 +125,6 @@ const Dashboard = () => {
 
   }, [])
 
-  const arrImportAmount = []
-  importVT.map((item, index) => {
-    arrImportAmount.push(item.importAmount)
-  })
-  console.log(arrImportAmount)
-  const arrImportMonth = []
-  importVT.map((item, index) => {
-    arrImportMonth.push(item.month)
-  })
-  const arrExportMonth = []
-  exportVT.map((item, index) => {
-    arrExportMonth.push(item.month)
-  })
-  const arrExportAmount = []
-  exportVT.map((item, index) => {
-    arrExportAmount.push(item.exportAmount)
-  })
-
   return (
     <div className="content-wrapper">
       <div className="content-header">
@@ -99,39 +146,30 @@ const Dashboard = () => {
         <div className="container-fluid">
           <div className="row">
             <div className="col-lg-6">
-              <div className="card">
+              <div className="card card-info card-outline">
                 <div className="card-header border-0">
                   <div className="d-flex justify-content-between">
-                    <h3 className="card-title">Danh sách tồn kho</h3>
+                    <h3 className="card-title">Danh sách kho</h3>
                   </div>
                 </div>
                 <div className="card-body">
                   {
                     getRoleNames() === 'admin' ? (
-                      <table id="item" className="table table-hover " style={{ height: "404px" }}>
-                        <thead>
-                          <tr>
-                            <th className='text-center'>STT</th>
-                            <th className='text-center'>Tên kho</th>
-                            <th className='text-center'>Trạng thái</th>
-                            <th className='text-center'>Giá trị tồn</th>
-                            <th className='text-center'>Số lượng tồn</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {
-                            tonKho.map((item, index) => (
-                              <tr key={index}>
-                                <td className='text-center'>{index + 1}</td>
-                                <td className='text-center'>{item.name}</td>
-                                <td className='text-center'>{item.status}</td>
-                                <td className='text-center'>{item.total}</td>
-                                <td className='text-center'>{item.tonKho}</td>
-                              </tr>
-                            ))
-                          }
-                        </tbody>
-                      </table>
+
+                      tonKho.map((item, index) => (
+                        <div className="small-box bg-white card-warning card-outline">
+                          <div className="inner">
+                            <h5 className="info-box-text">Tên nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
+                            <p className="info-box-number">Giá trị kho : {item.total}</p>
+                          </div>
+                          <div className='icon'>
+                             <i className="far fa-home"></i>
+                          </div>
+                          <Link to={"/warehouse-show/" + item.warehouse_id} class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></Link>
+                          {/* /.info-box-content */}
+                        </div>
+                        
+                      ))
                     ) : getDataWarehouseID().length > 0 && (
                       <table id="item" className="table table-hover ">
                         <thead>
@@ -174,17 +212,15 @@ const Dashboard = () => {
                 </div>
                 <div className="card-body">
                   <div className="position-relative mb-4">
-                    <canvas id="myChart" width="400" height="400">
-                      Charts()
-                    </canvas>
+                    <Bar options={options} data={data} />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   )
 }
 
