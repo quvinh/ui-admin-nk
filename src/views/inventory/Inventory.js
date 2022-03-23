@@ -33,10 +33,10 @@ const Inventory = () => {
     const [nameSelect, setNameSelect] = useState('')
     const [shelf_name, setShelfName] = useState('')
     const [shelf_id, setShelfID] = useState('')
-    const [amountCurrent, setAmountCurrent] = useState(0)
     const [price, setPrice] = useState(0)
     const [totalPrice, setTotalPrice] = useState(0)
     const [date, setDate] = useState(new Date)
+    const [formatPrice, setFormatPrice] = useState(0)
 
     const [dataTable, setDataTable] = useState([])
     const [dataWarehouse, setDataWarehouse] = useState([])
@@ -47,7 +47,7 @@ const Inventory = () => {
     const [showWarehouse, setShowWarehouse] = useState(false)
     const [validator, showValidationMessage] = Validator()
 
-    const [isAmountSelected, setIsAmountSelected] = useState(false)
+    const [isAmountSelected, setDifferencesSelect] = useState(false)
     const [isWarehouseSelected, setIsWarehouseSelected] = useState(false)
 
     const handleNameChange = (e) => {
@@ -58,11 +58,11 @@ const Inventory = () => {
     }
 
     const onChangeAmount = (e) => {
-        (e.target.value > 0 && name.length > 0) ? setIsAmountSelected(true) : setIsAmountSelected(false)
+        (e.target.value > 0 && name.length > 0) ? setDifferencesSelect(true) : setDifferencesSelect(false)
         if (dataTable.length === 0) createCode()
     }
 
-    
+
     const setNull = () => {
         setItemID('')
         setName('')
@@ -94,7 +94,7 @@ const Inventory = () => {
             })
     }
 
-    const reset = () => {
+    const reset = (e) => {
         setNull()
         setDataTable([])
     }
@@ -102,9 +102,9 @@ const Inventory = () => {
         console.log(e)
         // const index = e.nativeEvent.target.selectedIndex 
         // if (index === 0) {
-        // setIsAmountSelected(false)
+        // setDifferencesSelect(false)
         // } else {
-        setIsAmountSelected(true)
+        setDifferencesSelect(true)
         console.log(newValue.props.children)
         setShelfName(newValue.props.children)
         setShelfID(e.target.value)
@@ -121,7 +121,7 @@ const Inventory = () => {
                 console.log(error)
             })
         // }
-        setName('')
+        setNameSelect('')
         setAmount(0)
         setItemID('')
         setUnit('')
@@ -133,7 +133,7 @@ const Inventory = () => {
             dataTable.map((item, index) => {
                 console.log("LOG")
                 console.log(item)
-                Promise.all([postData('http://127.0.0.1:8000/api/admin/export/store?token=' + getToken(), item)])
+                Promise.all([postData('http://127.0.0.1:8000/api/admin/inventory/store?token=' + getToken(), item)])
                     .then(function (res) {
                         console.log("SAVED")
                         reset()
@@ -144,6 +144,7 @@ const Inventory = () => {
             })
         }
     }
+
     const onChangeName = (e, newValue) => {
         setNameSelect(newValue)
         var checked = false
@@ -167,13 +168,14 @@ const Inventory = () => {
             }
         })
         if (amount > 0) {
-            setIsAmountSelected(true)
+            setDifferencesSelect(true)
             if (dataTable.length === 0) createCode()
         }
         if (!checked) {
-            setIsAmountSelected(false)
+            setDifferencesSelect(false)
             setAmount(0)
         }
+
 
     }
     console.log(amount)
@@ -200,28 +202,37 @@ const Inventory = () => {
             setWarehouse(null)
         }
         setAmount(0)
-        setAmountCurrent(0)
         setName('')
         setShelfID(null)
-        setIsAmountSelected(false)
+        setDifferencesSelect(false)
     }
     const onRemoveRow = (e, index) => {
         var array = index > 0 ? [...dataTable.slice(0, index), ...dataTable.slice(index + 1, dataTable.length)] : [...dataTable.slice(1, dataTable.length)]
         setDataTable([...array])
+        console.log(array.length)
+        if (array.length === 0) { setDataTable([]) }
     }
 
-    const onAddTable = (e) => {//Button click, add data table
-        if (validator.allValid() && amount > 0) {
+    const onAddTable = (e, difference) => {//Button click, add data table
+        if (validator.allValid() && difference !== 0 && difference !== NaN) {
             if (dataTable.length > 0) {
                 let amountTotal = 0
                 let array = []
                 dataTable.map((item, index) => {
                     if (item.item_id === item_id && item.warehouse_id === warehouse_id && item.shelf_id === shelf_id) {
-                        amountTotal = parseInt(item.amount) + parseInt(amount)
-                        array = index > 0 ? [...dataTable.slice(0, index), ...dataTable.slice(index + 1, dataTable.length)] : [...dataTable.slice(1, dataTable.length)]
+                        if (item.difference <= 0) {
+                            if ((item.difference) >= -(item.amount)) {
+                                amountTotal = parseInt(item.difference) + parseInt(difference)
+                                array = index > 0 ? [...dataTable.slice(0, index), ...dataTable.slice(index + 1, dataTable.length)] : [...dataTable.slice(1, dataTable.length)]
+                            }
+                        }
+                        else {
+                            amountTotal = parseInt(item.difference) + parseInt(difference)
+                                array = index > 0 ? [...dataTable.slice(0, index), ...dataTable.slice(index + 1, dataTable.length)] : [...dataTable.slice(1, dataTable.length)]
+                        }
                     }
                 })
-                amountTotal > 0 ? amountTotal = amountTotal : amountTotal = amount
+                amountTotal > 0 ? amountTotal = amountTotal : amountTotal = difference
                 const data = {
                     item_id: item_id,
                     code: code,
@@ -230,8 +241,9 @@ const Inventory = () => {
                     name: name,
                     unit: unit,
                     created_by: getUserID(),//USER
-                    amount: amountTotal,
+                    amount: amount,
                     price: price,
+                    difference: amountTotal,
                     nameWarehouse: nameWarehouse,
                     shelf_name: shelf_name,
                     totalPrice: totalPrice,
@@ -253,23 +265,32 @@ const Inventory = () => {
                     name: name,
                     unit: unit,
                     created_by: getUserID(),//USER
-                    amount: amount,
+                    difference: difference,
                     price: price,
+                    amount: amount,
                     nameWarehouse: nameWarehouse,
                     shelf_name: shelf_name,
                     description: description,
                     totalPrice: totalPrice
                 }
-                setDataTable([...dataTable, data])
+                if (difference <= 0) {
+                    if((difference) >= -(amount)){
+                        setDataTable([...dataTable, data]) 
+                    }
+                }
+                else{
+                   setDataTable([...dataTable, data]) 
+                }
+                
                 console.log(data)
             }
+            setDifference(0)
 
-            setAmount(0)
-            // setAmountCurrent(0)
+            // setAmount(0)
         } else {
             showValidationMessage(true)
-            setAmount(0)
-            // setAmountCurrent(0)
+            setDifference(0)
+            // setAmount(0)
         }
         script()
         console.log(dataTable)
@@ -294,6 +315,7 @@ const Inventory = () => {
             getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
         ])
             .then(res => {
+
                 console.log(res[0].data)
                 setDataItem(res[0].data)
                 setDataWarehouse(res[1].data)
@@ -305,6 +327,7 @@ const Inventory = () => {
                         setShowWarehouse(true)
                     }
                 } else { setShowWarehouse(false) }
+
             })
             .catch(error => {
                 // if (error.response.status === 403) {
@@ -325,7 +348,7 @@ const Inventory = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Kho</h1>
+                                <h1>Phiếu kiểm kê</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
@@ -366,6 +389,7 @@ const Inventory = () => {
                                         <div className="row" style={{ marginBottom: 10 }}>
                                             <div className='col-md-6'>
                                                 <SelectSearch
+                                                    id='itemname'
                                                     placeholder='Tên vật tư'
                                                     options={dataOption}
                                                     value={nameSelect}
@@ -373,14 +397,14 @@ const Inventory = () => {
                                                     search
                                                     filterOptions={fuzzySearch}
                                                 />
-                                                
-                                                {/* <div style={{ color: "red", fontStyle: "italic" }}>
-                                                    {validator.message("itemname", name, "required", {
+
+                                                <div style={{ color: "red", fontStyle: "italic" }}>
+                                                    {validator.message("itemname", nameSelect, "required", {
                                                         messages: {
                                                             required: "(*) Nhập tên vật tư"
                                                         }
                                                     })}
-                                                </div> */}
+                                                </div>
 
                                             </div>
                                             <div className='col-md-3'>
@@ -444,16 +468,26 @@ const Inventory = () => {
                                                         <TextField
                                                             fullWidth
                                                             type="number"
-                                                            name="amount"
-                                                            // inputProps={{ min: 0, max: kd, inputMode: 'numeric', pattern: '[0-9]*' }}
+                                                            name="difference"
+                                                            id='difference'
+                                                            inputProps={{ min: -amount, inputMode: 'numeric', pattern: '[0-9]*' }}
                                                             size='small'
                                                             label="Số lượng chênh lệch"
-                                                        // value={amount}
-                                                        // onChange={(e) => {
-                                                        //     onChangeAmount(e)
-                                                        //     setAmount(parseInt(e.target.value) > kd ? kd : parseInt(e.target.value))
-                                                        // }}
+                                                            value={difference}
+                                                            onChange={(e) => {
+                                                                onChangeAmount(e)
+                                                                // setDifference(e.target.value)
+                                                                //
+                                                                setDifference(parseInt(e.target.value))
+                                                            }}
                                                         />
+                                                        <div style={{ color: "red", fontStyle: "italic" }}>
+                                                            {validator.message("difference", difference, "required", {
+                                                                messages: {
+                                                                    required: "(*) nhập số lượng chênh lệch"
+                                                                }
+                                                            })}
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -485,13 +519,13 @@ const Inventory = () => {
                                             <div className='col-md-6'>
                                                 <TextField
                                                     fullWidth
-                                                    type="number"
-                                                    name="amount"
+                                                    type="text"
+                                                    name="unit"
                                                     disabled
                                                     // inputProps={{ min: 0, max: kd, inputMode: 'numeric', pattern: '[0-9]*' }}
                                                     size='small'
                                                     label="Đơn vị tính"
-                                                // value={amount}
+                                                    value={unit}
                                                 // onChange={(e) => {
                                                 //     onChangeAmount(e)
                                                 //     setAmount(parseInt(e.target.value) > kd ? kd : parseInt(e.target.value))
@@ -527,15 +561,14 @@ const Inventory = () => {
                                                 <TextField
                                                     fullWidth
                                                     type="text"
-                                                    name="amount"
+                                                    name="description"
                                                     // inputProps={{ min: 0, max: kd, inputMode: 'numeric', pattern: '[0-9]*' }}
                                                     size='small'
                                                     label="Mô tả"
-                                                // value={amount}
-                                                // onChange={(e) => {
-                                                //     onChangeAmount(e)
-                                                //     setAmount(parseInt(e.target.value) > kd ? kd : parseInt(e.target.value))
-                                                // }}
+                                                    value={description}
+                                                    onChange={(e) => {
+                                                        setDesription(e.target.value)
+                                                    }}
                                                 />
                                             </div>
                                         </div>
@@ -544,6 +577,20 @@ const Inventory = () => {
 
 
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-footer" >
+                                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button style={{ width: "6%", marginRight: "10px" }} type="button"
+                                                className="btn btn-block btn-primary btn-sm"
+                                                onClick={(e) => reset(e)}>Reset
+                                            </button>
+
+                                            <button className="btn btn-sm btn-primary" onClick={(e) => {
+                                                onAddTable(e, difference)
+                                            }}>
+                                                <i className="fas fa-edit"></i> Thêm vào DS
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -555,35 +602,67 @@ const Inventory = () => {
                                                 <i className="fas fa-minus" />
                                             </button>
                                         </div>
+
                                     </div>
                                     <div className="card-body">
+                                        <div className="col" style={{ textAlign: "end", marginRight: "50px" }}>
+                                            {dataTable.length === 0 ? (
+                                                <>
+                                                    <button className="btn btn-sm btn-success" disabled>
+                                                        <i className="fas fa-save"></i> Lưu nhập
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button className="btn btn-sm btn-success" onClick={(e) => handleSave(e)}>
+                                                        <i className="fas fa-save"></i> Lưu nhập
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
                                         <hr />
-                                        <table id="item" className="table table-hover">
+                                        <table id="inventory" className="table table-hover">
                                             <thead>
                                                 <tr>
                                                     <th className="text-center">STT</th>
                                                     <th className="text-center">Mã VT</th>
                                                     <th className="text-center">Tên VT</th>
+                                                    <th className="text-center">Giá/Kệ</th>
                                                     <th className="text-center">DVT</th>
                                                     <th className="text-center">Số lượng</th>
                                                     <th className="text-center">Chênh lệch</th>
-                                                    <th className="text-center">Giá trị</th>
-                                                    <th className="text-center">Chênh lệch giá</th>
+                                                    {/* <th className="text-center">Giá trị</th>
+                                                    <th className="text-center">Chênh lệch giá</th> */}
                                                     <th className="text-center">Thao tác</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td className="text-center"></td>
-                                                    <td className="text-center"></td>
-                                                    <td className="text-center"></td>
-                                                    <td className="text-center"></td>
-                                                    <td className="text-center"></td>
-                                                    <td className="text-center"></td>
-                                                    <td className="text-center"></td>
-                                                    <td className="text-center"></td>
-                                                    <td className="text-center"></td>
-                                                </tr>
+                                                {
+                                                    dataTable.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td className="text-center">{index + 1}</td>
+                                                            <td className="text-center">{item.item_id}</td>
+                                                            <td className="text-center">{item.name}</td>
+                                                            <td className="text-center">{item.shelf_name}</td>
+                                                            <td className="text-center">{item.unit}</td>
+                                                            <td className="text-center">{(item.amount).toLocaleString()}</td>
+                                                            <td className="text-center">{(item.difference).toLocaleString()}</td>
+                                                            {/* <td className="text-center">{(item.price * item.amount).toLocaleString()}</td>
+                                                            <td className="text-center">
+                                                                {(item.difference < 0) ? (
+                                                                    (item.price * (-item.difference)).toLocaleString()
+                                                                ) : (
+                                                                    (item.price * (item.difference)).toLocaleString()
+                                                                )}</td> */}
+                                                            <td className='text-center'><button className="btn btn-sm btn-danger"
+                                                                onClick={(e) => {
+                                                                    onRemoveRow(e, index)
+                                                                }}>
+                                                                x
+                                                            </button></td>
+                                                        </tr>
+                                                    ))
+                                                }
                                             </tbody>
                                         </table>
                                     </div>

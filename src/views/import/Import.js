@@ -188,6 +188,7 @@ const Import = () => {
 
     const onAddTable = (e) => {//Button click, add data table
         if (validator.allValid() && amount > 0) {
+            console.log(dataTable)
             if (dataTable.length > 0) {
                 let amountTotal = 0
                 let array = []

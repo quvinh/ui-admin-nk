@@ -215,6 +215,16 @@ const AppSideNav = () => {
                                                 </li>
                                             )
                                         }
+                                        {
+                                            getAllPermissions().includes("Sửa phiếu kiểm kê", "Xóa phiếu kiểm kê", "Xem phiếu kiểm kê", "Duyệt phiếu kiểm kê") && (
+                                                <li className="nav-item">
+                                                    <Link to="/coupon_inventory" className="nav-link">
+                                                        <i className="far fa-circle nav-icon" />
+                                                        <p>Phiếu kiểm kê</p>
+                                                    </Link>
+                                                </li>
+                                            )
+                                        }
                                     </ul>
                                 </li>
                             )

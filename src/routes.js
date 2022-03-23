@@ -19,6 +19,8 @@ const CouponExport = React.lazy(() => import('./views/coupon/CouponExport'))
 const DetailImport = React.lazy(() => import('./views/coupon/DetailImport'))
 const DetailTransfer = React.lazy(() => import('./views/coupon/DetailTransfer'))
 const DetailExport = React.lazy(() => import('./views/coupon/DetailExport'))
+const CouponInventory = React.lazy(() => import('./views/coupon/CouponInventory'))
+const DetailInventory = React.lazy(() => import('./views/coupon/DetailInventory'))
 
 const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
 
@@ -111,7 +113,9 @@ const routes = [
   //   { path: '/supplier-add', name: 'Tạo mới nhà cung cấp', component: AddSuppliers },
   //   { path: '/supplier-edit/:id', name: 'Chỉnh sửa nhà cung cấp', component: EditSuppliers },
 
-  { path: '/inventory', name: 'Kiểm kê', component: Inventory }
+  { path: '/inventory', name: 'Kiểm kê', component: Inventory },
+  { path: '/detail_inventory/:code', name: 'Chi tiết phiếu xuất', component: DetailInventory },
+  { path: '/coupon_inventory', name: 'Phiếu xuất', component: CouponInventory },
 
   //   { path: '/role', name: 'Phân quyền', component: Role },
 ]
