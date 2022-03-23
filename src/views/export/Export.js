@@ -98,7 +98,7 @@ const Export = (props) => {
                 getDataShelf(item.warehouse_id)
                 setIsWarehouseSelected(true)
                 checked = true
-                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.id + '/' + item.warehouse_id + '/' + item.shelf_id + '?token=' + getToken())])
+                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '?token=' + getToken())])
                     .then(function (res) {
                         console.log(kd)
                         setKD(res[0].data)
@@ -199,6 +199,7 @@ const Export = (props) => {
             })
         // }
         setName('')
+        setNameSelect('')
         setAmount(0)
         setAmountCurrent(0)
     }
@@ -363,20 +364,6 @@ const Export = (props) => {
                         <div className="card-body">
                             <div className="row" style={{ marginBottom: 10 }}>
                                 <div className="col-md-7">
-                                    {/* <Autocomplete
-                                        id="name_item"
-                                        freeSolo
-                                        size='small'
-                                        options={dataOption}
-                                        // value={name}
-                                        // onChange={(e, newValue) => onChangeName(e, newValue)}
-                                        inputValue={name}
-                                        onInputChange={(e, newValue) => {
-                                            onChangeName(e, newValue)
-                                        }}
-                                        renderInput={(params) => <TextField {...params} label="Tên vật tư" />}
-                                        disableClearable
-                                    /> */}
                                     <SelectSearch
                                         options={dataOption}
                                         value={nameSelect}

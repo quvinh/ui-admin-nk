@@ -19,6 +19,9 @@ const CouponExport = React.lazy(() => import('./views/coupon/CouponExport'))
 const DetailImport = React.lazy(() => import('./views/coupon/DetailImport'))
 const DetailTransfer = React.lazy(() => import('./views/coupon/DetailTransfer'))
 const DetailExport = React.lazy(() => import('./views/coupon/DetailExport'))
+const PrintImport = React.lazy(() => import('./views/coupon/PrintImport'))
+const PrintExport = React.lazy(() => import('./views/coupon/PrintExport'))
+const PrintTransfer = React.lazy(() => import('./views/coupon/PrintTransfer'))
 
 const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
 
@@ -81,6 +84,9 @@ const routes = [
   { path: '/detail_import/:code', name: 'Chi tiết phiếu nhập', component: DetailImport },
   { path: '/detail_transfer/:code', name: 'Chi tiết phiếu luân chuyển', component: DetailTransfer },
   { path: '/detail_export/:code', name: 'Chi tiết phiếu xuất', component: DetailExport },
+  { path: '/print_import/:code', name: 'In phiếu nhập', component: PrintImport },
+  { path: '/print_export/:code', name: 'In phiếu nhập', component: PrintExport },
+  { path: '/print_transfer/:code', name: 'In phiếu nhập', component: PrintTransfer },
   //   { path: '/reports', name: 'Báo cáo', component: Reports },
   { path: '/statistic', name: 'Thống kê', component: Statistical },
   { path: '/transfer', name: 'Điều phối kho', component: Transfer },
