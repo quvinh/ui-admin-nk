@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getData } from '../../components/utils/Api'
-import { getToken, getUserID } from '../../components/utils/Common'
+import { delData, getData } from '../../components/utils/Api'
+import { getAllPermissions, getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 
 const Notification = () => {
     const script = () => {
@@ -10,9 +10,40 @@ const Notification = () => {
         compile.async = true
         document.body.appendChild(compile)
     }
+    const [notification, setNotification] = useState([])
+    const handleReload = () => {
+        Promise.all([getData('http://127.0.0.1:8000/api/admin/notification?token=' + getToken()),
+        ]).then(function (res) {
+            setNotification(res[0].data)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+    const handleDelete = (e, id) => {
+        Promise.all([delData('http://127.0.0.1:8000/api/admin/notification/delete/' + id + getToken()),
+        ]).then(function (res) {
+            handleReload()
+            console.log('success')
+        }).catch(error => {
+            console.log(error)
+        })
+    }
 
     useEffect(() => {
-        script()
+
+        Promise.all([
+            getData(getRoleNames() === 'admin' ? (
+                'http://127.0.0.1:8000/api/admin/notification?token=' + getToken()
+            ) : getDataWarehouseID().length > 0 && (
+                'http://127.0.0.1:8000/api/admin/notification/' + getDataWarehouseID()[0] + '?token=' + getToken()
+            )
+            )]).then(function (res) {
+                setNotification(res[0].data)
+                script()
+            }).catch(error => {
+                console.log(error)
+            })
+
     }, []);
     // useEffect(() => {
     //     // const header = `Authorization: Bearer ${getToken()}`
@@ -50,7 +81,11 @@ const Notification = () => {
             <section className="content">
                 <div className="row">
                     <div className="col-md-3">
-                        <Link to={"/notification-add"} className="btn btn-primary btn-block mb-3">Tạo thông báo</Link>
+                        {
+                            getAllPermissions().includes("Thêm thông báo") && (
+                                <Link to={"/notification-add"} className="btn btn-primary btn-block mb-3">Tạo thông báo</Link>
+                            )
+                        }
                         <div className="card">
                             <div className="card-header">
                                 <h3 className="card-title">Mục</h3>
@@ -120,7 +155,7 @@ const Notification = () => {
                             </div>
                             {/* /.card-header */}
                             <div className="card-body">
-                                <table id="example1" className="table table-bordered table-striped">
+                                <table id="item" className="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th style={{ width: 10 }}>STT</th>
@@ -141,23 +176,33 @@ const Notification = () => {
                                                 </tr>
                                             ))
                                         } */}
-                                        <tr>
-                                            <td>1</td>
-                                            <td className="mailbox-name">admin</td>
-                                            <td className="mailbox-subject"><b>THÔNG BÁO</b></td>
-                                            <td>1</td>
-                                            <td>
-                                                <div style={{ textAlign: "center" }}>
-                                                    <button style={{ border: "none", backgroundColor: "white", borderRadius: "4rem" }} className="btn btn-default" data-toggle="dropdown">
-                                                        <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                                    </button>
-                                                    <div className="dropdown-menu">
-                                                        <Link className="dropdown-item" to={"/notification-read/1"}>Chi tiết</Link>
-                                                        <a className="dropdown-item">Xoá</a>
+                                        {notification.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td className="mailbox-name">{item.fullname}</td>
+                                                <td className="mailbox-subject"><strong>{item.title}</strong></td>
+                                                <td>{item.created_at}</td>
+                                                <td>
+                                                    <div style={{ textAlign: "center" }}>
+                                                        <button style={{ border: "none", backgroundColor: "white", borderRadius: "4rem" }} className="btn btn-default" data-toggle="dropdown">
+                                                            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                        </button>
+                                                        <div className="dropdown-menu">
+                                                            {
+                                                                getAllPermissions().includes("Xem thông báo") && (
+                                                                    <Link className="dropdown-item" to={"/notification-read/" + item.id}>Chi tiết</Link>
+                                                                )
+                                                            }
+                                                            {
+                                                                getAllPermissions().includes("Xóa thông báo") && (
+                                                                    <a className="dropdown-item" onClick={(e) => { handleDelete(e, item.id) }}>Xoá</a>
+                                                                )
+                                                            }
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                     <tfoot>
                                     </tfoot>

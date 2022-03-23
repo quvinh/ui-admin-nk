@@ -53,9 +53,12 @@ const AddNotification = React.lazy(() => import('./views/notification/AddNotific
 const ReadNotification = React.lazy(() => import('./views/notification/ReadNotification'))
 
 // //Supplier
-// const Suppliers = React.lazy(() => import('./views/suppliers/Suppliers'))
+const Supplier = React.lazy(() => import('./views/supplier/Supplier'))
 // const AddSuppliers = React.lazy(() => import('./views/suppliers/Add'))
 // const EditSuppliers = React.lazy(() => import('./views/suppliers/Edit'))
+
+//Inventory
+const Inventory = React.lazy(() => import('./views/inventory/Inventory'))
 
 // //Role
 const Role = React.lazy(() => import('./views/role/Role'))
@@ -104,9 +107,11 @@ const routes = [
   { path: '/notification-add', name: 'Tạo thông báo', component: AddNotification },
   { path: '/notification-read/:id', name: 'Tạo thông báo', component: ReadNotification },
 
-  //   { path: '/supplier', name: 'Nhà cung cấp', component: Suppliers },
+    { path: '/supplier', name: 'Nhà cung cấp', component: Supplier },
   //   { path: '/supplier-add', name: 'Tạo mới nhà cung cấp', component: AddSuppliers },
   //   { path: '/supplier-edit/:id', name: 'Chỉnh sửa nhà cung cấp', component: EditSuppliers },
+
+  { path: '/inventory', name: 'Kiểm kê', component: Inventory }
 
   //   { path: '/role', name: 'Phân quyền', component: Role },
 ]

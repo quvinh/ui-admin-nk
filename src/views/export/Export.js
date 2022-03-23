@@ -79,6 +79,7 @@ const Export = (props) => {
     const onChangeName = (e, newValue) => {
         setNameSelect(newValue)
         var checked = false
+        console.log(newValue)
         dataItem.map((item) => {
             if (item.itemname === newValue.name && item.id === newValue.value) {
                 setItemID(item.item_id)
@@ -99,6 +100,7 @@ const Export = (props) => {
                 checked = true
                 Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '?token=' + getToken())])
                     .then(function (res) {
+                        console.log(kd)
                         setKD(res[0].data)
                     })
             }
@@ -197,6 +199,7 @@ const Export = (props) => {
             })
         // }
         setName('')
+        setNameSelect('')
         setAmount(0)
         setAmountCurrent(0)
     }
@@ -328,6 +331,7 @@ const Export = (props) => {
         name: item.itemname,
         value: item.id
     }))
+    console.log(dataOption)
 
     return (
         <div className="content-wrapper">
@@ -382,7 +386,7 @@ const Export = (props) => {
                                         filterOptions={fuzzySearch}
                                     />
                                     <div style={{ color: "red", fontStyle: "italic" }}>
-                                        {validator.message("name_item", name, "required", {
+                                        {validator.message("itemname", name, "required", {
                                             messages: {
                                                 required: "(*) Nhập tên vật tư"
                                             }
@@ -543,7 +547,7 @@ const Export = (props) => {
                                                         <td className='text-center'>{item.unit}</td>
                                                         <td className='text-center'>{item.amount}</td>
                                                         <td className='text-center'>{(item.price).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
-                                                        <td>{item.shelf_name}</td>
+                                                        <td className='text-center'>{item.shelf_name}</td>
                                                         <td className='text-center'><button className="btn btn-sm btn-danger"
                                                             onClick={(e) => {
                                                                 onRemoveRow(e, index)

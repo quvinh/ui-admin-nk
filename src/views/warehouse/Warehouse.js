@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { getData, putData, delData, postData } from '../../components/utils/Api'
 import { useHistory } from 'react-router-dom';
 import Validator from '../../components/utils/Validation'
-import { getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
+import { getAllPermissions, getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 import { set } from 'date-fns';
 // import Box from '@mui/material/Box';
 // import Tabs from '@mui/material/Tabs';
@@ -191,7 +191,13 @@ const Warehouse = () => {
     const [dataCountWarehouse, setDataCountWarehouse] = useState([])
 
     useEffect(() => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()),
+        Promise.all([
+            getData(getRoleNames() === 'admin' ? (
+                'http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()
+            ) : getDataWarehouseID().length > 0 && (
+                'http://127.0.0.1:8000/api/admin/warehouse/'+ getUserID() +'?token=' + getToken()
+            )),
+
             // getData('http://127.0.0.1:8000/api/admin/warehouse/warehouseShow?token=' + getToken()),
             // getData('http://127.0.0.1:8000/api/admin/warehouse/countWarehouse')
         ])
@@ -240,11 +246,26 @@ const Warehouse = () => {
                                     </Box> */}
 
                                     <h3 className="card-title"></h3>
-                                    <div className='modal-footer justify-content-end'>
-                                        <button type="button" className="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-lg">
-                                            <i class="fa fa-plus" aria-hidden="true"></i> tạo mới
-                                        </button>
-                                    </div>
+                                    {/* {
+                                        getAllPermissions().includes("Thêm kho") && (
+                                            <div className='modal-footer justify-content-end'>
+                                                <button type="button" className="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-lg">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i> tạo mới
+                                                </button>
+                                            </div>
+                                        )
+                                    } */}
+                                    {
+                                        getRoleNames() === "admin" ? (
+                                            <>
+                                                <div className='modal-footer justify-content-end'>
+                                                    <button type="button" className="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-lg">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i> tạo mới
+                                                    </button>
+                                                </div>
+                                            </>
+                                        ) : (<></>)
+                                    }
                                 </div>
                                 {/* /.card-header */}
                                 <div className="card-body">
@@ -293,29 +314,62 @@ const Warehouse = () => {
                                                                         (item.status) ? (
                                                                             <>
                                                                                 <a className="dropdown-item" href={'#/warehouse-show/' + item.id}>Chi tiết</a>
-                                                                                <a className="dropdown-item" data-toggle="modal" data-target="#modal-lg" onClick={(e) => {
-                                                                                    setId(item.id)
-                                                                                    setName(item.name)
-                                                                                    setLocation(item.location)
-                                                                                    setNote(item.note)
-                                                                                    setIsSelected(true)
-                                                                                }}>Cập nhật</a>
-                                                                                <a className="dropdown-item" data-toggle="modal" data-target="#modal-sm" onClick={(e) => {
-                                                                                    setStatus(false)
-                                                                                    setId(item.id)
-                                                                                }}>Đóng Kho</a>
+                                                                                {
+                                                                                    getAllPermissions().includes("Sửa kho") && (
+                                                                                        <a className="dropdown-item" data-toggle="modal" data-target="#modal-lg" onClick={(e) => {
+                                                                                            setId(item.id)
+                                                                                            setName(item.name)
+                                                                                            setLocation(item.location)
+                                                                                            setNote(item.note)
+                                                                                            setIsSelected(true)
+                                                                                        }}>Cập nhật</a>
+                                                                                    )
+                                                                                }
+                                                                                {
+                                                                                    getRoleNames() === "admin" ? (
+                                                                                        <>
+                                                                                            <a className="dropdown-item" data-toggle="modal" data-target="#modal-sm" onClick={(e) => {
+                                                                                                setStatus(false)
+                                                                                                setId(item.id)
+                                                                                            }}>Đóng Kho</a>
+                                                                                        </>
+                                                                                    ) : (<></>)
+                                                                                }
+                                                                                {/* {
+                                                                                    getAllPermissions().includes("Xóa kho") && (
+                                                                                        <a className="dropdown-item" data-toggle="modal" data-target="#modal-sm" onClick={(e) => {
+                                                                                            setStatus(false)
+                                                                                            setId(item.id)
+                                                                                        }}>Đóng Kho</a>
+                                                                                    )
+                                                                                } */}
                                                                             </>
 
                                                                         ) : (
-                                                                            <a className="dropdown-item" data-toggle="modal" data-target="#modal-sm" onClick={(e) => {
-                                                                                setStatus(true)
-                                                                                setId(item.id)
-                                                                            }}>Mở Kho</a>
+                                                                            <>
+                                                                                {
+                                                                                    getRoleNames() === "admin" ? (
+                                                                                        <>
+                                                                                            <a className="dropdown-item" data-toggle="modal" data-target="#modal-sm" onClick={(e) => {
+                                                                                                setStatus(true)
+                                                                                                setId(item.id)
+                                                                                            }}>Mở Kho</a>
+                                                                                        </>
+                                                                                    ) : (<></>)
+                                                                                }
+                                                                                {/* {
+                                                                                    getAllPermissions().includes("Xóa kho") && (
+                                                                                        <a className="dropdown-item" data-toggle="modal" data-target="#modal-sm" onClick={(e) => {
+                                                                                            setStatus(true)
+                                                                                            setId(item.id)
+                                                                                        }}>Mở Kho</a>
+                                                                                    )
+                                                                                } */}
+                                                                            </>
                                                                         )
                                                                     }
                                                                 </div>
                                                             </div>
-
                                                         </td>
                                                     </tr>
                                                 ))

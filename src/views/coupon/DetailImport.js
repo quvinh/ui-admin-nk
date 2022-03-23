@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { delData, getData, putData } from '../../components/utils/Api'
-import { getToken } from '../../components/utils/Common'
+import { getAllPermissions, getToken } from '../../components/utils/Common'
 import CurrencyFormat from 'react-currency-format'
 
 const DetailImport = (props) => {
@@ -75,7 +75,7 @@ const DetailImport = (props) => {
             .catch((error) => {
                 console.log(error)
             })
-            alert()
+        alert()
     }, [])
     return (
         <div className="content-wrapper">
@@ -102,13 +102,16 @@ const DetailImport = (props) => {
                             <div className="card">
                                 <div className="card-header">
                                     <h3 className="card-title"></h3>
-                                    <div style={{ textAlign: "end" }} >
-                                        {detailImport.length > 0 && (detailImport[0].status === '0' ? (<button className="btn btn-sm btn-primary toastrDefaultSuccess" onClick={(e) => handleDStatus()}>Duyệt</button>)
-                                            : (detailImport[0].status === '1' ? (<button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={(e) => handleUpdateStatus()}>Duyệt</button>)
-                                                : <></>
-                                            ))}
-                                    </div>
-
+                                    {
+                                        getAllPermissions().includes("Duyệt phiếu nhập") && (
+                                            <div style={{ textAlign: "end" }} >
+                                                {detailImport.length > 0 && (detailImport[0].status === '0' ? (<button className="btn btn-sm btn-primary toastrDefaultSuccess" onClick={(e) => handleDStatus()}>Duyệt</button>)
+                                                    : (detailImport[0].status === '1' ? (<button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={(e) => handleUpdateStatus()}>Duyệt</button>)
+                                                        : <></>
+                                                    ))}
+                                            </div>
+                                        )
+                                    }
                                 </div>
                                 <div className="card-body">
                                     <table id="example1" className="table table-bordered table-striped">

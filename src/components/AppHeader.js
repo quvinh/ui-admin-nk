@@ -4,8 +4,10 @@ import { Link, useHistory } from 'react-router-dom'
 import { getData } from './utils/Api'
 import { getRoleNames, getToken, getUserID, removeUserSession } from './utils/Common'
 
-const AppHeader = () => {
+const AppHeader = (props) => {
+    console.log(props)
     const [dataUserDetail, setUserDetail] = useState([])
+    const [dataNotification, setDataNotification] = useState([])
     const history = useHistory()
     const handleLogout = () => {
         removeUserSession()
@@ -13,7 +15,8 @@ const AppHeader = () => {
     }
     useEffect(() => {
         Promise.all([
-            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
+            getData('http://127.0.0.1:8000/api/admin/notification?token=' + getToken()),
         ])
             .then(function (res) {
                 setUserDetail(res[0].data)
@@ -119,7 +122,7 @@ const AppHeader = () => {
                         <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             <span className="dropdown-item dropdown-header">15 Notifications</span>
                             <div className="dropdown-divider" />
-                            <a href="#" className="dropdown-item">
+                            {/* <a href="#" className="dropdown-item">
                                 <i className="fas fa-envelope mr-2" /> 4 new messages
                                 <span className="float-right text-muted text-sm">3 mins</span>
                             </a>
@@ -132,6 +135,19 @@ const AppHeader = () => {
                             <a href="#" className="dropdown-item">
                                 <i className="fas fa-file mr-2" /> 3 new reports
                                 <span className="float-right text-muted text-sm">2 days</span>
+                            </a> */}
+                            <a href="#" className="dropdown-item">
+                                <div className="media">
+                                    <img src="dist/img/user8-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3" />
+                                    <div className="media-body">
+                                        <h3 className="dropdown-item-title">
+                                            John Pierce
+                                            <span className="float-right text-sm text-muted"><i className="fas fa-star" /></span>
+                                        </h3>
+                                        <p className="text-sm">{props.props}</p>
+                                        <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
+                                    </div>
+                                </div>
                             </a>
                             <div className="dropdown-divider" />
                             <a href="#" className="dropdown-item dropdown-footer">See All Notifications</a>

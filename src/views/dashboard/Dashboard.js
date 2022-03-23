@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { Bar } from 'react-chartjs-2';
 // import BarChart from './Chart2';
 import { getData } from '../../components/utils/Api'
-import { getDataWarehouseID, getRoleNames, getToken } from '../../components/utils/Common'
+import { getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,6 +16,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Link } from 'react-router-dom';
+import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 
 
@@ -24,8 +25,8 @@ const Dashboard = () => {
   const [importVT, setImportVT] = useState([])
   const [exportVT, setExportVT] = useState([])
   const year = new Date().getFullYear().toString()
-  const [nameWarehouse, setNameWarehouse] = useState('')
-  const [idWarehouse, setIdWarehouse] = useState('')
+  const [dataWarehouse, setDataWarehouse] = useState([])
+  const [warehouse, setWarehouse] = useState('')
   const [totalItem, setTotalItem] = useState('')
   const [amountItem, setAmountItem] = useState('')
   const [status, setStatus] = useState('')
@@ -34,7 +35,6 @@ const Dashboard = () => {
   importVT.map((item, index) => {
     arrImportAmount.push(item.importAmount)
   })
-  console.log(arrImportAmount)
   const arrImportMonth = []
   importVT.map((item, index) => {
     arrImportMonth.push(item.month)
@@ -70,8 +70,8 @@ const Dashboard = () => {
     },
   };
 
-  const labels = arrImportMonth;
-
+  const labels = arrExportMonth.length > arrImportMonth.length ? arrExportMonth : arrImportMonth;
+  console.log(labels)
   const data = {
     labels,
     datasets: [
@@ -84,8 +84,18 @@ const Dashboard = () => {
         label: 'Xuất',
         data: arrExportAmount,
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      }
+      },
     ]
+  }
+
+  const onChangeWarehouse = (e) => {
+    Promise.all([
+      getData('http://127.0.0.1:8000/api/admin/dashboard/importByWarehouse/' + e.target.value + '/' + year + '?token=' + getToken()),
+      getData('http://127.0.0.1:8000/api/admin/dashboard/exportByWarehouse/' + e.target.value + '/' + year + '?token=' + getToken()),
+    ]).then(function (res) {
+      setImportVT(res[0].data)
+      setExportVT(res[1].data)
+    })
   }
 
   useEffect(() => {
@@ -94,12 +104,14 @@ const Dashboard = () => {
         Promise.all([
           getData('http://127.0.0.1:8000/api/admin/dashboard/tongTonKho?token=' + getToken()),
           getData('http://127.0.0.1:8000/api/admin/dashboard/import/' + year + '?token=' + getToken()),
-          getData('http://127.0.0.1:8000/api/admin/dashboard/export/' + year + '?token=' + getToken())
+          getData('http://127.0.0.1:8000/api/admin/dashboard/export/' + year + '?token=' + getToken()),
+          getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
         ])
           .then(function (res) {
             setTonKho(res[0].data)
             setImportVT(res[1].data)
             setExportVT(res[2].data)
+            setDataWarehouse(res[3].data)
           })
           .catch((error) => {
             console.log(error)
@@ -107,15 +119,17 @@ const Dashboard = () => {
 
       ) : getDataWarehouseID().length > 0 && (
         Promise.all([
-          getData('http://127.0.0.1:8000/api/admin/dashboard/listWarehouse/' + getDataWarehouseID()[0] + '/' + '?token=' + getToken()),
+          getData('http://127.0.0.1:8000/api/admin/dashboard/tonKho/' + getUserID() + '/' + '?token=' + getToken()),
+          getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
           getData('http://127.0.0.1:8000/api/admin/dashboard/importByWarehouse/' + getDataWarehouseID()[0] + '/' + year + '?token=' + getToken()),
           getData('http://127.0.0.1:8000/api/admin/dashboard/exportByWarehouse/' + getDataWarehouseID()[0] + '/' + year + '?token=' + getToken()),
-          getData('http://127.0.0.1:8000/api/admin/dashboard/tonKho/' + getDataWarehouseID()[0] + '?token=' + getToken())
         ])
           .then(function (res) {
+            console.log('user', res[0].data, getUserID())
             setTonKho(res[0].data)
-            setImportVT(res[1].data)
-            setExportVT(res[2].data)
+            setDataWarehouse(res[1].data)
+            setImportVT(res[2].data)
+            setExportVT(res[3].data)
           })
           .catch((error) => {
             console.log(error)
@@ -154,48 +168,20 @@ const Dashboard = () => {
                 </div>
                 <div className="card-body">
                   {
-                    getRoleNames() === 'admin' ? (
-
-                      tonKho.map((item, index) => (
-                        <div className="small-box bg-white card-warning card-outline">
-                          <div className="inner">
-                            <h5 className="info-box-text">Tên nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
-                            <p className="info-box-number">Giá trị kho : {item.total}</p>
-                          </div>
-                          <div className='icon'>
-                             <i className="far fa-home"></i>
-                          </div>
-                          <Link to={"/warehouse-show/" + item.warehouse_id} class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></Link>
-                          {/* /.info-box-content */}
+                    tonKho.map((item, index) => (
+                      <div className="small-box bg-white card-warning card-outline">
+                        <div className="inner">
+                          <h5 className="info-box-text">Tên nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
+                          <p className="info-box-number">Giá trị kho : {item.total}</p>
                         </div>
-                        
-                      ))
-                    ) : getDataWarehouseID().length > 0 && (
-                      <table id="item" className="table table-hover ">
-                        <thead>
-                          <tr>
-                            <th className='text-center'>STT</th>
-                            <th className='text-center'>Mã VT</th>
-                            <th className='text-center'>Tên VT</th>
-                            <th className='text-center'>Giá trị tồn</th>
-                            <th className='text-center'>Số lượng tồn</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {
-                            tonKho.map((item, index) => (
-                              <tr key={index}>
-                                <td className='text-center'>{index + 1}</td>
-                                <td className='text-center'>{item.item_id}</td>
-                                <td className='text-center'>{item.item_name}</td>
-                                <td className='text-center'>{item.total}</td>
-                                <td className='text-center'>{item.tonKho}</td>
-                              </tr>
-                            ))
-                          }
-                        </tbody>
-                      </table>
-                    )
+                        <div className='icon'>
+                          <i className="far fa-home"></i>
+                        </div>
+                        <Link to={"/warehouse-show/" + item.warehouse_id} class="small-box-footer">Chi tiết kho<i class="fas fa-arrow-circle-right"></i></Link>
+                        {/* /.info-box-content */}
+                      </div>
+
+                    ))
                   }
                 </div>
               </div>
@@ -211,6 +197,29 @@ const Dashboard = () => {
                   </div> */}
                 </div>
                 <div className="card-body">
+                  <div className='row'>
+                    <div className='col-md-8'></div>
+                  <div className="col-md-4" >
+                    <Box>
+                      <FormControl fullWidth>
+                        <InputLabel size='small' style={{ fontSize: 12 }}>Nhà kho</InputLabel>
+                        <Select
+                          size="small"
+                          label="Nhà kho"
+                          name="warehouse"
+                          value={warehouse}
+                          onChange={(e) => {
+                            onChangeWarehouse(e)
+                            setWarehouse(e.target.value)
+                          }}
+                        >
+                          {dataWarehouse.map((item, index) => (
+                            <MenuItem key={index} value={item.id}>{item.name}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </div></div>
                   <div className="position-relative mb-4">
                     <Bar options={options} data={data} />
                   </div>

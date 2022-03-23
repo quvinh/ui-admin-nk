@@ -111,7 +111,7 @@ const Category = () => {
                                 </div>
                                 {/* /.card-header */}
                                 <div className="card-body">
-                                    <table id="example1" className="table table-bordered table-striped">
+                                    <table id="item" className="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th>STT</th>

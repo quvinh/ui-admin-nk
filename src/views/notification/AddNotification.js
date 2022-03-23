@@ -1,42 +1,58 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import AppHeader from '../../components/AppHeader'
 import { getData, postData } from '../../components/utils/Api'
 import { getToken, getUserID } from '../../components/utils/Common'
+import Notification from './Notification'
 // import Select, { components } from 'react-select'
 const AddNotification = () => {
     const [title, setTitle] = useState()
     const [content, setContent] = useState('Nội dung')
     const [dataWarehouse, setDataWarehouse] = useState([])
+    const [dataNotification, setDataNotification] = useState([])
     const [isCheckedWarehouse, setIsCheckedWarehouse] = useState([])
+    const [isSelected, setIsSelected] = useState(false)
+    const [test, setTest] = useState('')
     const history = useHistory()
+
+    const handleChangeData = () => {
+
+    }
 
     const handleCheckWarehouse = (e) => {
         const { id, checked } = e.target
         console.log(id)
         setIsCheckedWarehouse([...isCheckedWarehouse, parseInt(id)])
         !checked && setIsCheckedWarehouse(isCheckedWarehouse.filter(item => parseInt(item) !== parseInt(id)))
-        setIsSelected(true)
+        // setIsSelected(true)
     }
 
     const handleSave = () => {
         isCheckedWarehouse.map(item => {
+            console.log(title)
+            console.log(item)
+            console.log(content)
+            const data = {
+                title: title,
+                content: content,
+                status: 0,
+                created_by: getUserID(),
+                warehouse_id: item
+            }
+            console.log(data)
             Promise.all([
-                postData('http://127.0.0.1:8000/api/admin/notification/store?token=' + getToken(), {
-                    title: title,
-                    content: content,
-                    status: 0,
-                    created_by: getUserID(),
-                    warehouse_id: item
-                }),
+                postData('http://127.0.0.1:8000/api/admin/notification/store?token=' + getToken(), data),
             ])
                 .then(function (res) {
+                    setTest('test')
                     // history.push('/notification')
                 })
                 .catch(error => {
                     console.log(error)
                 })
         })
+        console.log(dataNotification)
         history.push('/notification')
     }
 
@@ -183,7 +199,7 @@ const AddNotification = () => {
                                         <input className="form-control" placeholder="Tiêu đề:" onChange={(e) => setTitle(e.target.value)} />
                                     </div>
                                     <div className="form-group">
-                                        <textarea className="form-control" value={content} style={{ height: 300 }} onChange={(e) => setContent(e.target.value)} />
+                                        <textarea className="form-control" style={{ height: 300 }} onChange={(e) => setContent(e.target.value)} />
                                     </div>
                                     <div className="form-group">
                                         {/* <div className="btn btn-default btn-file">

@@ -1,6 +1,6 @@
 import { getData, putData, delData, postData } from '../../components/utils/Api'
 import React, { useEffect, useState } from 'react'
-import { getToken } from '../../components/utils/Common'
+import { getAllPermissions, getToken } from '../../components/utils/Common'
 import { Link } from 'react-router-dom'
 
 const CouponImport = () => {
@@ -100,13 +100,17 @@ const CouponImport = () => {
                                                         }
                                                         </td>
                                                         <td>
-                                                        <div style={{ textAlign: "center" }}>
+                                                            <div style={{ textAlign: "center" }}>
                                                                 <button style={{ border: "none", backgroundColor: "white", borderRadius: "4rem" }} className="btn btn-default" data-toggle="dropdown">
                                                                     <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                                 </button>
                                                                 <div className="dropdown-menu" size='small'>
                                                                     <Link className="dropdown-item" to={'/detail_import/' + item.code} size='small'>Chi tiết</Link>
-                                                                    <a className="dropdown-item" onClick={(e) => { handleDelete(item.code) }} size='small'>Xóa</a>
+                                                                    {
+                                                                        getAllPermissions().includes("Xoá phiếu nhập") && (
+                                                                            <a className="dropdown-item" onClick={(e) => { handleDelete(item.code) }} size='small'>Xóa</a>
+                                                                        )
+                                                                    }
                                                                 </div>
                                                             </div>
                                                         </td>
