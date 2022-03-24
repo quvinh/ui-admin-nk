@@ -120,6 +120,7 @@ const Export = (props) => {
     }
 
     const setNull = () => {
+        setNameSelect('')
         setName('')
         setAmount(0)
         setAmountCurrent(0)

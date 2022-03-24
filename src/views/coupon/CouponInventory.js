@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { getAllPermissions, getToken } from '../../components/utils/Common'
 import { Link } from 'react-router-dom'
 
-const CouponImport = () => {
+const CouponInventory = () => {
 
-    const [codeImport, setCodeImport] = useState([])
+    const [codeInventory, setCodeInventory] = useState([])
 
     const script = () => {
         const compile = document.createElement("script")
@@ -14,9 +14,9 @@ const CouponImport = () => {
         document.body.appendChild(compile)
     }
     const handleReload = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showCodeImport?token=' + getToken())])
+        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showCodeInventory?token=' + getToken())])
             .then(function (res) {
-                setCodeImport(res[0].data)
+                setCodeInventory(res[0].data)
             })
             .catch(err => {
                 console.log(err)
@@ -24,7 +24,7 @@ const CouponImport = () => {
     }
 
     const handleDelete = (code) => {
-        Promise.all([delData('http://127.0.0.1:8000/api/admin/import/deleteCode/' + code + '?token=' + getToken())])
+        Promise.all([delData('http://127.0.0.1:8000/api/admin/inventory/deleteCode/' + code + '?token=' + getToken())])
             .then(function (res) {
                 console.log("Deleted", code)
                 handleReload()
@@ -35,9 +35,10 @@ const CouponImport = () => {
     }
 
     useEffect(() => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showCodeImport?token=' + getToken())])
+        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showCodeInventory?token=' + getToken())])
             .then(function (res) {
-                setCodeImport(res[0].data)
+                setCodeInventory(res[0].data)
+                console.log(res[0].data)
             })
             .catch((error) => {
                 console.log(error)
@@ -45,18 +46,20 @@ const CouponImport = () => {
 
     }, [])
 
+    console.log('table', codeInventory)
+
     return (
         <div className="content-wrapper">
             <section className="content-header">
                 <div className="container-fluid">
                     <div className="row mb-2">
                         <div className="col-sm-6">
-                            <h1>Phiếu nhập</h1>
+                            <h1>Phiếu kiểm kê</h1>
                         </div>
                         <div className="col-sm-6">
                             <ol className="breadcrumb float-sm-right">
                                 <li className="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                                <li className="breadcrumb-item active">Phiếu nhập</li>
+                                <li className="breadcrumb-item active">Phiếu kiểm kê</li>
                             </ol>
                         </div>
                     </div>
@@ -74,28 +77,28 @@ const CouponImport = () => {
                                     <table id="example1" className="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th style={{ width: 10 }}>STT</th>
-                                                <th>Mã phiếu</th>
-                                                <th>Tên kho</th>
-                                                <th>Người tạo</th>
-                                                <th>Thời gian</th>
-                                                <th>Trạng thái</th>
-                                                <th style={{ width: 15 }}>Action</th>
+                                                <th style={{ width: 10 }} className='text-center'>STT</th>
+                                                <th className='text-center'>Mã phiếu</th>
+                                                <th className='text-center'>Tên kho</th>
+                                                <th className='text-center'>Người tạo</th>
+                                                <th className='text-center'>Thời gian</th>
+                                                <th className='text-center'>Trạng thái</th>
+                                                <th style={{ width: 15 }} className='text-center'>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {
-                                                codeImport.map((item, index) => (
+                                                codeInventory.map((item, index) => (
                                                     <tr>
-                                                        <td>{index + 1}</td>
-                                                        <td>{item.code}</td>
-                                                        <td>{item.tenKho}</td>
-                                                        <td>{item.fullname}</td>
-                                                        <td>{item.created_at}</td>
-                                                        <td>{
-                                                            <span className={item.status === '2' ? "badge badge-success" :
-                                                                (item.status === '1' ? 'badge badge-primary' : 'badge badge-secondary')}>
-                                                                {item.status === '2' ? 'Đã duyệt' : (item.status === '1' ? 'Giao hàng' : 'Chờ duyệt')}
+                                                        <td className='text-center'>{index + 1}</td>
+                                                        <td className='text-center'>{item.code}</td>
+                                                        <td className='text-center'>{item.warehouse_name}</td>
+                                                        <td className='text-center'>{item.fullname}</td>
+                                                        <td className='text-center'>{item.created_at}</td>
+                                                        <td className='text-center'>{
+                                                            <span className={item.status === 1 ? "badge badge-success" :
+                                                                 'badge badge-secondary'}>
+                                                                {item.status === 1 ? 'Đã xử lý' : 'Chờ xử lý'}
                                                             </span>
                                                         }
                                                         </td>
@@ -105,9 +108,9 @@ const CouponImport = () => {
                                                                     <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                                 </button>
                                                                 <div className="dropdown-menu" size='small'>
-                                                                    <Link className="dropdown-item" to={'/detail_import/' + item.code} size='small'>Chi tiết</Link>
+                                                                    <Link className="dropdown-item" to={'/detail_inventory/' + item.code} size='small'>Chi tiết</Link>
                                                                     {
-                                                                        getAllPermissions().includes("Xoá phiếu nhập") && (
+                                                                        getAllPermissions().includes("Xoá phiếu kiểm kê") && (
                                                                             <a className="dropdown-item" onClick={(e) => { handleDelete(item.code) }} size='small'>Xóa</a>
                                                                         )
                                                                     }
@@ -130,4 +133,4 @@ const CouponImport = () => {
     )
 }
 
-export default CouponImport
+export default CouponInventory

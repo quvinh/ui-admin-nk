@@ -188,6 +188,7 @@ const Import = () => {
 
     const onAddTable = (e) => {//Button click, add data table
         if (validator.allValid() && amount > 0) {
+            console.log(dataTable)
             if (dataTable.length > 0) {
                 let amountTotal = 0
                 let array = []
@@ -216,8 +217,14 @@ const Import = () => {
                     totalPrice: parseInt(amountTotal) * parseInt(price)
                 }
                 console.log(dataTable)
-                array.length > 0 ? setDataTable([...array, data]) : (dataTable.length === 1 && dataTable[0].item_id === item_id ? setDataTable([data]) : setDataTable([...dataTable, data]))
-                console.log(dataTable)
+                array.length > 0 ? setDataTable([...array, data]) : (
+                    dataTable.length === 1 &&
+                        dataTable[0].item_id === item_id &&
+                        dataTable[0].warehouse_id === warehouse_id &&
+                        dataTable[0].batch_code === batch_code &&
+                        dataTable[0].shelf_id === shelf_id &&
+                        dataTable[0].supplier_id === supplier_id ? setDataTable([data]) : setDataTable([...dataTable, data]))
+                // console.log(dataTable)
             } else {
                 const data = {
                     item_id: item_id,

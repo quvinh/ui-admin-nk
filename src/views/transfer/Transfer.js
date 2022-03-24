@@ -368,7 +368,7 @@ const Transfer = () => {
         document.body.appendChild(compile)
     }
 
-    const dataOption = dataItem.map((item, index) => ({
+    const dataOption = dataItem && dataItem.map((item, index) => ({
         name: item.itemname,
         value: item.id
     }))
