@@ -200,7 +200,7 @@ const Transfer = () => {
                 setName(item.itemname)
                 setAmountCurrent(item.amount)
                 setIsFromWarehouseSelected(true)
-                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '?token=' + getToken())])
+                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id + '?token=' + getToken())])
                     .then(function (res) {
                         setKD(res[0].data)
                     })
@@ -379,7 +379,9 @@ const Transfer = () => {
                 'http://127.0.0.1:8000/api/admin/items/itemInWarehouse?token=' + getToken() :
                 'http://127.0.0.1:8000/api/admin/items/searchItem/' + getIdWarehouseRole() + '?token=' + getToken()),
             getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
+            getData('http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()),
             getData('http://127.0.0.1:8000/api/auth/user-profile?token=' + getToken())
+
         ])
             .then(res => {
                 console.log(res[0].data)
