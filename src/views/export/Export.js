@@ -75,7 +75,7 @@ const Export = (props) => {
         }
     }
     // const [isItemSelected, setIsItemSelected] = useState(false)
-
+    
     const onChangeName = (e, newValue) => {
         setNameSelect(newValue)
         var checked = false
@@ -98,9 +98,9 @@ const Export = (props) => {
                 getDataShelf(item.warehouse_id)
                 setIsWarehouseSelected(true)
                 checked = true
-                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '?token=' + getToken())])
+                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id +  '?token=' + getToken())])
                     .then(function (res) {
-                        console.log(kd)
+                        console.log('kd',kd)
                         setKD(res[0].data)
                     })
             }
@@ -111,7 +111,7 @@ const Export = (props) => {
         }
         if (!checked) setIsAmountSelected(false)
         setAmount(0)
-
+        console.log('dataItem',dataItem)
     }
 
     const onChangeAmount = (e) => {
@@ -252,7 +252,7 @@ const Export = (props) => {
                     totalPrice: totalPrice
 
                 }
-                console.log(data)
+                console.log('dataItem',data)
                 console.log(dataTable)
                 array.length > 0 ? setDataTable([...array, data]) : (dataTable.length === 1 && dataTable[0].item_id === item_id &&
                     dataTable[0].warehouse_id === warehouse_id && dataTable[0].shelf_id === shelf_id ?
@@ -278,7 +278,7 @@ const Export = (props) => {
                     totalPrice: totalPrice
                 }
                 setDataTable([...dataTable, data])
-                console.log(data)
+                console.log('dataItem',data)
             }
 
             setAmount(0)
@@ -332,7 +332,7 @@ const Export = (props) => {
         name: item.itemname,
         value: item.id
     }))
-    console.log(dataOption)
+    console.log('data',dataOption)
 
     return (
         <div className="content-wrapper">
