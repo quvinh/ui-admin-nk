@@ -23,14 +23,13 @@ const AppSideNav = () => {
 
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
-            <Link to={"/dashboard"} className="brand-link">
-                {/* <img src="../../public/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} /> */}
-                <span className="brand-text font-weight-light">LOGO</span>
+            <Link to={"/dashboard"} className="brand-link" style={{ textAlign: "center", backgroundColor: "#d2d6de" }}>
+                <img src="../../dist/img/NamKhanh.png" width={"100%"} />
             </Link>
             <div className="sidebar">
                 <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div className="image">
-                        <img src="../../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
+                        <img src="../../dist/img/user.png" className="img-circle elevation-2" alt="User Image" />
                     </div>
                     <div className="info">
                         <a href="#" className="d-block">{dataUserDetail[0] && dataUserDetail[0].fullname}</a>
@@ -160,12 +159,6 @@ const AppSideNav = () => {
                                             <Link to="/warehouse" className="nav-link">
                                                 <i className="far fa-circle nav-icon" />
                                                 <p>Kho</p>
-                                            </Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link to="/shelf" className="nav-link">
-                                                <i className="far fa-circle nav-icon" />
-                                                <p>Giá/kệ</p>
                                             </Link>
                                         </li>
                                     </ul>

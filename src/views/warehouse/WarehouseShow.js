@@ -45,13 +45,15 @@ const WarehouseShow = (props) => {
         Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + props.match.params.id + '?token=' + getToken())])
             .then(function (res) {
                 setDataShelf(res[0].data)
+                script()
             })
     }
     const handleAddShelf = (e) => {
         const data = {
             name: nameShelf,
             position: position,
-            warehouse_id: props.match.params.id,}
+            warehouse_id: props.match.params.id,
+        }
         console.log(data)
         Promise.all([postData('http://127.0.0.1:8000/api/admin/shelf/store/?token=' + getToken(), data)])
             .then(function (res) {
@@ -60,10 +62,13 @@ const WarehouseShow = (props) => {
                 // setDataShelf([...dataShelf, data])
                 setIsSelected(false)
                 setNullShelf()
+                
             }).catch(error => {
                 console.log(error)
                 showValidationMessage(true)
             })
+
+
     }
 
     const handleUpdateShelf = (e) => {

@@ -114,14 +114,14 @@ const AppHeader = (props) => {
                             <i className="far fa-bell" />
                             <span className="badge badge-danger navbar-badge">{countNotification && countNotification.count}</span>
                         </a>
-                        <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <div className="dropdown-menu dropdown-menu-xs dropdown-menu-right">
                             <span className="dropdown-item dropdown-header">{countNotification && countNotification.count} Thông báo chưa đọc</span>
                             <div className="dropdown-divider" />
                             {
                                 countNotification.data && countNotification.data.map((item, index) => (
                                     <Link to={"/notification-read/" + item.id} key={index}
                                         className="dropdown-item" onClick={() => handleClickNotify(item.id)}>
-                                        <i className="fas fa-bell" /> {item.fullname} đã gửi thông báo cho bạn.
+                                        <i className="fas fa-bell" /> {item.fullname} đã gửi thông báo cho bạn.  {item.status === 0 && <i style={{color: "blue"}} className="fas fa-circle" />}
                                         <p><b>{item.title}</b> {String(item.content).substring(0, 8) + "..."}<span className="float-right text-muted text-sm">{handleShowTime(new Date(), item.created_at)}</span></p>
                                     </Link>
                                 ))
@@ -145,13 +145,13 @@ const AppHeader = (props) => {
                     </li>
                     <li className="nav-item dropdown user-menu">
                         <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">
-                            <img src="../../dist/img/user2-160x160.jpg" className="user-image img-circle elevation-2" alt="User Image" />
+                            <img src="../../dist/img/user.png" className="user-image img-circle elevation-2" alt="User Image" />
                             <span className="d-none d-md-inline">{dataUserDetail[0] && dataUserDetail[0].fullname}</span>
                         </a>
                         <ul className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             {/* User image */}
                             <li className="user-header bg-primary">
-                                <img src="../../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
+                                <img src="../../dist/img/user.png" className="img-circle elevation-2" alt="User Image" />
                                 <p>
                                     <small>Tên đăng nhập</small>
                                     {dataUserDetail[0] && dataUserDetail[0].username}

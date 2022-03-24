@@ -168,7 +168,7 @@ const Dashboard = () => {
                         <div className="col-md-3 small-box bg-white card-warning card-outline ml-1" >
                           <div className="inner">
                             <h5 className="info-box-text">Nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
-                            <p className="info-box-number">Giá trị kho : {item.total}</p>
+                            <p className="info-box-number">Giá trị kho : {parseInt(item.total).toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
                           </div>
                           <div className='icon'>
                             <i className="far fa-home"></i>
@@ -220,13 +220,13 @@ const Dashboard = () => {
               </div>
             </div>
             <div className='col-lg-6'>
-              <div className='card'>
+              {/* <div className='card'>
                 <div className='card-body'>
                   <table>
                     <th>a</th>
                   </table>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
