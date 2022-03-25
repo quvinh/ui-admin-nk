@@ -153,8 +153,8 @@ const Import = () => {
             setIsCategorySelected(true)
             console.log('category', e.target.value)
             Promise.all(
-                [getData('/api/admin/category/itemCategory/' + e.target.value + '?token=' + getToken()),
-                getData('/api/admin/category/unitCategory/' + e.target.value + '?token=' + getToken())],
+                [getData('/api/admin/category/itemCategory/' + e.target.value),
+                getData('/api/admin/category/unitCategory/' + e.target.value)],
             ).then(function (res) {
                 setDataItem(res[0].data)
                 setUnit(res[1].data[0].unit)
@@ -178,7 +178,7 @@ const Import = () => {
     }
 
     const getDataShelf = (id) => {
-        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id)])
             .then(function (res) {
                 console.log(res[0].data)
                 setDataShelf(res[0].data)
@@ -264,7 +264,7 @@ const Import = () => {
             var checked = false
             dataTable.map((item, index) => {
                 console.log(item)
-                Promise.all([postData('/api/admin/import/store?token=' + getToken(), item)])
+                Promise.all([postData('/api/admin/import/store', item)])
                     .then(function (res) {
                         console.log("SAVED")
                         // alert()
@@ -304,15 +304,15 @@ const Import = () => {
 
     useEffect(() => {
         Promise.all([
-            getData('/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
-            getData('/api/admin/suppliers?token=' + getToken()),
-            getData('/api/admin/category?token=' + getToken()),
+            getData('/api/admin/warehouse/show/' + getUserID()),
+            getData('/api/admin/suppliers'),
+            getData('/api/admin/category'),
             getData(getRoleNames() === 'admin' ?
-                '/api/admin/items/itemInWarehouse?token=' + getToken() :
-                '/api/admin/items/searchItem/' + getDataWarehouseID()[0] + '?token=' + getToken()),
-            getData('/api/admin/shelf?token=' + getToken()),
-            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
-            getData('/api/admin/items?token=' + getToken())
+                '/api/admin/items/itemInWarehouse' :
+                '/api/admin/items/searchItem/' + getDataWarehouseID()[0]),
+            getData('/api/admin/shelf'),
+            getData('/api/auth/get-user/' + getUserID()),
+            getData('/api/admin/items')
         ])
             .then(res => {
 

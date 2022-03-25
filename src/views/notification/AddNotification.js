@@ -46,7 +46,7 @@ const AddNotification = () => {
         //     }
         //     console.log(data)
         //     Promise.all([
-        //         postData('/api/admin/notification/store?token=' + getToken(), data),
+        //         postData('/api/admin/notification/store', data),
         //     ])
         //         .then(function (res) {
         //             setTest('test')
@@ -59,7 +59,7 @@ const AddNotification = () => {
         // console.log(dataNotification)
         // history.push('/notification')
         Promise.all([
-            postData('/api/admin/notification/store?token=' + getToken(), {
+            postData('/api/admin/notification/store', {
                 title: title,
                 content: content,
                 created_by: getUserID(),
@@ -81,8 +81,8 @@ const AddNotification = () => {
     useEffect(() => {
         // const header = `Authorization: Bearer ${getToken()}`
         Promise.all([
-            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
-            getData('/api/admin/notification/get-person/' + getUserID() + '?token=' + getToken()),
+            getData('/api/auth/get-user/' + getUserID()),
+            getData('/api/admin/notification/get-person/' + getUserID()),
         ])
             .then(function (res) {
                 setDataWarehouse(res[0].warehouse_id)

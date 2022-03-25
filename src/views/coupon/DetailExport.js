@@ -15,7 +15,7 @@ const DetailExport = (props) => {
         if (detailExport.length > 0) {
             detailExport.map((item, index) => {
                 console.log(item)
-                Promise.all([putData('/api/admin/export/dStatus/' + item.id + '?token=' + getToken())])
+                Promise.all([putData('/api/admin/export/dStatus/' + item.id)])
                     .then(function (res) {
                         console.log("Changed 0->1")
                         handleReload()
@@ -30,7 +30,7 @@ const DetailExport = (props) => {
         if (detailExport.length > 0) {
             detailExport.map((item, index) => {
                 console.log(item)
-                Promise.all([putData('/api/admin/export/updateStatus/' + item.id + '?token=' + getToken())])
+                Promise.all([putData('/api/admin/export/updateStatus/' + item.id)])
                     .then(function (res) {
                         console.log("Changed 1->2")
                         handleReload()
@@ -43,7 +43,7 @@ const DetailExport = (props) => {
     }
 
     const handleReload = () => {
-        Promise.all([getData('/api/admin/inventory/showHistoryExport/' + props.match.params.code + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showHistoryExport/' + props.match.params.code)])
             .then(function (res) {
                 setDetailExport(res[0].data)
             })
@@ -67,7 +67,7 @@ const DetailExport = (props) => {
     }
 
     useEffect(() => {
-        Promise.all([getData('/api/admin/inventory/showHistoryExport/' + props.match.params.code + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showHistoryExport/' + props.match.params.code)])
             .then(function (res) {
                 console.log(res[0].data)
                 setDetailExport(res[0].data)

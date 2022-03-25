@@ -12,7 +12,7 @@ const PrintImport = (props) => {
     const total = detailImport.length > 0 && detailImport.reduce((a, p) => a + (p.luongNhap * p.price), 0)
 
     useEffect(() => {
-        Promise.all([getData('/api/admin/inventory/showHistoryImport/' + props.match.params.code + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showHistoryImport/' + props.match.params.code)])
             .then(function (res) {
                 console.log(res[0].data)
                 setDetailImport(res[0].data)

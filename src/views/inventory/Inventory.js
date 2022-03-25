@@ -84,7 +84,7 @@ const Inventory = () => {
     }
 
     const getDataShelf = (id) => {
-        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id)])
             .then(function (res) {
                 console.log(res[0].data)
                 setDataShelf(res[0].data)
@@ -111,7 +111,7 @@ const Inventory = () => {
         console.log(e.target.value)
         console.log(dataItem)
         Promise.all([
-            getData('/api/admin/warehouse/itemShelf/' + warehouse_id + '/' + e.target.value + '?token=' + getToken())
+            getData('/api/admin/warehouse/itemShelf/' + warehouse_id + '/' + e.target.value)
         ])
             .then(function (res) {
                 console.log(res[0].data)
@@ -133,7 +133,7 @@ const Inventory = () => {
             dataTable.map((item, index) => {
                 console.log("LOG")
                 console.log(item)
-                Promise.all([postData('/api/admin/inventory/store?token=' + getToken(), item)])
+                Promise.all([postData('/api/admin/inventory/store', item)])
                     .then(function (res) {
                         console.log("SAVED")
                         reset()
@@ -188,7 +188,7 @@ const Inventory = () => {
             setIsWarehouseSelected(true)
             setWarehouse(e.target.value)
             getDataShelf(e.target.value)
-            Promise.all([getData('/api/admin/items/searchItem/' + e.target.value + '?token=' + getToken())])
+            Promise.all([getData('/api/admin/items/searchItem/' + e.target.value)])
                 .then(function (res) {
                     reset()
                     setDataItem(res[0].data)
@@ -309,10 +309,10 @@ const Inventory = () => {
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
-                '/api/admin/items/itemInWarehouse?token=' + getToken() :
-                getDataWarehouseID().length > 0 && '/api/admin/items/searchItem/' + getDataWarehouseID()[0] + '?token=' + getToken()),
-            getData('/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
-            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+                '/api/admin/items/itemInWarehouse' :
+                getDataWarehouseID().length > 0 && '/api/admin/items/searchItem/' + getDataWarehouseID()[0]),
+            getData('/api/admin/warehouse/show/' + getUserID()),
+            getData('/api/auth/get-user/' + getUserID())
         ])
             .then(res => {
 

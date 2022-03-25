@@ -35,7 +35,7 @@ const StatisticTransfer = () => {
             startDate: startDate.getDate() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getFullYear(),
             endDate: endDate.getDate() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getFullYear()
         }
-        Promise.all([postData('/api/admin/statistic/transferByDay?token=' + getToken(), data)])
+        Promise.all([postData('/api/admin/statistic/transferByDay', data)])
             .then(function (res) {
                 setDataTable(res[0].data.data)
             })
@@ -43,8 +43,8 @@ const StatisticTransfer = () => {
 
     useEffect(() => {
         Promise.all([
-            postData('/api/admin/statistic/transferByYear?token=' + getToken(), data),
-            getData('/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
+            postData('/api/admin/statistic/transferByYear', data),
+            getData('/api/admin/warehouse/show/' + getUserID()),
         ]).then(function (res) {
             console.log('ware', res[0].data, 'data', data)
             setDataTable(res[0].data.data)

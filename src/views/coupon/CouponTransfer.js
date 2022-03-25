@@ -13,7 +13,7 @@ const CouponTransfer = () => {
         document.body.appendChild(compile)
     }
     const handleReload = () => {
-        Promise.all([getData('/api/admin/inventory/showCodeTransfer?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showCodeTransfer')])
             .then(function (res) {
                 setCodeTransfer(res[0].data)
             })
@@ -23,7 +23,7 @@ const CouponTransfer = () => {
     }
 
     const handleDelete = (code) => {
-        Promise.all([delData('/api/admin/transfer/deleteCode/' + code + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/transfer/deleteCode/' + code)])
             .then(function (res) {
                 console.log("Deleted", code)
                 handleReload()
@@ -34,7 +34,7 @@ const CouponTransfer = () => {
     }
 
     useEffect(() => {
-        Promise.all([getData('/api/admin/inventory/showCodeTransfer?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showCodeTransfer')])
             .then(function (res) {
                 setCodeTransfer(res[0].data)
             })

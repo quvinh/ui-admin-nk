@@ -63,7 +63,7 @@ const Export = (props) => {
             dataTable.map((item, index) => {
                 console.log("LOG")
                 console.log(item)
-                Promise.all([postData('/api/admin/export/store?token=' + getToken(), item)])
+                Promise.all([postData('/api/admin/export/store', item)])
                     .then(function (res) {
                         console.log("SAVED")
                         reset()
@@ -98,7 +98,7 @@ const Export = (props) => {
                 getDataShelf(item.warehouse_id)
                 setIsWarehouseSelected(true)
                 checked = true
-                Promise.all([getData('/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id + '?token=' + getToken())])
+                Promise.all([getData('/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id)])
                     .then(function (res) {
                         console.log('kd', kd)
                         setKD(res[0].data)
@@ -154,7 +154,7 @@ const Export = (props) => {
             setIsWarehouseSelected(true)
             setWarehouse(e.target.value)
             getDataShelf(e.target.value)
-            Promise.all([getData('/api/admin/items/searchItem/' + e.target.value + '?token=' + getToken())])
+            Promise.all([getData('/api/admin/items/searchItem/' + e.target.value)])
                 .then(function (res) {
                     setDataItem(res[0].data)
                     console.log(res[0].data)
@@ -185,7 +185,7 @@ const Export = (props) => {
         console.log(e.target.value)
         console.log(dataItem)
         Promise.all([
-            getData('/api/admin/warehouse/itemShelf/' + warehouse_id + '/' + e.target.value + '?token=' + getToken())
+            getData('/api/admin/warehouse/itemShelf/' + warehouse_id + '/' + e.target.value)
         ])
             .then(function (res) {
                 console.log(res[0].data)
@@ -211,7 +211,7 @@ const Export = (props) => {
     }
 
     const getDataShelf = (id) => {
-        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id)])
             .then(function (res) {
                 console.log(res[0].data)
                 setDataShelf(res[0].data)
@@ -306,10 +306,10 @@ const Export = (props) => {
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
-                '/api/admin/items/itemInWarehouse?token=' + getToken() :
-                getDataWarehouseID().length > 0 && '/api/admin/items/searchItem/' + getDataWarehouseID()[0] + '?token=' + getToken()),
-            getData('/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
-            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+                '/api/admin/items/itemInWarehouse' :
+                getDataWarehouseID().length > 0 && '/api/admin/items/searchItem/' + getDataWarehouseID()[0]),
+            getData('/api/admin/warehouse/show/' + getUserID()),
+            getData('/api/auth/get-user/' + getUserID())
         ])
             .then(res => {
                 setDataItem(res[0].data)

@@ -17,7 +17,7 @@ const AppHeader = (props) => {
 
     const handleReload = (id) => {
         Promise.all([
-            getData('/api/admin/notification/count/' + getUserID() + '?token=' + getToken()),
+            getData('/api/admin/notification/count/' + getUserID()),
         ])
             .then(function (res) {
                 setCountNotification(res[0])
@@ -30,7 +30,7 @@ const AppHeader = (props) => {
 
     const handleClickNotify = (id) => {
         Promise.all([
-            putData('/api/admin/notification/update/' + id + '?token=' + getToken()),
+            putData('/api/admin/notification/update/' + id),
         ])
             .then(function (res) {
                 handleReload(id)
@@ -62,8 +62,8 @@ const AppHeader = (props) => {
     }
     useEffect(() => {
         Promise.all([
-            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
-            getData('/api/admin/notification/count/' + getUserID() + '?token=' + getToken()),
+            getData('/api/auth/get-user/' + getUserID()),
+            getData('/api/admin/notification/count/' + getUserID()),
         ])
             .then(function (res) {
                 setUserDetail(res[0].data)

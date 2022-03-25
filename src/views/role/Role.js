@@ -31,7 +31,7 @@ const Role = () => {
 
     const permissionChecked = (role_id) => {
         if (role_id) {
-            Promise.all([getData('/api/admin/auth_model/roles/show/' + role_id + '?token=' + getToken())])
+            Promise.all([getData('/api/admin/auth_model/roles/show/' + role_id)])
                 .then(function (res) {
                     console.log(res)
                     setIsCheckedPermission(res[0].data.map(item => item.name))
@@ -122,7 +122,7 @@ const Role = () => {
     //Add role name
     const handleAddRole = (role_name) => {
         if (validator.allValid()) {
-            Promise.all([postData('/api/admin/auth_model/roles/store?token=' + getToken(), {
+            Promise.all([postData('/api/admin/auth_model/roles/store', {
                 name: role_name
             })])
                 .then(function (res) {
@@ -137,7 +137,7 @@ const Role = () => {
     }
 
     const handleGetRoleNames = () => {
-        Promise.all([getData('/api/admin/auth_model/roles?token=' + getToken())])
+        Promise.all([getData('/api/admin/auth_model/roles')])
             .then(function (res) {
                 setRoles(res[0].data)
             })
@@ -146,7 +146,7 @@ const Role = () => {
             })
     }
     const handelDeleteRole = (role_id) => {
-        Promise.all([delData('/api/admin/auth_model/roles/delete/' + role_id + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/auth_model/roles/delete/' + role_id)])
             .then(function (res) {
                 console.log('UPDATED role name')
                 handleGetRoleNames()
@@ -176,7 +176,7 @@ const Role = () => {
     const handleSave = () => {
         console.log("......")
         if (roleID && isCheckedPermission) {
-            Promise.all([putData('/api/admin/auth_model/roles/update/' + roleID + '?token=' + getToken(), {
+            Promise.all([putData('/api/admin/auth_model/roles/update/' + roleID, {
                 permission: isCheckedPermission
             })])
                 .then(function (res) {
@@ -197,8 +197,8 @@ const Role = () => {
     useEffect(() => {
         // const header = `Authorization: Bearer ${getToken()}`
         Promise.all([
-            getData('/api/admin/auth_model/roles?token=' + getToken()),
-            getData('/api/admin/auth_model/permission?token=' + getToken()),
+            getData('/api/admin/auth_model/roles'),
+            getData('/api/admin/auth_model/permission'),
         ])
             .then(function (res) {
                 setRoles(res[0].data)

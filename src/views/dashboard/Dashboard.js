@@ -92,8 +92,8 @@ const Dashboard = () => {
 
   const onChangeWarehouse = (e) => {
     Promise.all([
-      getData('/api/admin/dashboard/importByWarehouse/' + e.target.value + '/' + year + '?token=' + getToken()),
-      getData('/api/admin/dashboard/exportByWarehouse/' + e.target.value + '/' + year + '?token=' + getToken()),
+      getData('/api/admin/dashboard/importByWarehouse/' + e.target.value + '/' + year),
+      getData('/api/admin/dashboard/exportByWarehouse/' + e.target.value + '/' + year),
     ]).then(function (res) {
       setImportVT(res[0].data)
       setExportVT(res[1].data)
@@ -104,10 +104,10 @@ const Dashboard = () => {
     {
       getRoleNames() === 'admin' ? (
         Promise.all([
-          getData('/api/admin/dashboard/tongTonKho?token=' + getToken()),
-          getData('/api/admin/dashboard/import/' + year + '?token=' + getToken()),
-          getData('/api/admin/dashboard/export/' + year + '?token=' + getToken()),
-          getData('/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
+          getData('/api/admin/dashboard/tongTonKho'),
+          getData('/api/admin/dashboard/import/' + year),
+          getData('/api/admin/dashboard/export/' + year),
+          getData('/api/admin/warehouse/show/' + getUserID()),
         ])
           .then(function (res) {
             setTonKho(res[0].data)
@@ -121,10 +121,10 @@ const Dashboard = () => {
 
       ) : getDataWarehouseID().length > 0 && (
         Promise.all([
-          getData('/api/admin/dashboard/tonKho/' + getUserID() + '/' + '?token=' + getToken()),
-          getData('/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
-          getData('/api/admin/dashboard/importByWarehouse/' + getDataWarehouseID()[0] + '/' + year + '?token=' + getToken()),
-          getData('/api/admin/dashboard/exportByWarehouse/' + getDataWarehouseID()[0] + '/' + year + '?token=' + getToken()),
+          getData('/api/admin/dashboard/tonKho/' + getUserID() + '/'),
+          getData('/api/admin/warehouse/show/' + getUserID()),
+          getData('/api/admin/dashboard/importByWarehouse/' + getDataWarehouseID()[0] + '/' + year),
+          getData('/api/admin/dashboard/exportByWarehouse/' + getDataWarehouseID()[0] + '/' + year),
         ])
           .then(function (res) {
             console.log('user', res[0].data, getUserID())

@@ -34,7 +34,7 @@ const EditAccount = (props) => {
     const handelSave = () => {
         console.log("......")
         if (roleID !== 0) {
-            Promise.all([postData('/api/admin/auth_model/user_roles?token=' + getToken(), {
+            Promise.all([postData('/api/admin/auth_model/user_roles', {
                 user_id: dataUser[0].id,
                 roles_id: roleID,
                 warehouse_id: isCheckedWarehouse
@@ -52,10 +52,10 @@ const EditAccount = (props) => {
     }
     useEffect(() => {
         Promise.all([
-            getData('/api/auth/get-user/' + props.match.params.id + '?token=' + getToken()),
-            getData('/api/admin/auth_model/roles?token=' + getToken()),
-            getData('/api/admin/warehouse?token=' + getToken()),
-            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+            getData('/api/auth/get-user/' + props.match.params.id),
+            getData('/api/admin/auth_model/roles'),
+            getData('/api/admin/warehouse'),
+            getData('/api/auth/get-user/' + getUserID())
         ])
             .then(function (res) {
                 // console.log(res)

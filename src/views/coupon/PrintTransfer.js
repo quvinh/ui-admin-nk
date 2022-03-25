@@ -8,7 +8,7 @@ import { getAllPermissions, getToken } from '../../components/utils/Common'
 const PrintTransfer = (props) => {
     const [detailTransfer, setDetailTransfer] = useState([])
     useEffect(() => {
-        Promise.all([getData('/api/admin/inventory/showHistoryTransfer/' + props.match.params.code + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showHistoryTransfer/' + props.match.params.code)])
             .then(function (res) {
                 console.log(res[0].data)
                 setDetailTransfer(res[0].data)

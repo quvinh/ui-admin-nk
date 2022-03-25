@@ -42,7 +42,7 @@ const Account = () => {
         console.log(user_id)
         console.log(roles_id)
         if (roles_id) {
-            Promise.all([getData('/api/admin/auth_model/detail_roles/' + user_id + '/' + roles_id + '?token=' + getToken())])
+            Promise.all([getData('/api/admin/auth_model/detail_roles/' + user_id + '/' + roles_id)])
                 .then(function (res) {
                     console.log(res[0].roleName.id)
                     setIsCheckedPermission(res[0].data.map(item => item.name))
@@ -84,7 +84,7 @@ const Account = () => {
     }
     console.log(isCheckedRole)
     const handleGetUsers = () => {
-        Promise.all([getData('/api/auth/users?token=' + getToken())])
+        Promise.all([getData('/api/auth/users')])
             // Promise.all([getData('/api/auth/users', {headers:{'Authorization': 'Bearer ' + getToken()}})])
             .then(function (response) {
                 console.log("daTA:", response)
@@ -100,7 +100,7 @@ const Account = () => {
     const handelSave = (user_id, roles_id, permission, warehouse_id) => {
         console.log("......")
         if (user_id !== "" && roles_id !== "" && permission.length > 0 && warehouse_id.length > 0) {
-            Promise.all([postData('/api/admin/auth_model/user_roles?token=' + getToken(), {
+            Promise.all([postData('/api/admin/auth_model/user_roles', {
                 user_id: user_id,
                 roles_id: roles_id,
                 permission: permission,
@@ -121,7 +121,7 @@ const Account = () => {
 
     //Update role name
     const handelUpdateRoleName = (role_id, role_name) => {
-        Promise.all([putData('/api/admin/auth_model/roles/update/' + role_id + '?token=' + getToken(), {
+        Promise.all([putData('/api/admin/auth_model/roles/update/' + role_id, {
             name: role_name
         })])
             .then(function (res) {
@@ -136,7 +136,7 @@ const Account = () => {
 
     //Add role name
     const handelAddRole = (role_name) => {
-        Promise.all([postData('/api/admin/auth_model/roles/store?token=' + getToken(), {
+        Promise.all([postData('/api/admin/auth_model/roles/store', {
             name: role_name
         })])
             .then(function (res) {
@@ -149,7 +149,7 @@ const Account = () => {
     }
 
     const handelDeleteRole = (role_id) => {
-        Promise.all([delData('/api/admin/auth_model/roles/delete/' + role_id + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/auth_model/roles/delete/' + role_id)])
             .then(function (res) {
                 console.log('UPDATED role name')
                 handleGetRoleNames()
@@ -162,7 +162,7 @@ const Account = () => {
     }
 
     const handleDelete = (id) => {
-        Promise.all([delData('/api/admin/detail_user/delete/' + id + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/detail_user/delete/' + id)])
             .then(function (res) {
                 console.log('Deleted')
                 handleGetUsers()
@@ -174,7 +174,7 @@ const Account = () => {
     }
 
     const handleGetRoleNames = () => {
-        Promise.all([getData('/api/admin/auth_model/roles?token=' + getToken())])
+        Promise.all([getData('/api/admin/auth_model/roles')])
             .then(function (res) {
                 setRoles(res[0].data)
             })
@@ -194,12 +194,12 @@ const Account = () => {
     useEffect(() => {
         // const header = `Authorization: Bearer ${getToken()}`
         Promise.all([
-            getData('/api/auth/users?token=' + getToken()),
+            getData('/api/auth/users'),
             // Promise.all([getData('/api/auth/users', {headers:{'Authorization': 'Bearer ' + getToken()}}),
-            getData('/api/admin/detail_user/show/' + getUserID() + '?token=' + getToken()),
-            getData('/api/admin/auth_model/roles?token=' + getToken()),
-            getData('/api/admin/auth_model/permission?token=' + getToken()),
-            getData('/api/admin/warehouse?token=' + getToken()),
+            getData('/api/admin/detail_user/show/' + getUserID()),
+            getData('/api/admin/auth_model/roles'),
+            getData('/api/admin/auth_model/permission'),
+            getData('/api/admin/warehouse'),
         ])
             .then(function (res) {
                 // console.log(res[1].permission.map(item => item.name))

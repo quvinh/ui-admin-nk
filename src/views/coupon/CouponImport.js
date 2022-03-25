@@ -14,7 +14,7 @@ const CouponImport = () => {
         document.body.appendChild(compile)
     }
     const handleReload = () => {
-        Promise.all([getData('/api/admin/inventory/showCodeImport?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showCodeImport')])
             .then(function (res) {
                 setCodeImport(res[0].data)
             })
@@ -24,7 +24,7 @@ const CouponImport = () => {
     }
 
     const handleDelete = (code) => {
-        Promise.all([delData('/api/admin/import/deleteCode/' + code + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/import/deleteCode/' + code)])
             .then(function (res) {
                 console.log("Deleted", code)
                 handleReload()
@@ -35,7 +35,7 @@ const CouponImport = () => {
     }
 
     useEffect(() => {
-        Promise.all([getData('/api/admin/inventory/showCodeImport?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showCodeImport')])
             .then(function (res) {
                 setCodeImport(res[0].data)
             })

@@ -67,7 +67,7 @@ const Supplier = () => {
     }
     const handleDelete = (e, id) => {
         console.log(id)
-        Promise.all([delData('/api/admin/suppliers/delete/' + id + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/suppliers/delete/' + id)])
             .then(function (res) {
                 handleReload()
                 // eClick.closest('tr').remove();
@@ -78,7 +78,7 @@ const Supplier = () => {
     }
 
     const handleReload = () => {
-        Promise.all([getData('/api/admin/suppliers?token=' + getToken())])
+        Promise.all([getData('/api/admin/suppliers')])
             .then(function (res) {
                 setDataTable(res[0].data)
                 script()
@@ -98,7 +98,7 @@ const Supplier = () => {
             note: note
         }
         console.log(data);
-        Promise.all([postData('/api/admin/suppliers/store?token=' + getToken(), data)])
+        Promise.all([postData('/api/admin/suppliers/store', data)])
             .then(function (res) {
                 console.log('Added succesfully', res)
                 handleReload()
@@ -121,7 +121,7 @@ const Supplier = () => {
             note: note
         }
         console.log(id);
-        Promise.all([putData('/api/admin/suppliers/update/' + id + '?token=' + getToken(), data)])
+        Promise.all([putData('/api/admin/suppliers/update/' + id, data)])
             .then(function (res) {
                 console.log('Added succesfully', res)
                 handleReload()
@@ -134,7 +134,7 @@ const Supplier = () => {
 
     }
     const handleSuppliers = (id) => {
-        Promise.all([getData('/api/admin/suppliers/show/' + id + '?token=' + getToken()),
+        Promise.all([getData('/api/admin/suppliers/show/' + id),
         ])
             .then(function (res) {
                 console.log(res[0].data)
@@ -150,7 +150,7 @@ const Supplier = () => {
 
 
     useEffect(() => {
-        Promise.all([getData('/api/admin/suppliers?token=' + getToken())])
+        Promise.all([getData('/api/admin/suppliers')])
             .then(function (res) {
                 // console.log(res[0].data)
                 setDataTable(res[0].data)

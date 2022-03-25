@@ -11,7 +11,7 @@ const AppSideNav = () => {
 
     useEffect(() => {
         Promise.all([
-            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+            getData('/api/auth/get-user/' + getUserID())
         ])
             .then(function (res) {
                 setUserDetail(res[0].data)

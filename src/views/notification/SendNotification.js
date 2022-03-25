@@ -15,7 +15,7 @@ const SendNotification = () => {
     }
 
     const handleReload = () => {
-        Promise.all([getData('/api/admin/notification/send/' + getUserID() + '?token=' + getToken()),
+        Promise.all([getData('/api/admin/notification/send/' + getUserID()),
         ]).then(function (res) {
             setNotification(res[0].data)
         }).catch(error => {
@@ -24,7 +24,7 @@ const SendNotification = () => {
     }
     const handleDelete = (id) => {
         console.log(id)
-        Promise.all([delData('/api/admin/notification/delete/' + id + '?token=' + getToken()),
+        Promise.all([delData('/api/admin/notification/delete/' + id),
         ]).then(function (res) {
             handleReload()
             console.log('success')
@@ -36,7 +36,7 @@ const SendNotification = () => {
     useEffect(() => {
 
         Promise.all([
-            getData('/api/admin/notification/send/' + getUserID() + '?token=' + getToken())
+            getData('/api/admin/notification/send/' + getUserID())
         ]).then(function (res) {
             setNotification(res[0].data)
             setCountNotification(res[0].count)

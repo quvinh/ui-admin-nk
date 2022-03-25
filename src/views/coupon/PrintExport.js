@@ -9,7 +9,7 @@ const PrintExport = (props) => {
     const [detailExport, setDetailExport] = useState([])
 
     useEffect(() => {
-        Promise.all([getData('/api/admin/inventory/showHistoryExport/' + props.match.params.code + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showHistoryExport/' + props.match.params.code)])
             .then(function (res) {
                 console.log(res[0].data)
                 setDetailExport(res[0].data)
