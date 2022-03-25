@@ -19,7 +19,7 @@ const DetailInventory = (props) => {
         if (detailInventory.length > 0) {
             detailInventory.map((item, index) => {
                 console.log(item)
-                Promise.all([putData('http://127.0.0.1:8000/api/admin/inventory/handleInventory/' + item.id + '?token=' + getToken())])
+                Promise.all([putData('/api/admin/inventory/handleInventory/' + item.id + '?token=' + getToken())])
                     .then(function (res) {
                         handleReload()
                     })
@@ -31,7 +31,7 @@ const DetailInventory = (props) => {
     }
 
     const handleReload = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showHistoryInventory/' + props.match.params.code + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showHistoryInventory/' + props.match.params.code + '?token=' + getToken())])
             .then(function (res) {
                 setDetaiInventory(res[0].data)
             })
@@ -55,7 +55,7 @@ const DetailInventory = (props) => {
     }
 
     useEffect(() => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showHistoryInventory/' + props.match.params.code + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showHistoryInventory/' + props.match.params.code + '?token=' + getToken())])
             .then(function (res) {
                 console.log(res[0].data)
                 setDetaiInventory(res[0].data)

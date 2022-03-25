@@ -15,7 +15,7 @@ const DetailImport = (props) => {
         if (detailImport.length > 0) {
             detailImport.map((item, index) => {
                 console.log(item)
-                Promise.all([putData('http://127.0.0.1:8000/api/admin/import/dStatus/' + item.id + '?token=' + getToken())])
+                Promise.all([putData('/api/admin/import/dStatus/' + item.id + '?token=' + getToken())])
                     .then(function (res) {
                         console.log("Changed 0->1")
                         handleReload()
@@ -30,7 +30,7 @@ const DetailImport = (props) => {
         if (detailImport.length > 0) {
             detailImport.map((item, index) => {
                 console.log(item)
-                Promise.all([putData('http://127.0.0.1:8000/api/admin/import/updateStatus/' + item.id + '?token=' + getToken())])
+                Promise.all([putData('/api/admin/import/updateStatus/' + item.id + '?token=' + getToken())])
                     .then(function (res) {
                         console.log("Changed 1->2")
                         handleReload()
@@ -45,7 +45,7 @@ const DetailImport = (props) => {
     const total = detailImport.length > 0 && detailImport.reduce((a, p) => a + (p.luongNhap * p.price), 0)
 
     const handleReload = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showHistoryImport/' + props.match.params.code + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showHistoryImport/' + props.match.params.code + '?token=' + getToken())])
             .then(function (res) {
                 setDetailImport(res[0].data)
             })
@@ -69,7 +69,7 @@ const DetailImport = (props) => {
     }
 
     useEffect(() => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showHistoryImport/' + props.match.params.code + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showHistoryImport/' + props.match.params.code + '?token=' + getToken())])
             .then(function (res) {
                 console.log(res[0].data)
                 setDetailImport(res[0].data)

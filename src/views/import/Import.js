@@ -87,45 +87,47 @@ const Import = () => {
         console.log("1: ", newValue)
         if (dataTable.length === 0) createCode()
         setIsItemSelected(false)
+        if (dataItem && dataItem.map(item => item.itemname).includes(newValue)) {
+            dataItem && dataItem.map((item) => {
+                if (item.itemname === newValue) {
+                    getDataShelf(item.warehouse_id)
+                    setItemID(item.item_id)
+                    setBatchCode(item.batch_code)
+                    // setCategory(item.category_id)
+                    setShelf(item.shelf_id)
+                    setAmount(item.amount)
+                    // setUnit(item.unit)
+                    setWarehouse(item.warehouse_id)
+                    setNameWarehouse(item.name_warehouse)
+                    setPrice(item.price)
+                    setSuppliers(item.supplier_id)
+                    setName(item.itemname)
+                    setTotalPrice(parseInt(item.amount) * parseInt(item.price))
+                    setIsItemSelected(true)
+                    setIsWarehouseSelected(true)
+                    // console.log(item.name_item)
+                }
+            })
+        } else {
+            dataItemName.map((item) => {
+                if (item.name === newValue) {
+                    console.log(item)
+                    setNull()
+                    if (getRoleNames() !== 'admin') {
+                        getDataShelf(getDataWarehouseID()[0])
+                        setWarehouse(getDataWarehouseID()[0])
+                        setShowWarehouse(true)
+                    } else { setShowWarehouse(false) }
+                    setItemID(item.id)
+                    setCategory(item.category_id)
+                    setUnit(item.unit)
+                    setName(item.name)
+                    setIsWarehouseSelected(false)
+                    setIsItemSelected(true)
+                }
+            })
+        }
 
-        dataItemName.map((item) => {
-            if (item.name === newValue) {
-                console.log(item)
-                setNull()
-                if (getRoleNames() !== 'admin') {
-                    getDataShelf(getDataWarehouseID()[0])
-                    setWarehouse(getDataWarehouseID()[0])
-                    setShowWarehouse(true)
-                } else { setShowWarehouse(false) }
-                setItemID(item.id)
-                setCategory(item.category_id)
-                setUnit(item.unit)
-                setName(item.name)
-                setIsWarehouseSelected(false)
-                setIsItemSelected(true)
-            }
-        })
-        console.log(dataItem)
-        // dataItem && dataItem.map((item) => {
-        //     if (item.name_item === newValue) {
-        //         getDataShelf(item.warehouse_id)
-        //         setItemID(item.item_id)
-        //         setBatchCode(item.batch_code)
-        //         // setCategory(item.category_id)
-        //         setShelf(item.shelf_id)
-        //         setAmount(item.amount)
-        //         // setUnit(item.unit)
-        //         setWarehouse(item.warehouse_id)
-        //         setNameWarehouse(item.name_warehouse)
-        //         setPrice(item.price)
-        //         setSuppliers(item.supplier_id)
-        //         setName(item.name_item)
-        //         setTotalPrice(parseInt(item.amount) * parseInt(item.price))
-        //         setIsItemSelected(true)
-        //         setIsWarehouseSelected(true)
-        //         // console.log(item.name_item)
-        //     }
-        // })
         setIsUnitSelected(false)
     }
 
@@ -151,8 +153,8 @@ const Import = () => {
             setIsCategorySelected(true)
             console.log('category', e.target.value)
             Promise.all(
-                [getData('http://127.0.0.1:8000/api/admin/category/itemCategory/' + e.target.value + '?token=' + getToken()),
-                getData('http://127.0.0.1:8000/api/admin/category/unitCategory/' + e.target.value + '?token=' + getToken())],
+                [getData('/api/admin/category/itemCategory/' + e.target.value + '?token=' + getToken()),
+                getData('/api/admin/category/unitCategory/' + e.target.value + '?token=' + getToken())],
             ).then(function (res) {
                 setDataItem(res[0].data)
                 setUnit(res[1].data[0].unit)
@@ -176,7 +178,7 @@ const Import = () => {
     }
 
     const getDataShelf = (id) => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
             .then(function (res) {
                 console.log(res[0].data)
                 setDataShelf(res[0].data)
@@ -262,7 +264,7 @@ const Import = () => {
             var checked = false
             dataTable.map((item, index) => {
                 console.log(item)
-                Promise.all([postData('http://127.0.0.1:8000/api/admin/import/store?token=' + getToken(), item)])
+                Promise.all([postData('/api/admin/import/store?token=' + getToken(), item)])
                     .then(function (res) {
                         console.log("SAVED")
                         // alert()
@@ -302,15 +304,15 @@ const Import = () => {
 
     useEffect(() => {
         Promise.all([
-            getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/suppliers?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/category?token=' + getToken()),
+            getData('/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
+            getData('/api/admin/suppliers?token=' + getToken()),
+            getData('/api/admin/category?token=' + getToken()),
             getData(getRoleNames() === 'admin' ?
-                'http://127.0.0.1:8000/api/admin/items/itemInWarehouse?token=' + getToken() :
-                'http://127.0.0.1:8000/api/admin/items/searchItem/' + getDataWarehouseID()[0] + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/shelf?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/items?token=' + getToken())
+                '/api/admin/items/itemInWarehouse?token=' + getToken() :
+                '/api/admin/items/searchItem/' + getDataWarehouseID()[0] + '?token=' + getToken()),
+            getData('/api/admin/shelf?token=' + getToken()),
+            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
+            getData('/api/admin/items?token=' + getToken())
         ])
             .then(res => {
 
@@ -331,7 +333,7 @@ const Import = () => {
             })
             .catch(error => {
                 console.log(error)
-                history.push("/login")
+                // history.push("/login")
             })
 
         alert()

@@ -9,7 +9,7 @@ const ReadNotification = (props) => {
     const [createdBy, setCreateBy] = useState('')
     const [createdAt, setCreatedAt] = useState('')
     useEffect(() => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/notification/show/' + props.match.params.id + '?token=' + getToken()),
+        Promise.all([getData('/api/admin/notification/show/' + props.match.params.id + '?token=' + getToken()),
         ]).then(function (res) {
             console.log(res[0])
             setTitle(res[0].data[0].title)

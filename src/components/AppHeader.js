@@ -17,7 +17,7 @@ const AppHeader = (props) => {
 
     const handleReload = (id) => {
         Promise.all([
-            getData('http://127.0.0.1:8000/api/admin/notification/count/' + getUserID() + '?token=' + getToken()),
+            getData('/api/admin/notification/count/' + getUserID() + '?token=' + getToken()),
         ])
             .then(function (res) {
                 setCountNotification(res[0])
@@ -30,7 +30,7 @@ const AppHeader = (props) => {
 
     const handleClickNotify = (id) => {
         Promise.all([
-            putData('http://127.0.0.1:8000/api/admin/notification/update/' + id + '?token=' + getToken()),
+            putData('/api/admin/notification/update/' + id + '?token=' + getToken()),
         ])
             .then(function (res) {
                 handleReload(id)
@@ -62,8 +62,8 @@ const AppHeader = (props) => {
     }
     useEffect(() => {
         Promise.all([
-            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/notification/count/' + getUserID() + '?token=' + getToken()),
+            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
+            getData('/api/admin/notification/count/' + getUserID() + '?token=' + getToken()),
         ])
             .then(function (res) {
                 setUserDetail(res[0].data)

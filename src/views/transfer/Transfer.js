@@ -83,7 +83,7 @@ const Transfer = () => {
             setIsFromWarehouseSelected(true)
             setFromWarehouse(e.target.value)
             getDataFromShelf(e.target.value)
-            Promise.all([getData('http://127.0.0.1:8000/api/admin/items/searchItem/' + e.target.value + '?token=' + getToken())])
+            Promise.all([getData('/api/admin/items/searchItem/' + e.target.value + '?token=' + getToken())])
                 .then(function (res) {
                     setDataItem(res[0].data)
                 })
@@ -102,7 +102,7 @@ const Transfer = () => {
         setIsAmountSelected(false)
     }
     const getDataFromShelf = (id) => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
             .then(function (res) {
                 setDataFromShelf(res[0].data)
             })
@@ -118,7 +118,7 @@ const Transfer = () => {
             setNameFromShelf(newvalue.props.children)
             setFromShelf(e.target.value)
             Promise.all([
-                getData('http://127.0.0.1:8000/api/admin/warehouse/itemShelf/' + fromWarehouse + '/' + e.target.value + '?token=' + getToken())
+                getData('/api/admin/warehouse/itemShelf/' + fromWarehouse + '/' + e.target.value + '?token=' + getToken())
             ])
                 .then(function (res) {
                     console.log(res[0].data)
@@ -156,7 +156,7 @@ const Transfer = () => {
         setIsAmountSelected(false)
     }
     const getDataToShelf = (id) => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
             .then(function (res) {
                 setDataToShelf(res[0].data)
             })
@@ -200,7 +200,7 @@ const Transfer = () => {
                 setName(item.itemname)
                 setAmountCurrent(item.amount)
                 setIsFromWarehouseSelected(true)
-                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id + '?token=' + getToken())])
+                Promise.all([getData('/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id + '?token=' + getToken())])
                     .then(function (res) {
                         setKD(res[0].data)
                     })
@@ -330,7 +330,7 @@ const Transfer = () => {
         console.log('--', dataTable)
         if (dataTable) {
             dataTable.map((item, index) => {
-                Promise.all([postData('http://127.0.0.1:8000/api/admin/transfer/store?token=' + getToken(), item)])
+                Promise.all([postData('/api/admin/transfer/store?token=' + getToken(), item)])
                     .then(function (res) {
                         console.log("SAVED")
                         setIsSave(true)
@@ -376,11 +376,11 @@ const Transfer = () => {
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
-                'http://127.0.0.1:8000/api/admin/items/itemInWarehouse?token=' + getToken() :
-                'http://127.0.0.1:8000/api/admin/items/searchItem/' + getIdWarehouseRole() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/auth/user-profile?token=' + getToken())
+                '/api/admin/items/itemInWarehouse?token=' + getToken() :
+                '/api/admin/items/searchItem/' + getIdWarehouseRole() + '?token=' + getToken()),
+            getData('/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
+            getData('/api/admin/warehouse?token=' + getToken()),
+            getData('/api/auth/user-profile?token=' + getToken())
 
         ])
             .then(res => {

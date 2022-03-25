@@ -28,7 +28,7 @@ const Profile = () => {
       gender: gender
     }
     console.log(data)
-    Promise.all([postData('http://127.0.0.1:8000/api/auth/update-user/' + getUserID() + '?token=' + getToken(), data)])
+    Promise.all([postData('/api/auth/update-user/' + getUserID() + '?token=' + getToken(), data)])
       .then(function (res) {
         console.log('UPDATED')
       })
@@ -43,7 +43,7 @@ const Profile = () => {
   }
   useEffect(() => {
     Promise.all([
-      getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+      getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken())
     ])
       .then(function (res) {
         setUsername(res[0].data[0].username)

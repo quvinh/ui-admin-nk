@@ -11,7 +11,7 @@ const AppSideNav = () => {
 
     useEffect(() => {
         Promise.all([
-            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken())
         ])
             .then(function (res) {
                 setUserDetail(res[0].data)
@@ -58,7 +58,7 @@ const AppSideNav = () => {
                         </li>
                         <li className="nav-item">
                             <a className="nav-link">
-                                <i className="nav-icon fas fa-copy" />
+                                <i className="nav-icon fas fa-list" />
                                 <p>
                                     Danh mục
                                     <i className="fas fa-angle-left right" />
@@ -69,13 +69,13 @@ const AppSideNav = () => {
                                     <ul className="nav nav-treeview">
                                         <li className="nav-item">
                                             <Link to="/category" className="nav-link">
-                                                <i className="far fa-circle nav-icon" />
+                                                <i className="fas fa-minus nav-icon" />
                                                 <p>Loại vật tư</p>
                                             </Link>
                                         </li>
                                         <li className="nav-item">
                                             <Link to="/supplier" className="nav-link">
-                                                <i className="far fa-circle nav-icon" />
+                                                <i className="fas fa-minus nav-icon" />
                                                 <p>Nhà cung cấp</p>
                                             </Link>
                                         </li>
@@ -98,7 +98,7 @@ const AppSideNav = () => {
                                             getAllPermissions().includes("Thêm phiếu nhập") && (
                                                 <li className="nav-item">
                                                     <Link to="/import" className="nav-link">
-                                                        <i className="far fa-circle nav-icon" />
+                                                        <i className="fas fa-minus nav-icon" />
                                                         <p>Nhập kho</p>
                                                     </Link>
                                                 </li>
@@ -108,7 +108,7 @@ const AppSideNav = () => {
                                             getAllPermissions().includes("Thêm phiếu xuất") && (
                                                 <li className="nav-item">
                                                     <Link to="/export" className="nav-link">
-                                                        <i className="far fa-circle nav-icon" />
+                                                        <i className="fas fa-minus nav-icon" />
                                                         <p>Xuất kho</p>
                                                     </Link>
                                                 </li>
@@ -118,7 +118,7 @@ const AppSideNav = () => {
                                             getAllPermissions().includes("Thêm phiếu chuyển") && (
                                                 <li className="nav-item">
                                                     <Link to="/transfer" className="nav-link">
-                                                        <i className="far fa-circle nav-icon" />
+                                                        <i className="fas fa-minus nav-icon" />
                                                         <p>Luân chuyển</p>
                                                     </Link>
                                                 </li>
@@ -128,7 +128,7 @@ const AppSideNav = () => {
                                             getAllPermissions().includes("Thống kê") && (
                                                 <li className="nav-item">
                                                     <Link to="/statistic" className="nav-link">
-                                                        <i className="far fa-circle nav-icon" />
+                                                        <i className="fas fa-minus nav-icon" />
                                                         <p>Thống kê</p>
                                                     </Link>
                                                 </li>
@@ -136,7 +136,7 @@ const AppSideNav = () => {
                                         }
                                         <li className="nav-item">
                                             <Link to="/inventory" className="nav-link">
-                                                <i className="far fa-circle nav-icon" />
+                                                <i className="fas fa-minus nav-icon" />
                                                 <p>Kiểm kê</p>
                                             </Link>
                                         </li>
@@ -148,7 +148,7 @@ const AppSideNav = () => {
                             getAllPermissions().includes("Thêm kho", "Sửa kho", "Xóa kho", "Xem kho") && (
                                 <li className="nav-item">
                                     <a className="nav-link">
-                                        <i className="nav-icon fas fa-chart-pie" />
+                                        <i className="nav-icon fas fa-home" />
                                         <p>
                                             Quản lý kho
                                             <i className="right fas fa-angle-left" />
@@ -157,7 +157,7 @@ const AppSideNav = () => {
                                     <ul className="nav nav-treeview">
                                         <li className="nav-item">
                                             <Link to="/warehouse" className="nav-link">
-                                                <i className="far fa-circle nav-icon" />
+                                                <i className="fas fa-minus nav-icon" />
                                                 <p>Kho</p>
                                             </Link>
                                         </li>
@@ -171,7 +171,7 @@ const AppSideNav = () => {
                                 "Sửa phiếu chuyển", "Xóa phiếu chuyển", "Xem phiếu chuyển", "Duyệt phiếu chuyển") && (
                                 <li className="nav-item">
                                     <a className="nav-link">
-                                        <i className="nav-icon fas fa-tree" />
+                                        <i className="nav-icon fas fa-copy" />
                                         <p>
                                             Quản lý phiếu
                                             <i className="fas fa-angle-left right" />
@@ -182,7 +182,7 @@ const AppSideNav = () => {
                                             getAllPermissions().includes("Sửa phiếu nhập", "Xóa phiếu nhập", "Xem phiếu nhập", "Duyệt phiếu nhập") && (
                                                 <li className="nav-item">
                                                     <Link to="/coupon_import" className="nav-link">
-                                                        <i className="far fa-circle nav-icon" />
+                                                        <i className="fas fa-minus nav-icon" />
                                                         <p>Phiếu nhập</p>
                                                     </Link>
                                                 </li>
@@ -192,7 +192,7 @@ const AppSideNav = () => {
                                             getAllPermissions().includes("Sửa phiếu xuất", "Xóa phiếu xuất", "Xem phiếu xuất", "Duyệt phiếu xuất") && (
                                                 <li className="nav-item">
                                                     <Link to="/coupon_export" className="nav-link">
-                                                        <i className="far fa-circle nav-icon" />
+                                                        <i className="fas fa-minus nav-icon" />
                                                         <p>Phiếu xuất</p>
                                                     </Link>
                                                 </li>
@@ -202,7 +202,7 @@ const AppSideNav = () => {
                                             getAllPermissions().includes("Sửa phiếu chuyển", "Xóa phiếu chuyển", "Xem phiếu chuyển", "Duyệt phiếu chuyển") && (
                                                 <li className="nav-item">
                                                     <Link to="/coupon_transfer" className="nav-link">
-                                                        <i className="far fa-circle nav-icon" />
+                                                        <i className="fas fa-minus nav-icon" />
                                                         <p>Phiếu luân chuyển</p>
                                                     </Link>
                                                 </li>
@@ -212,7 +212,7 @@ const AppSideNav = () => {
                                             getAllPermissions().includes("Sửa phiếu kiểm kê", "Xóa phiếu kiểm kê", "Xem phiếu kiểm kê", "Duyệt phiếu kiểm kê") && (
                                                 <li className="nav-item">
                                                     <Link to="/coupon_inventory" className="nav-link">
-                                                        <i className="far fa-circle nav-icon" />
+                                                        <i className="fas fa-minus nav-icon" />
                                                         <p>Phiếu kiểm kê</p>
                                                     </Link>
                                                 </li>
@@ -227,7 +227,7 @@ const AppSideNav = () => {
                             getAllPermissions().includes("Thêm tài khoản", "Sửa tài khoản", "Xóa tài khoản", "Xem tài khoản") && (
                                 <li className="nav-item">
                                     <a className="nav-link">
-                                        <i className="nav-icon far fa-envelope" />
+                                        <i className="nav-icon far fa-user" />
                                         <p>
                                             Admin
                                             <i className="fas fa-angle-left right" />
@@ -236,13 +236,13 @@ const AppSideNav = () => {
                                     <ul className="nav nav-treeview">
                                         <li className="nav-item">
                                             <Link to="/account" className="nav-link">
-                                                <i className="far fa-circle nav-icon" />
+                                                <i className="fas fa-minus nav-icon" />
                                                 <p>Người dùng</p>
                                             </Link>
                                         </li>
                                         <li className="nav-item">
                                             <Link to="/role" className="nav-link">
-                                                <i className="far fa-circle nav-icon" />
+                                                <i className="fas fa-minus nav-icon" />
                                                 <p>Chức vụ - Quyền hạn</p>
                                             </Link>
                                         </li>
@@ -262,7 +262,7 @@ const AppSideNav = () => {
                             getAllPermissions().includes("Thêm thông báo", "Sửa thông báo", "Xóa thông báo", "Xem thông báo") && (
                                 <li className="nav-item">
                                     <Link to="/notification" className="nav-link">
-                                        <i className="nav-icon fas fa-table" />
+                                        <i className="nav-icon fas fa-bell" />
                                         <p>
                                             Thông báo
                                         </p>

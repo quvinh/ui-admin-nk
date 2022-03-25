@@ -34,7 +34,7 @@ const EditAccount = (props) => {
     const handelSave = () => {
         console.log("......")
         if (roleID !== 0) {
-            Promise.all([postData('http://127.0.0.1:8000/api/admin/auth_model/user_roles?token=' + getToken(), {
+            Promise.all([postData('/api/admin/auth_model/user_roles?token=' + getToken(), {
                 user_id: dataUser[0].id,
                 roles_id: roleID,
                 warehouse_id: isCheckedWarehouse
@@ -52,10 +52,10 @@ const EditAccount = (props) => {
     }
     useEffect(() => {
         Promise.all([
-            getData('http://127.0.0.1:8000/api/auth/get-user/' + props.match.params.id + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/auth_model/roles?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+            getData('/api/auth/get-user/' + props.match.params.id + '?token=' + getToken()),
+            getData('/api/admin/auth_model/roles?token=' + getToken()),
+            getData('/api/admin/warehouse?token=' + getToken()),
+            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken())
         ])
             .then(function (res) {
                 // console.log(res)

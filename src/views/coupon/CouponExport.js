@@ -14,7 +14,7 @@ const CouponExport = () => {
         document.body.appendChild(compile)
     }
     const handleReload = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showCodeExport?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showCodeExport?token=' + getToken())])
             .then(function (res) {
                 setCodeExport(res[0].data)
             })
@@ -24,7 +24,7 @@ const CouponExport = () => {
     }
 
     const handleDelete = (code) => {
-        Promise.all([delData('http://127.0.0.1:8000/api/admin/export/deleteCode/' + code + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/export/deleteCode/' + code + '?token=' + getToken())])
             .then(function (res) {
                 console.log("Deleted", code)
                 handleReload()
@@ -35,7 +35,7 @@ const CouponExport = () => {
     }
 
     useEffect(() => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showCodeExport?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showCodeExport?token=' + getToken())])
             .then(function (res) {
                 setCodeExport(res[0].data)
             })

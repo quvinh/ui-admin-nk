@@ -20,7 +20,7 @@ const Category = () => {
     const [dataTable, setDataTable] = useState([])
     const history = useHistory()
     const handleDelete = (e, id) => {
-        Promise.all([delData('http://127.0.0.1:8000/api/admin/category/delete/' + id + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/category/delete/' + id + '?token=' + getToken())])
             .then(function (res) {
                 handleReload()
             })
@@ -29,7 +29,7 @@ const Category = () => {
             })
     }
     const handleReload = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/category?token=' + getToken())])
+        Promise.all([getData('/api/admin/category?token=' + getToken())])
             .then(function (res) {
                 setDataTable(res[0].data)
             })
@@ -42,7 +42,7 @@ const Category = () => {
     }
 
     const handleAdd = () => {
-        Promise.all([postData('http://127.0.0.1:8000/api/admin/category/store?token=' + getToken(), data)])
+        Promise.all([postData('/api/admin/category/store?token=' + getToken(), data)])
             .then(function (res) {
                 handleReload()
             }).catch(err => {
@@ -50,7 +50,7 @@ const Category = () => {
             })
     }
     const handleUpdate = (id) => {
-        Promise.all([putData('http://127.0.0.1:8000/api/admin/category/update/' + id + '?token=' + getToken(), data)])
+        Promise.all([putData('/api/admin/category/update/' + id + '?token=' + getToken(), data)])
             .then(function (res) {
                 handleReload()
             }).catch(err => {
@@ -69,7 +69,7 @@ const Category = () => {
     }
 
     useEffect(() => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/category?token=' + getToken())])
+        Promise.all([getData('/api/admin/category?token=' + getToken())])
             .then(function (res) {
                 console.log(res[0].data)
                 setDataTable(res[0].data)

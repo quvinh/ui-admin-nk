@@ -14,7 +14,7 @@ const CouponInventory = () => {
         document.body.appendChild(compile)
     }
     const handleReload = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showCodeInventory?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showCodeInventory?token=' + getToken())])
             .then(function (res) {
                 setCodeInventory(res[0].data)
             })
@@ -24,7 +24,7 @@ const CouponInventory = () => {
     }
 
     const handleDelete = (code) => {
-        Promise.all([delData('http://127.0.0.1:8000/api/admin/inventory/deleteCode/' + code + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/inventory/deleteCode/' + code + '?token=' + getToken())])
             .then(function (res) {
                 console.log("Deleted", code)
                 handleReload()
@@ -35,7 +35,7 @@ const CouponInventory = () => {
     }
 
     useEffect(() => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showCodeInventory?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showCodeInventory?token=' + getToken())])
             .then(function (res) {
                 setCodeInventory(res[0].data)
                 console.log(res[0].data)

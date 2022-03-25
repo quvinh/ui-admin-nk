@@ -63,7 +63,7 @@ const Export = (props) => {
             dataTable.map((item, index) => {
                 console.log("LOG")
                 console.log(item)
-                Promise.all([postData('http://127.0.0.1:8000/api/admin/export/store?token=' + getToken(), item)])
+                Promise.all([postData('/api/admin/export/store?token=' + getToken(), item)])
                     .then(function (res) {
                         console.log("SAVED")
                         reset()
@@ -75,7 +75,7 @@ const Export = (props) => {
         }
     }
     // const [isItemSelected, setIsItemSelected] = useState(false)
-    
+
     const onChangeName = (e, newValue) => {
         setNameSelect(newValue)
         var checked = false
@@ -98,9 +98,9 @@ const Export = (props) => {
                 getDataShelf(item.warehouse_id)
                 setIsWarehouseSelected(true)
                 checked = true
-                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id +  '?token=' + getToken())])
+                Promise.all([getData('/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id + '?token=' + getToken())])
                     .then(function (res) {
-                        console.log('kd',kd)
+                        console.log('kd', kd)
                         setKD(res[0].data)
                     })
             }
@@ -111,7 +111,7 @@ const Export = (props) => {
         }
         if (!checked) setIsAmountSelected(false)
         setAmount(0)
-        console.log('dataItem',dataItem)
+        console.log('dataItem', dataItem)
     }
 
     const onChangeAmount = (e) => {
@@ -154,7 +154,7 @@ const Export = (props) => {
             setIsWarehouseSelected(true)
             setWarehouse(e.target.value)
             getDataShelf(e.target.value)
-            Promise.all([getData('http://127.0.0.1:8000/api/admin/items/searchItem/' + e.target.value + '?token=' + getToken())])
+            Promise.all([getData('/api/admin/items/searchItem/' + e.target.value + '?token=' + getToken())])
                 .then(function (res) {
                     setDataItem(res[0].data)
                     console.log(res[0].data)
@@ -185,7 +185,7 @@ const Export = (props) => {
         console.log(e.target.value)
         console.log(dataItem)
         Promise.all([
-            getData('http://127.0.0.1:8000/api/admin/warehouse/itemShelf/' + warehouse_id + '/' + e.target.value + '?token=' + getToken())
+            getData('/api/admin/warehouse/itemShelf/' + warehouse_id + '/' + e.target.value + '?token=' + getToken())
         ])
             .then(function (res) {
                 console.log(res[0].data)
@@ -211,7 +211,7 @@ const Export = (props) => {
     }
 
     const getDataShelf = (id) => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
             .then(function (res) {
                 console.log(res[0].data)
                 setDataShelf(res[0].data)
@@ -252,11 +252,15 @@ const Export = (props) => {
                     totalPrice: totalPrice
 
                 }
-                console.log('dataItem',data)
+                console.log('dataItem', data)
                 console.log(dataTable)
-                array.length > 0 ? setDataTable([...array, data]) : (dataTable.length === 1 && dataTable[0].item_id === item_id &&
-                    dataTable[0].warehouse_id === warehouse_id && dataTable[0].shelf_id === shelf_id ?
-                    setDataTable([data]) : setDataTable([...dataTable, data]))
+                array.length > 0 ? setDataTable([...array, data]) : (
+                    dataTable.length === 1 &&
+                        dataTable[0].item_id === item_id &&
+                        dataTable[0].warehouse_id === warehouse_id &&
+                        dataTable[0].batch_code === batch_code &&
+                        dataTable[0].shelf_id === shelf_id &&
+                        dataTable[0].supplier_id === supplier_id ? setDataTable([data]) : setDataTable([...dataTable, data]))
                 console.log(dataTable)
             } else {
                 const data = {
@@ -278,7 +282,7 @@ const Export = (props) => {
                     totalPrice: totalPrice
                 }
                 setDataTable([...dataTable, data])
-                console.log('dataItem',data)
+                console.log('dataItem', data)
             }
 
             setAmount(0)
@@ -302,10 +306,10 @@ const Export = (props) => {
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
-                'http://127.0.0.1:8000/api/admin/items/itemInWarehouse?token=' + getToken() :
-                getDataWarehouseID().length > 0 && 'http://127.0.0.1:8000/api/admin/items/searchItem/' + getDataWarehouseID()[0] + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+                '/api/admin/items/itemInWarehouse?token=' + getToken() :
+                getDataWarehouseID().length > 0 && '/api/admin/items/searchItem/' + getDataWarehouseID()[0] + '?token=' + getToken()),
+            getData('/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
+            getData('/api/auth/get-user/' + getUserID() + '?token=' + getToken())
         ])
             .then(res => {
                 setDataItem(res[0].data)
@@ -332,7 +336,7 @@ const Export = (props) => {
         name: item.itemname,
         value: item.id
     }))
-    console.log('data',dataOption)
+    console.log('data', dataOption)
 
     return (
         <div className="content-wrapper">
