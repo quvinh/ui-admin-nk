@@ -66,6 +66,7 @@ const Supplier = React.lazy(() => import('./views/supplier/Supplier'))
 
 //Inventory
 const Inventory = React.lazy(() => import('./views/inventory/Inventory'))
+// const ListProduct = React.lazy(() => import('./views/listproduct/ListProduct'))
 
 // //Role
 const Role = React.lazy(() => import('./views/role/Role'))
@@ -128,6 +129,8 @@ const routes = [
   { path: '/print_inventory/:code', name: 'In phiếu nhập', component: PrintInventory },
 
   //   { path: '/role', name: 'Phân quyền', component: Role },
+
+  // { path: '/listproduct', name: 'In phiếu nhập', component: ListProduct },
 ]
 
 export default routes
