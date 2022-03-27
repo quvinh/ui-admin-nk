@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { FormControl, InputLabel, Select } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useEffect, useState } from 'react'
@@ -235,7 +236,7 @@ const Category = () => {
                                                                                 )
                                                                             }
                                                                             {
-                                                                                getAllPermissions().includes("Xóa loại vật tư") && (
+                                                                                getAllPermissions().includes("Xoá loại vật tư") && (
                                                                                     <button className='dropdown-item btnDelete' onClick={(e) => handleDelete(e, item.id)}>Xóa</button>
                                                                                 )
                                                                             }
@@ -305,7 +306,7 @@ const Category = () => {
                                                                                 )
                                                                             }
                                                                             {
-                                                                                getAllPermissions().includes("Xóa vật tư") && (
+                                                                                getAllPermissions().includes("Xoá vật tư") && (
                                                                                     <button className='dropdown-item btnDelete' onClick={(e) => {
                                                                                         handleDeleteItem(e, item.id)
                                                                                     }}>Xóa</button>

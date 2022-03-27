@@ -65,7 +65,7 @@ const AppSideNav = () => {
                                 </p>
                             </a>
                             {
-                                getAllPermissions().includes("Thêm loại vật tư", "Sửa loại vật tư", "Xóa loại vật tư", "Xem loại vật tư") && (
+                                getAllPermissions().includes("Xem loại vật tư") && (
                                     <ul className="nav nav-treeview">
                                         <li className="nav-item">
                                             <Link to="/category" className="nav-link">
