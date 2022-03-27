@@ -77,25 +77,25 @@ const CouponInventory = () => {
                                     <table id="example1" className="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th style={{ width: 10 }} className='text-center'>STT</th>
-                                                <th className='text-center'>Mã phiếu</th>
-                                                <th className='text-center'>Tên kho</th>
-                                                <th className='text-center'>Người tạo</th>
-                                                <th className='text-center'>Thời gian</th>
-                                                <th className='text-center'>Trạng thái</th>
-                                                <th style={{ width: 15 }} className='text-center'>Action</th>
+                                                <th style={{ width: 10 }}>STT</th>
+                                                <th>Mã phiếu</th>
+                                                <th>Tên kho</th>
+                                                <th>Người tạo</th>
+                                                <th>Thời gian</th>
+                                                <th>Trạng thái</th>
+                                                <th style={{ width: 15 }}>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {
                                                 codeInventory.map((item, index) => (
                                                     <tr>
-                                                        <td className='text-center'>{index + 1}</td>
-                                                        <td className='text-center'>{item.code}</td>
-                                                        <td className='text-center'>{item.warehouse_name}</td>
-                                                        <td className='text-center'>{item.fullname}</td>
-                                                        <td className='text-center'>{item.created_at}</td>
-                                                        <td className='text-center'>{
+                                                        <td>{index + 1}</td>
+                                                        <td>{item.code}</td>
+                                                        <td>{item.warehouse_name}</td>
+                                                        <td>{item.fullname}</td>
+                                                        <td>{item.created_at}</td>
+                                                        <td>{
                                                             <span className={item.status === 1 ? "badge badge-success" :
                                                                  'badge badge-secondary'}>
                                                                 {item.status === 1 ? 'Đã xử lý' : 'Chờ xử lý'}
@@ -128,7 +128,6 @@ const CouponInventory = () => {
                     </div>
                 </div>
             </section>
-
         </div>
     )
 }

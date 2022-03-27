@@ -24,6 +24,7 @@ const PrintExport = React.lazy(() => import('./views/coupon/PrintExport'))
 const PrintTransfer = React.lazy(() => import('./views/coupon/PrintTransfer'))
 const CouponInventory = React.lazy(() => import('./views/coupon/CouponInventory'))
 const DetailInventory = React.lazy(() => import('./views/coupon/DetailInventory'))
+const PrintInventory = React.lazy(() => import('./views/coupon/PrintInventory'))
 
 const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
 
@@ -124,6 +125,7 @@ const routes = [
   { path: '/inventory', name: 'Kiểm kê', component: Inventory },
   { path: '/detail_inventory/:code', name: 'Chi tiết phiếu xuất', component: DetailInventory },
   { path: '/coupon_inventory', name: 'Phiếu xuất', component: CouponInventory },
+  { path: '/print_inventory/:code', name: 'In phiếu nhập', component: PrintInventory },
 
   //   { path: '/role', name: 'Phân quyền', component: Role },
 ]
