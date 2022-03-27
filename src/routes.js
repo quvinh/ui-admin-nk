@@ -24,6 +24,7 @@ const PrintExport = React.lazy(() => import('./views/coupon/PrintExport'))
 const PrintTransfer = React.lazy(() => import('./views/coupon/PrintTransfer'))
 const CouponInventory = React.lazy(() => import('./views/coupon/CouponInventory'))
 const DetailInventory = React.lazy(() => import('./views/coupon/DetailInventory'))
+const PrintInventory = React.lazy(() => import('./views/coupon/PrintInventory'))
 
 const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
 
@@ -65,6 +66,7 @@ const Supplier = React.lazy(() => import('./views/supplier/Supplier'))
 
 //Inventory
 const Inventory = React.lazy(() => import('./views/inventory/Inventory'))
+// const ListProduct = React.lazy(() => import('./views/listproduct/ListProduct'))
 
 // //Role
 const Role = React.lazy(() => import('./views/role/Role'))
@@ -124,8 +126,11 @@ const routes = [
   { path: '/inventory', name: 'Kiểm kê', component: Inventory },
   { path: '/detail_inventory/:code', name: 'Chi tiết phiếu xuất', component: DetailInventory },
   { path: '/coupon_inventory', name: 'Phiếu xuất', component: CouponInventory },
+  { path: '/print_inventory/:code', name: 'In phiếu nhập', component: PrintInventory },
 
   //   { path: '/role', name: 'Phân quyền', component: Role },
+
+  // { path: '/listproduct', name: 'In phiếu nhập', component: ListProduct },
 ]
 
 export default routes

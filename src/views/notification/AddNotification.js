@@ -58,6 +58,8 @@ const AddNotification = () => {
         // })
         // console.log(dataNotification)
         // history.push('/notification')
+        console.log(title)
+        console.log(content)
         Promise.all([
             postData('/api/admin/notification/store', {
                 title: title,
