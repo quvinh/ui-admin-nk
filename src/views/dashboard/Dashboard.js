@@ -34,19 +34,19 @@ const Dashboard = () => {
   // const [status, setStatus] = useState('')
 
   const arrImportAmount = []
-  importVT.map((item, index) => {
+  importVT && importVT.map((item, index) => {
     arrImportAmount.push(item.importAmount)
   })
   const arrImportMonth = []
-  importVT.map((item, index) => {
+  importVT && importVT.map((item, index) => {
     arrImportMonth.push(item.month)
   })
   const arrExportMonth = []
-  exportVT.map((item, index) => {
+  exportVT && exportVT.map((item, index) => {
     arrExportMonth.push(item.month)
   })
   const arrExportAmount = []
-  exportVT.map((item, index) => {
+  exportVT && exportVT.map((item, index) => {
     arrExportAmount.push(item.exportAmount)
   })
 
@@ -166,7 +166,7 @@ const Dashboard = () => {
                 <div className="card-body">
                   <div className='row'>
                     {
-                      tonKho.map((item, index) => (
+                      tonKho && tonKho.map((item, index) => (
                         <div className="col-md-3 small-box bg-white card-warning card-outline ml-1" >
                           <div className="inner">
                             <h5 className="info-box-text">Nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
@@ -204,7 +204,7 @@ const Dashboard = () => {
                               setWarehouse(e.target.value)
                             }}
                           >
-                            {dataWarehouse.map((item, index) => (
+                            {dataWarehouse && dataWarehouse.map((item, index) => (
                               <MenuItem key={index} value={item.id}>{item.name}</MenuItem>
                             ))}
                           </Select>

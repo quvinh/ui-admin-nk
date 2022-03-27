@@ -370,7 +370,7 @@ const WarehouseShow = (props) => {
                                         <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
 
                                             <form className="form-horizontal">
-                                                <hr style={{ border: "1px solid red" }} />
+                                            <hr style={{ border: "1px solid gray" }} />
                                                 {/* <div className="row"> */}
                                                 <div className="row">
                                                     <div className="col">
@@ -436,7 +436,7 @@ const WarehouseShow = (props) => {
                                             </form>
                                             <hr />
                                             <br />
-                                            <hr style={{ border: "1px solid blue" }} />
+                                            <hr style={{ border: "1px solid gray" }} />
                                             <div className="row">
                                                 <div className="col">
                                                     <h6><strong>Danh sách kệ</strong></h6>
@@ -506,8 +506,8 @@ const WarehouseShow = (props) => {
                                                 <thead>
                                                     <tr>
                                                         <th className='text-center'>STT</th>
-                                                        <th className='text-center'>Mã nhân viên</th>
-                                                        <th className='text-center'>Tên nhân viên</th>
+                                                        {/* <th className='text-center'>Mã nhân viên</th> */}
+                                                        <th className='text-center'>Họ và tên</th>
                                                         <th className='text-center'>Email</th>
                                                         <th className='text-center'>Số điện thoại</th>
                                                     </tr>
@@ -517,8 +517,8 @@ const WarehouseShow = (props) => {
                                                         dataManager.map((item, index) => (
                                                             <tr key={index}>
                                                                 <td className='text-center'>{String(index + 1)}</td>
-                                                                <td className='text-center'>{item.userid}</td>
-                                                                <td className='text-center'>{item.fullname}</td>
+                                                                {/* <td className='text-center'>{item.user_id}</td> */}
+                                                                <td className='text-center'><span className="badge badge-primary">{item.fullname}</span></td>
                                                                 <td className='text-center'>{item.email}</td>
                                                                 <td className='text-center'>{item.phone}</td>
                                                             </tr>
@@ -555,7 +555,7 @@ const WarehouseShow = (props) => {
                                                             <tr key={index}>
                                                                 <td className='text-center'>{String(index + 1)}</td>
                                                                 <td className='text-center'>{item.id}</td>
-                                                                <td className='text-center'>{item.itemname}</td>
+                                                                <td className='text-center'><b>{item.itemname}</b></td>
                                                                 <td className='text-center'>{item.categoryname}</td>
                                                                 <td className='text-center'>{item.shelfname}</td>
                                                                 <td className='text-center'>{item.amount}</td>

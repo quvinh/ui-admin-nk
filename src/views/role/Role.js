@@ -24,6 +24,7 @@ const Role = () => {
     const [isCheckedWarehouseAll, setIsCheckedWarehouseAll] = useState(false)
     const [isCheckedShelfAll, setIsCheckedShelfAll] = useState(false)
     const [isCheckedCategoryAll, setIsCheckedCategoryAll] = useState(false)
+    const [isCheckedItemAll, setIsCheckedItemAll] = useState(false)
     const [isCheckedSupplierAll, setIsCheckedSupplierAll] = useState(false)
     const [isCheckedNotificationAll, setIsCheckedNotificationAll] = useState(false)
 
@@ -93,6 +94,14 @@ const Role = () => {
         setIsCheckedCategoryAll(!isCheckedCategoryAll)
         checked && setIsCheckedPermission([...isCheckedPermission.filter(item => !dataPermission.dataCategory.includes(item)), ...dataPermission.dataCategory.map(item => item)])
         !checked && isCheckedPermission && setIsCheckedPermission(isCheckedPermission.filter(item => !dataPermission.dataCategory.includes(item)))
+        setIsSelected(true)
+    }
+
+    const handleCheckItemAll = (e) => {
+        const { checked } = e.target
+        setIsCheckedItemAll(!isCheckedItemAll)
+        checked && setIsCheckedPermission([...isCheckedPermission.filter(item => !dataPermission.dataItem.includes(item)), ...dataPermission.dataItem.map(item => item)])
+        !checked && isCheckedPermission && setIsCheckedPermission(isCheckedPermission.filter(item => !dataPermission.dataItem.includes(item)))
         setIsSelected(true)
     }
 
@@ -375,7 +384,7 @@ const Role = () => {
                             </div>
                             <div className="card">
                                 <div className="card-header">
-                                    <h3 className="card-title"><b>Thống kê</b></h3>
+                                    <h3 className="card-title"><b>Thông báo</b></h3>
                                     <div className="card-tools">
                                         <button type="button" className="btn btn-tool" data-card-widget="collapse">
                                             <i className="fas fa-minus" />
@@ -385,10 +394,22 @@ const Role = () => {
                                 <div className="card-body">
                                     <div className="form-group">
                                         <div className="form-check">
-                                            <input className="form-check-input" type="checkbox" name="Thống kê" checked={isCheckedPermission.includes("Thống kê")} onChange={(e) => handleCheckPermission(e)} />
-                                            <label className="form-check-label">Thống kê</label>
+                                            <input className="form-check-input" type="checkbox" onChange={(e) => handleCheckNotificationAll(e)} checked={isCheckedNotificationAll} />
+                                            <label className="form-check-label">Chọn tất cả</label>
                                         </div>
                                     </div>
+                                    {
+                                        dataPermission.dataNotification && dataPermission.dataNotification.map((item, index) => (
+                                            <div className="form-group">
+                                                <div className="form-check" key={index}>
+                                                    <input className="form-check-input" type="checkbox" name={item}
+                                                        checked={isCheckedPermission.includes(item)}
+                                                        onChange={(e) => handleCheckPermission(e)} />
+                                                    <label className="form-check-label">{item}</label>
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -547,7 +568,7 @@ const Role = () => {
                             </div>
                             <div className="card">
                                 <div className="card-header">
-                                    <h3 className="card-title"><b>Thông báo</b></h3>
+                                    <h3 className="card-title"><b>Vật tư</b></h3>
                                     <div className="card-tools">
                                         <button type="button" className="btn btn-tool" data-card-widget="collapse">
                                             <i className="fas fa-minus" />
@@ -557,12 +578,12 @@ const Role = () => {
                                 <div className="card-body">
                                     <div className="form-group">
                                         <div className="form-check">
-                                            <input className="form-check-input" type="checkbox" onChange={(e) => handleCheckNotificationAll(e)} checked={isCheckedNotificationAll} />
+                                            <input className="form-check-input" type="checkbox" onChange={(e) => handleCheckItemAll(e)} checked={isCheckedItemAll} />
                                             <label className="form-check-label">Chọn tất cả</label>
                                         </div>
                                     </div>
                                     {
-                                        dataPermission.dataNotification && dataPermission.dataNotification.map((item, index) => (
+                                        dataPermission.dataItem && dataPermission.dataItem.map((item, index) => (
                                             <div className="form-group">
                                                 <div className="form-check" key={index}>
                                                     <input className="form-check-input" type="checkbox" name={item}
@@ -573,6 +594,24 @@ const Role = () => {
                                             </div>
                                         ))
                                     }
+                                </div>
+                            </div>
+                            <div className="card">
+                                <div className="card-header">
+                                    <h3 className="card-title"><b>Thống kê</b></h3>
+                                    <div className="card-tools">
+                                        <button type="button" className="btn btn-tool" data-card-widget="collapse">
+                                            <i className="fas fa-minus" />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="card-body">
+                                    <div className="form-group">
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="checkbox" name="Thống kê" checked={isCheckedPermission.includes("Thống kê")} onChange={(e) => handleCheckPermission(e)} />
+                                            <label className="form-check-label">Thống kê</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -93,10 +93,10 @@ const Import = () => {
                     getDataShelf(item.warehouse_id)
                     setItemID(item.item_id)
                     setBatchCode(item.batch_code)
-                    // setCategory(item.category_id)
+                    setCategory(item.category_id)
                     setShelf(item.shelf_id)
                     setAmount(item.amount)
-                    // setUnit(item.unit)
+                    setUnit(item.unit)
                     setWarehouse(item.warehouse_id)
                     setNameWarehouse(item.name_warehouse)
                     setPrice(item.price)
@@ -432,8 +432,9 @@ const Import = () => {
                                                             onChange={(e, newValue) => {
                                                                 (e.target.value === 'Lô') ? setIsUnitSelected(true) : (
                                                                     setIsUnitSelected(false),
-                                                                    setCategory(''),
-                                                                    setName(''),
+                                                                    // setCategory(''),
+                                                                    // setName(''),
+                                                                    setNull(),
                                                                     setIsItemSelected(false)
                                                                 )
                                                                 setUnit(e.target.value)

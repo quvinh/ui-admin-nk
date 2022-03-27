@@ -52,6 +52,7 @@ const Export = (props) => {
     const [isAmountSelected, setIsAmountSelected] = useState(false)
     const [isWarehouseSelected, setIsWarehouseSelected] = useState(false)
     const [showWarehouse, setShowWarehouse] = useState(false)
+    const [showAmountValid, setShowAmountValid] = useState(false)
 
     const history = useHistory()
 
@@ -100,7 +101,10 @@ const Export = (props) => {
                 checked = true
                 Promise.all([getData('/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id)])
                     .then(function (res) {
-                        console.log('kd', kd)
+                        // console.log(item.item_id, item.shelf_name)
+                        // var value = dataTable.filter(i => i.item_id === item.item_id && i.item_id === item.item_id)
+                        // console.log(value)
+                        // value.length > 0 ? setKD(res[0].data - value[0].amount) : setKD(res[0].data)
                         setKD(res[0].data)
                     })
             }
@@ -111,7 +115,14 @@ const Export = (props) => {
         }
         if (!checked) setIsAmountSelected(false)
         setAmount(0)
+
+        // dataTable.filter(item => [
+        //     item.item_id === item_id,
+        //     item.shelf_name === shelf_name
+        // ]) ? setShowAmountValid(true) : setShowAmountValid(false)
         console.log('dataItem', dataItem)
+
+        // console.log(getAmountValid())
     }
 
     const onChangeAmount = (e) => {
@@ -286,6 +297,7 @@ const Export = (props) => {
             }
 
             setAmount(0)
+            setShowAmountValid(true)
             // setAmountCurrent(0)
         } else {
             showValidationMessage(true)
@@ -293,16 +305,22 @@ const Export = (props) => {
             // setAmountCurrent(0)
         }
         script()
-        console.log(dataTable)
+
     }
 
-    const getIdWarehouseRole = () => {
-        var nameRole = ''
-        getRoleNames().split(' ').map((item) => {
-            if (!isNaN(item)) nameRole = item
-        })
-        return nameRole
+    // dataTable.length > 0 && console.log(dataTable.filter(item => item.item_id === 'CBL6')[0].amount)
+
+    const getAmountValid = () => {
+        var amount = 0
+        console.log(item_id, shelf_name)
+        if (dataTable.length > 0) {
+            const value = dataTable.filter(item => item.item_id === item_id && item.shelf_name === shelf_name)
+            value.length > 0 ? amount = value[0].amount : amount = 0
+        }
+        console.log(amount)
+        return parseInt(amount)
     }
+
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
@@ -412,7 +430,7 @@ const Export = (props) => {
                                         fullWidth
                                         type="number"
                                         name="amount"
-                                        inputProps={{ min: 0, max: kd, inputMode: 'numeric', pattern: '[0-9]*' }}
+                                        inputProps={{ min: 0, max: kd - getAmountValid(), inputMode: 'numeric', pattern: '[0-9]*' }}
                                         size='small'
                                         label="Số lượng"
                                         value={amount}
@@ -437,7 +455,7 @@ const Export = (props) => {
                                         type={'number'}
                                         size='small'
                                         label="Số lượng khả dụng"
-                                        value={kd}
+                                        value={kd - getAmountValid()}
                                         variant="outlined"
                                     />
                                 </div>
@@ -489,7 +507,9 @@ const Export = (props) => {
                                 </button>
                                 <button className="btn btn-sm btn-primary" onClick={(e) => {
                                     onAddTable(e)
-                                    setKD(parseInt(kd) - parseInt(amount))
+                                    // setKD(parseInt(kd) - parseInt(amount))
+                                    setKD(parseInt(kd))
+                                    // setKD(parseInt(kd) - getAmountValid())
                                 }}>
                                     <i className="fas fa-edit"></i> Thêm vào DS
                                 </button>
@@ -542,7 +562,7 @@ const Export = (props) => {
                                                         <td className='text-center'><button className="btn btn-sm btn-danger"
                                                             onClick={(e) => {
                                                                 onRemoveRow(e, index)
-                                                                setKD(parseInt(kd) + parseInt(item.amount))
+                                                                setKD(parseInt(kd))
                                                             }}>
                                                             x
                                                         </button></td>

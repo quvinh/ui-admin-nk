@@ -242,7 +242,15 @@ const Transfer = () => {
         setDataTable([...array])
     }
 
-
+    const getAmountValid = () => {
+        var amount = 0
+        if (dataTable.length > 0) {
+            const value = dataTable.filter(item => item.item_id === item_id && item.fromShelf === fromShelf && item.toWarehouse === toWarehouse)
+            value.length > 0 ? amount = value[0].amount : amount = 0
+        }
+        console.log(amount)
+        return parseInt(amount)
+    }
 
     const onAddTable = (e) => {//Button click, add data table
         console.log('e', dataTable)
@@ -471,7 +479,7 @@ const Transfer = () => {
                                                 size='small'
                                                 label="Số lượng"
                                                 type={'number'}
-                                                inputProps={{ min: 0, max: kd, type: 'number' }}
+                                                inputProps={{ min: 0, max: kd - getAmountValid(), type: 'number' }}
                                                 value={amount}
                                                 onChange={(e) => {
                                                     onChangeAmount(e)
@@ -493,7 +501,7 @@ const Transfer = () => {
                                                 type={'number'}
                                                 size='small'
                                                 label="SL khả dụng"
-                                                value={kd}
+                                                value={kd - getAmountValid()}
                                                 variant="outlined"
                                             />
                                         </div>
@@ -622,15 +630,15 @@ const Transfer = () => {
                                             {
                                                 (isAmountSelected) ? (
                                                     <>
-                                                        <button class="btn btn-sm btn-primary" onClick={(e) => {
+                                                        <button className="btn btn-sm btn-primary" onClick={(e) => {
                                                             onAddTable(e)
-                                                            setKD(parseInt(kd) - parseInt(amount))
-                                                        }}><i class="fas fa-edit"></i> THÊM VÀO PHIẾU</button>
+                                                            setKD(parseInt(kd))
+                                                        }}><i className="fas fa-edit"></i> THÊM VÀO PHIẾU</button>
                                                         {/* <ShowTransfer dataTable={dataTable} code={code} /> */}
                                                     </>
                                                 ) : (
-                                                    <button class="btn btn-sm btn-secondary" disabled>
-                                                        <i class="fas fa-edit"></i> THÊM VÀO PHIẾU
+                                                    <button className="btn btn-sm btn-secondary" disabled>
+                                                        <i className="fas fa-edit"></i> THÊM VÀO PHIẾU
                                                     </button>
                                                 )
                                             }
@@ -686,9 +694,9 @@ const Transfer = () => {
                                                         <td>{item.nameToWarehouse}</td>
                                                         <td>{item.nameToShelf}</td>
                                                         <td>
-                                                            <button class="btn btn-sm btn-danger" onClick={(e) => {
+                                                            <button className="btn btn-sm btn-danger" onClick={(e) => {
                                                                 onRemoveRow(e, index)
-                                                                setKD(parseInt(kd) + parseInt(item.amount))
+                                                                setKD(parseInt(kd))
                                                             }}>
                                                                 X
                                                             </button>
