@@ -134,12 +134,16 @@ const AppSideNav = () => {
                                                 </li>
                                             )
                                         }
-                                        <li className="nav-item">
-                                            <Link to="/inventory" className="nav-link">
-                                                <i className="fas fa-minus nav-icon" />
-                                                <p>Kiểm kê</p>
-                                            </Link>
-                                        </li>
+                                        {
+                                            getAllPermissions().includes("Thêm phiếu kiểm kê") && (
+                                                <li className="nav-item">
+                                                    <Link to="/inventory" className="nav-link">
+                                                        <i className="fas fa-minus nav-icon" />
+                                                        <p>Kiểm kê</p>
+                                                    </Link>
+                                                </li>
+                                            )
+                                        }
                                     </ul>
                                 </li>
                             )
