@@ -40,36 +40,43 @@ const Login = () => {
   }, [])
 
   return (
-    <div className="hold-transition login-page">
-      <div className="login-box">
-        <div className="login-logo">
-          <a><b>NAM</b>KHÁNH</a>
-        </div>
-        <div className="card">
-          <div className="card-body login-card-body">
-            <p className="login-box-msg">Sign in to start your session</p>
-            <form id="quickForm">
-              <div className="card-body">
-                <div className="form-group">
-                  <label>Tên đăng nhập</label>
-                  <input type="text" name="username" value={username} className="form-control" placeholder="Tên đăng nhập" onChange={(e) => setUsername(e.target.value)} />
+    <main className="d-flex align-items-center min-vh-100 py-3 py-md-0">
+      <div className="container">
+        <div className="card login-card" >
+          <div className="row no-gutters">
+            <div className="col-md-7">
+              <img src="../../../dist/img/login.jpeg" alt="login" className="login-card-img" style={{opacity:1}} />
+            </div>
+            <div className="col-md-5">
+              <div className="card-body" style={{height:"500px"}}>
+                <div className="brand-wrapper">
+                  {/* <img src="assets/images/logo.svg" alt="logo" className="logo" /> */}
                 </div>
-                <div className="form-group">
-                  <label>Mật khẩu</label>
-                  <input type="password" name="password" value={password} className="form-control" placeholder="Mật khẩu" onChange={(e) => setPassword(e.target.value)} />
-                </div>
+                <p className="login-card-description" style={{textAlign:"center"}}>Đăng nhập</p>
+                <form id="quickForm">
+                  <div className="form-group" >
+                    <label htmlFor="email" className="sr-only">Email</label>
+                    <input type="text" name="username" value={username} className="form-control" placeholder="Tên đăng nhập" onChange={(e) => setUsername(e.target.value)} />
+                    
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="password" className="sr-only">Password</label>
+                    <input type="password" name="password" value={password} className="form-control" placeholder="Mật khẩu" onChange={(e) => setPassword(e.target.value)} />
+                    
+                  </div>
+                  <div className="social-auth-links text-center mb-3">
+                    <button type="button" className="btn btn-block login-btn mb-4" onClick={() => handleLogin()}>Đăng nhập</button>
+                  </div>
+                </form>
+                <nav className="login-card-footer-nav">
+                </nav>
               </div>
-              <div className="social-auth-links text-center mb-3">
-                <button type="button" className="btn btn-primary" onClick={() => handleLogin()}>Đăng nhập</button>
-              </div>
-              {/* <div className="card-footer">
-                <button type="submit" className="btn btn-primary">Đăng nhập</button>
-              </div> */}
-            </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </main>
+
   )
 }
 
