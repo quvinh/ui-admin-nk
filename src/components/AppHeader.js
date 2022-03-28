@@ -1,31 +1,79 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { getData } from './utils/Api'
-import { getRoleNames, getToken, getUserID, removeUserSession } from './utils/Common'
+import { getData, putData } from './utils/Api'
+import { getDataWarehouseID, getRoleNames, getToken, getUserID, removeUserSession } from './utils/Common'
 
 const AppHeader = (props) => {
     console.log(props)
     const [dataUserDetail, setUserDetail] = useState([])
-    const [dataNotification, setDataNotification] = useState([])
+    const [countNotification, setCountNotification] = useState(0)
     const history = useHistory()
+
     const handleLogout = () => {
         removeUserSession()
         history.push('/login')
     }
+
+    const handleReload = (id) => {
+        Promise.all([
+            getData('/api/admin/notification/count/' + getUserID()),
+        ])
+            .then(function (res) {
+                setCountNotification(res[0])
+                history.push('/notification-read/' + id)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    const handleClickNotify = (id) => {
+        Promise.all([
+            putData('/api/admin/notification/update/' + id),
+        ])
+            .then(function (res) {
+                handleReload(id)
+                history.push('/notification')
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    const handleShowTime = (send, current) => {
+        const start = new Date(send)
+        const end = new Date(current)
+
+        const diffInDays = parseInt(Math.abs(end - start) / (1000 * 60 * 60 * 24))
+        const diffInHours = parseInt(Math.abs(end - start) / (1000 * 60 * 60))
+        const diffInMinutes = parseInt(Math.abs(end - start) / (1000 * 60))
+        const diffInSeconds = parseInt(Math.abs(end - start) / (1000))
+
+        if (diffInDays > 0) {
+            return diffInDays + " ngày trước"
+        } else if (diffInHours > 0) {
+            return diffInHours + " giờ trước"
+        } else if (diffInMinutes > 0) {
+            return diffInMinutes + " phút trước"
+        } else {
+            return "vài giây trước"
+        }
+    }
     useEffect(() => {
         Promise.all([
-            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/notification?token=' + getToken()),
+            getData('/api/auth/get-user/' + getUserID()),
+            getData('/api/admin/notification/count/' + getUserID()),
         ])
             .then(function (res) {
                 setUserDetail(res[0].data)
+                setCountNotification(res[1])
             })
             .catch(error => {
                 console.log(error)
             })
     }, [])
-    console.log(dataUserDetail)
+    console.log(getDataWarehouseID())
     return (
         <div>
             <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -62,81 +110,23 @@ const AppHeader = (props) => {
                         </div>
                     </li>
                     <li className="nav-item dropdown">
-                        <a className="nav-link" data-toggle="dropdown" href="#">
-                            <i className="far fa-comments" />
-                            <span className="badge badge-danger navbar-badge">3</span>
-                        </a>
-                        <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            <a href="#" className="dropdown-item">
-                                {/* Message Start */}
-                                <div className="media">
-                                    <img src="dist/img/user1-128x128.jpg" alt="User Avatar" className="img-size-50 mr-3 img-circle" />
-                                    <div className="media-body">
-                                        <h3 className="dropdown-item-title">
-                                            Brad Diesel
-                                            <span className="float-right text-sm text-danger"><i className="fas fa-star" /></span>
-                                        </h3>
-                                        <p className="text-sm">Call me whenever you can...</p>
-                                        <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
-                                    </div>
-                                </div>
-                            </a>
-                            <div className="dropdown-divider" />
-                            <a href="#" className="dropdown-item">
-                                <div className="media">
-                                    <img src="dist/img/user8-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3" />
-                                    <div className="media-body">
-                                        <h3 className="dropdown-item-title">
-                                            John Pierce
-                                            <span className="float-right text-sm text-muted"><i className="fas fa-star" /></span>
-                                        </h3>
-                                        <p className="text-sm">I got your message bro</p>
-                                        <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
-                                    </div>
-                                </div>
-                            </a>
-                            <div className="dropdown-divider" />
-                            <a href="#" className="dropdown-item">
-                                <div className="media">
-                                    <img src="dist/img/user3-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3" />
-                                    <div className="media-body">
-                                        <h3 className="dropdown-item-title">
-                                            Nora Silvester
-                                            <span className="float-right text-sm text-warning"><i className="fas fa-star" /></span>
-                                        </h3>
-                                        <p className="text-sm">The subject goes here</p>
-                                        <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
-                                    </div>
-                                </div>
-                                {/* Message End */}
-                            </a>
-                            <div className="dropdown-divider" />
-                            <a href="#" className="dropdown-item dropdown-footer">See All Messages</a>
-                        </div>
-                    </li>
-                    <li className="nav-item dropdown">
-                        <a className="nav-link" data-toggle="dropdown" href="#">
+                        <a className="nav-link" data-toggle="dropdown">
                             <i className="far fa-bell" />
-                            <span className="badge badge-warning navbar-badge">15</span>
+                            <span className="badge badge-danger navbar-badge">{countNotification && countNotification.count}</span>
                         </a>
-                        <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            <span className="dropdown-item dropdown-header">15 Notifications</span>
+                        <div className="dropdown-menu dropdown-menu-xs dropdown-menu-right">
+                            <span className="dropdown-item dropdown-header">{countNotification && countNotification.count} Thông báo chưa đọc</span>
                             <div className="dropdown-divider" />
+                            {
+                                countNotification.data && countNotification.data.map((item, index) => (
+                                    <Link to={"/notification-read/" + item.id} key={index}
+                                        className="dropdown-item" onClick={() => handleClickNotify(item.id)}>
+                                        <i className="fas fa-bell" /> {item.fullname} đã gửi thông báo cho bạn.  {item.status === 0 && <i style={{color: "blue"}} className="fas fa-circle" />}
+                                        <p><b>{item.title}</b> {String(item.content).substring(0, 8) + "..."}<span className="float-right text-muted text-sm">{handleShowTime(new Date(), item.created_at)}</span></p>
+                                    </Link>
+                                ))
+                            }
                             {/* <a href="#" className="dropdown-item">
-                                <i className="fas fa-envelope mr-2" /> 4 new messages
-                                <span className="float-right text-muted text-sm">3 mins</span>
-                            </a>
-                            <div className="dropdown-divider" />
-                            <a href="#" className="dropdown-item">
-                                <i className="fas fa-users mr-2" /> 8 friend requests
-                                <span className="float-right text-muted text-sm">12 hours</span>
-                            </a>
-                            <div className="dropdown-divider" />
-                            <a href="#" className="dropdown-item">
-                                <i className="fas fa-file mr-2" /> 3 new reports
-                                <span className="float-right text-muted text-sm">2 days</span>
-                            </a> */}
-                            <a href="#" className="dropdown-item">
                                 <div className="media">
                                     <img src="dist/img/user8-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3" />
                                     <div className="media-body">
@@ -148,20 +138,20 @@ const AppHeader = (props) => {
                                         <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
                                     </div>
                                 </div>
-                            </a>
+                            </a> */}
                             <div className="dropdown-divider" />
-                            <a href="#" className="dropdown-item dropdown-footer">See All Notifications</a>
+                            <Link to={"/notification"} className="dropdown-item dropdown-footer">Xem tất cả</Link>
                         </div>
                     </li>
                     <li className="nav-item dropdown user-menu">
                         <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">
-                            <img src="../../dist/img/user2-160x160.jpg" className="user-image img-circle elevation-2" alt="User Image" />
+                            <img src="../../dist/img/user.png" className="user-image img-circle elevation-2" alt="User Image" />
                             <span className="d-none d-md-inline">{dataUserDetail[0] && dataUserDetail[0].fullname}</span>
                         </a>
                         <ul className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             {/* User image */}
                             <li className="user-header bg-primary">
-                                <img src="../../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
+                                <img src="../../dist/img/user.png" className="img-circle elevation-2" alt="User Image" />
                                 <p>
                                     <small>Tên đăng nhập</small>
                                     {dataUserDetail[0] && dataUserDetail[0].username}

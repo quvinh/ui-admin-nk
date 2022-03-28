@@ -52,6 +52,7 @@ const Export = (props) => {
     const [isAmountSelected, setIsAmountSelected] = useState(false)
     const [isWarehouseSelected, setIsWarehouseSelected] = useState(false)
     const [showWarehouse, setShowWarehouse] = useState(false)
+    const [showAmountValid, setShowAmountValid] = useState(false)
 
     const history = useHistory()
 
@@ -63,7 +64,7 @@ const Export = (props) => {
             dataTable.map((item, index) => {
                 console.log("LOG")
                 console.log(item)
-                Promise.all([postData('http://127.0.0.1:8000/api/admin/export/store?token=' + getToken(), item)])
+                Promise.all([postData('/api/admin/export/store', item)])
                     .then(function (res) {
                         console.log("SAVED")
                         reset()
@@ -75,7 +76,7 @@ const Export = (props) => {
         }
     }
     // const [isItemSelected, setIsItemSelected] = useState(false)
-    
+
     const onChangeName = (e, newValue) => {
         setNameSelect(newValue)
         var checked = false
@@ -98,9 +99,12 @@ const Export = (props) => {
                 getDataShelf(item.warehouse_id)
                 setIsWarehouseSelected(true)
                 checked = true
-                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id +  '?token=' + getToken())])
+                Promise.all([getData('/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id)])
                     .then(function (res) {
-                        console.log('kd',kd)
+                        // console.log(item.item_id, item.shelf_name)
+                        // var value = dataTable.filter(i => i.item_id === item.item_id && i.item_id === item.item_id)
+                        // console.log(value)
+                        // value.length > 0 ? setKD(res[0].data - value[0].amount) : setKD(res[0].data)
                         setKD(res[0].data)
                     })
             }
@@ -111,7 +115,14 @@ const Export = (props) => {
         }
         if (!checked) setIsAmountSelected(false)
         setAmount(0)
-        console.log('dataItem',dataItem)
+
+        // dataTable.filter(item => [
+        //     item.item_id === item_id,
+        //     item.shelf_name === shelf_name
+        // ]) ? setShowAmountValid(true) : setShowAmountValid(false)
+        console.log('dataItem', dataItem)
+
+        // console.log(getAmountValid())
     }
 
     const onChangeAmount = (e) => {
@@ -120,6 +131,7 @@ const Export = (props) => {
     }
 
     const setNull = () => {
+        setNameSelect('')
         setName('')
         setAmount(0)
         setAmountCurrent(0)
@@ -153,7 +165,7 @@ const Export = (props) => {
             setIsWarehouseSelected(true)
             setWarehouse(e.target.value)
             getDataShelf(e.target.value)
-            Promise.all([getData('http://127.0.0.1:8000/api/admin/items/searchItem/' + e.target.value + '?token=' + getToken())])
+            Promise.all([getData('/api/admin/items/searchItem/' + e.target.value)])
                 .then(function (res) {
                     setDataItem(res[0].data)
                     console.log(res[0].data)
@@ -184,7 +196,7 @@ const Export = (props) => {
         console.log(e.target.value)
         console.log(dataItem)
         Promise.all([
-            getData('http://127.0.0.1:8000/api/admin/warehouse/itemShelf/' + warehouse_id + '/' + e.target.value + '?token=' + getToken())
+            getData('/api/admin/warehouse/itemShelf/' + warehouse_id + '/' + e.target.value)
         ])
             .then(function (res) {
                 console.log(res[0].data)
@@ -202,6 +214,7 @@ const Export = (props) => {
         setNameSelect('')
         setAmount(0)
         setAmountCurrent(0)
+        setKD(0)
     }
 
     const onRemoveRow = (e, index) => {
@@ -210,7 +223,7 @@ const Export = (props) => {
     }
 
     const getDataShelf = (id) => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id)])
             .then(function (res) {
                 console.log(res[0].data)
                 setDataShelf(res[0].data)
@@ -251,11 +264,15 @@ const Export = (props) => {
                     totalPrice: totalPrice
 
                 }
-                console.log('dataItem',data)
+                console.log('dataItem', data)
                 console.log(dataTable)
-                array.length > 0 ? setDataTable([...array, data]) : (dataTable.length === 1 && dataTable[0].item_id === item_id &&
-                    dataTable[0].warehouse_id === warehouse_id && dataTable[0].shelf_id === shelf_id ?
-                    setDataTable([data]) : setDataTable([...dataTable, data]))
+                array.length > 0 ? setDataTable([...array, data]) : (
+                    dataTable.length === 1 &&
+                        dataTable[0].item_id === item_id &&
+                        dataTable[0].warehouse_id === warehouse_id &&
+                        dataTable[0].batch_code === batch_code &&
+                        dataTable[0].shelf_id === shelf_id &&
+                        dataTable[0].supplier_id === supplier_id ? setDataTable([data]) : setDataTable([...dataTable, data]))
                 console.log(dataTable)
             } else {
                 const data = {
@@ -277,10 +294,11 @@ const Export = (props) => {
                     totalPrice: totalPrice
                 }
                 setDataTable([...dataTable, data])
-                console.log('dataItem',data)
+                console.log('dataItem', data)
             }
 
             setAmount(0)
+            setShowAmountValid(true)
             // setAmountCurrent(0)
         } else {
             showValidationMessage(true)
@@ -288,23 +306,29 @@ const Export = (props) => {
             // setAmountCurrent(0)
         }
         script()
-        console.log(dataTable)
+
     }
 
-    const getIdWarehouseRole = () => {
-        var nameRole = ''
-        getRoleNames().split(' ').map((item) => {
-            if (!isNaN(item)) nameRole = item
-        })
-        return nameRole
+    // dataTable.length > 0 && console.log(dataTable.filter(item => item.item_id === 'CBL6')[0].amount)
+
+    const getAmountValid = () => {
+        var amount = 0
+        console.log(item_id, shelf_name)
+        if (dataTable.length > 0) {
+            const value = dataTable.filter(item => item.item_id === item_id && item.shelf_name === shelf_name)
+            value.length > 0 ? amount = value[0].amount : amount = 0
+        }
+        console.log(amount)
+        return parseInt(amount)
     }
+
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
-                'http://127.0.0.1:8000/api/admin/items/itemInWarehouse?token=' + getToken() :
-                getDataWarehouseID().length > 0 && 'http://127.0.0.1:8000/api/admin/items/searchItem/' + getDataWarehouseID()[0] + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/auth/get-user/' + getUserID() + '?token=' + getToken())
+                '/api/admin/items/itemInWarehouse' :
+                getDataWarehouseID().length > 0 && '/api/admin/items/searchItem/' + getDataWarehouseID()[0]),
+            getData('/api/admin/warehouse/show/' + getUserID()),
+            getData('/api/auth/get-user/' + getUserID())
         ])
             .then(res => {
                 setDataItem(res[0].data)
@@ -331,7 +355,7 @@ const Export = (props) => {
         name: item.itemname,
         value: item.id
     }))
-    console.log('data',dataOption)
+    console.log('data', dataOption)
 
     return (
         <div className="content-wrapper">
@@ -407,7 +431,7 @@ const Export = (props) => {
                                         fullWidth
                                         type="number"
                                         name="amount"
-                                        inputProps={{ min: 0, max: kd, inputMode: 'numeric', pattern: '[0-9]*' }}
+                                        inputProps={{ min: 0, max: kd - getAmountValid(), inputMode: 'numeric', pattern: '[0-9]*' }}
                                         size='small'
                                         label="Số lượng"
                                         value={amount}
@@ -432,7 +456,7 @@ const Export = (props) => {
                                         type={'number'}
                                         size='small'
                                         label="Số lượng khả dụng"
-                                        value={kd}
+                                        value={kd - getAmountValid()}
                                         variant="outlined"
                                     />
                                 </div>
@@ -484,7 +508,9 @@ const Export = (props) => {
                                 </button>
                                 <button className="btn btn-sm btn-primary" onClick={(e) => {
                                     onAddTable(e)
-                                    setKD(parseInt(kd) - parseInt(amount))
+                                    // setKD(parseInt(kd) - parseInt(amount))
+                                    setKD(parseInt(kd))
+                                    // setKD(parseInt(kd) - getAmountValid())
                                 }}>
                                     <i className="fas fa-edit"></i> Thêm vào DS
                                 </button>
@@ -537,7 +563,7 @@ const Export = (props) => {
                                                         <td className='text-center'><button className="btn btn-sm btn-danger"
                                                             onClick={(e) => {
                                                                 onRemoveRow(e, index)
-                                                                setKD(parseInt(kd) + parseInt(item.amount))
+                                                                setKD(parseInt(kd))
                                                             }}>
                                                             x
                                                         </button></td>

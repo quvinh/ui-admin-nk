@@ -14,7 +14,7 @@ const CouponImport = () => {
         document.body.appendChild(compile)
     }
     const handleReload = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showCodeImport?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showCodeImport')])
             .then(function (res) {
                 setCodeImport(res[0].data)
             })
@@ -24,7 +24,7 @@ const CouponImport = () => {
     }
 
     const handleDelete = (code) => {
-        Promise.all([delData('http://127.0.0.1:8000/api/admin/import/deleteCode/' + code + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/import/deleteCode/' + code)])
             .then(function (res) {
                 console.log("Deleted", code)
                 handleReload()
@@ -35,7 +35,7 @@ const CouponImport = () => {
     }
 
     useEffect(() => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/inventory/showCodeImport?token=' + getToken())])
+        Promise.all([getData('/api/admin/inventory/showCodeImport')])
             .then(function (res) {
                 setCodeImport(res[0].data)
             })
@@ -51,12 +51,12 @@ const CouponImport = () => {
                 <div className="container-fluid">
                     <div className="row mb-2">
                         <div className="col-sm-6">
-                            <h1>Phiếu Xuất</h1>
+                            <h1>Phiếu nhập</h1>
                         </div>
                         <div className="col-sm-6">
                             <ol className="breadcrumb float-sm-right">
                                 <li className="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                                <li className="breadcrumb-item active">Phiếu xuất</li>
+                                <li className="breadcrumb-item active">Phiếu nhập</li>
                             </ol>
                         </div>
                     </div>

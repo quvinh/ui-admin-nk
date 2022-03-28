@@ -83,7 +83,7 @@ const Transfer = () => {
             setIsFromWarehouseSelected(true)
             setFromWarehouse(e.target.value)
             getDataFromShelf(e.target.value)
-            Promise.all([getData('http://127.0.0.1:8000/api/admin/items/searchItem/' + e.target.value + '?token=' + getToken())])
+            Promise.all([getData('/api/admin/items/searchItem/' + e.target.value)])
                 .then(function (res) {
                     setDataItem(res[0].data)
                 })
@@ -102,7 +102,7 @@ const Transfer = () => {
         setIsAmountSelected(false)
     }
     const getDataFromShelf = (id) => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id)])
             .then(function (res) {
                 setDataFromShelf(res[0].data)
             })
@@ -118,7 +118,7 @@ const Transfer = () => {
             setNameFromShelf(newvalue.props.children)
             setFromShelf(e.target.value)
             Promise.all([
-                getData('http://127.0.0.1:8000/api/admin/warehouse/itemShelf/' + fromWarehouse + '/' + e.target.value + '?token=' + getToken())
+                getData('/api/admin/warehouse/itemShelf/' + fromWarehouse + '/' + e.target.value)
             ])
                 .then(function (res) {
                     console.log(res[0].data)
@@ -156,7 +156,7 @@ const Transfer = () => {
         setIsAmountSelected(false)
     }
     const getDataToShelf = (id) => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + id)])
             .then(function (res) {
                 setDataToShelf(res[0].data)
             })
@@ -200,7 +200,7 @@ const Transfer = () => {
                 setName(item.itemname)
                 setAmountCurrent(item.amount)
                 setIsFromWarehouseSelected(true)
-                Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id + '?token=' + getToken())])
+                Promise.all([getData('/api/admin/warehouse/kd/' + item.item_id + '/' + item.warehouse_id + '/' + item.shelf_id + '/' + item.batch_code + '/' + item.supplier_id)])
                     .then(function (res) {
                         setKD(res[0].data)
                     })
@@ -242,7 +242,15 @@ const Transfer = () => {
         setDataTable([...array])
     }
 
-
+    const getAmountValid = () => {
+        var amount = 0
+        if (dataTable.length > 0) {
+            const value = dataTable.filter(item => item.item_id === item_id && item.fromShelf === fromShelf && item.fromWarehouse === fromWarehouse)
+            value.length > 0 ? amount = value[0].amount : amount = 0
+        }
+        console.log(amount)
+        return parseInt(amount)
+    }
 
     const onAddTable = (e) => {//Button click, add data table
         console.log('e', dataTable)
@@ -330,7 +338,7 @@ const Transfer = () => {
         console.log('--', dataTable)
         if (dataTable) {
             dataTable.map((item, index) => {
-                Promise.all([postData('http://127.0.0.1:8000/api/admin/transfer/store?token=' + getToken(), item)])
+                Promise.all([postData('/api/admin/transfer/store', item)])
                     .then(function (res) {
                         console.log("SAVED")
                         setIsSave(true)
@@ -368,7 +376,7 @@ const Transfer = () => {
         document.body.appendChild(compile)
     }
 
-    const dataOption = dataItem.map((item, index) => ({
+    const dataOption = dataItem && dataItem.map((item, index) => ({
         name: item.itemname,
         value: item.id
     }))
@@ -376,11 +384,11 @@ const Transfer = () => {
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
-                'http://127.0.0.1:8000/api/admin/items/itemInWarehouse?token=' + getToken() :
-                'http://127.0.0.1:8000/api/admin/items/searchItem/' + getIdWarehouseRole() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/auth/user-profile?token=' + getToken())
+                '/api/admin/items/itemInWarehouse' :
+                '/api/admin/items/searchItem/' + getIdWarehouseRole()),
+            getData('/api/admin/warehouse/show/' + getUserID()),
+            getData('/api/admin/warehouse'),
+            getData('/api/auth/user-profile')
 
         ])
             .then(res => {
@@ -398,9 +406,9 @@ const Transfer = () => {
 
             })
             .catch(error => {
-                if (error.response.status === 403) {
-                    history.push('/404')
-                }
+                // if (error.response.status === 403) {
+                //     history.push('/404')
+                // }
             })
         alert()
     }, [])
@@ -471,7 +479,7 @@ const Transfer = () => {
                                                 size='small'
                                                 label="Số lượng"
                                                 type={'number'}
-                                                inputProps={{ min: 0, max: kd, type: 'number' }}
+                                                inputProps={{ min: 0, max: kd - getAmountValid(), type: 'number' }}
                                                 value={amount}
                                                 onChange={(e) => {
                                                     onChangeAmount(e)
@@ -493,7 +501,7 @@ const Transfer = () => {
                                                 type={'number'}
                                                 size='small'
                                                 label="SL khả dụng"
-                                                value={kd}
+                                                value={kd - getAmountValid()}
                                                 variant="outlined"
                                             />
                                         </div>
@@ -622,15 +630,15 @@ const Transfer = () => {
                                             {
                                                 (isAmountSelected) ? (
                                                     <>
-                                                        <button class="btn btn-sm btn-primary" onClick={(e) => {
+                                                        <button className="btn btn-sm btn-primary" onClick={(e) => {
                                                             onAddTable(e)
-                                                            setKD(parseInt(kd) - parseInt(amount))
-                                                        }}><i class="fas fa-edit"></i> THÊM VÀO PHIẾU</button>
+                                                            setKD(parseInt(kd))
+                                                        }}><i className="fas fa-edit"></i> THÊM VÀO PHIẾU</button>
                                                         {/* <ShowTransfer dataTable={dataTable} code={code} /> */}
                                                     </>
                                                 ) : (
-                                                    <button class="btn btn-sm btn-secondary" disabled>
-                                                        <i class="fas fa-edit"></i> THÊM VÀO PHIẾU
+                                                    <button className="btn btn-sm btn-secondary" disabled>
+                                                        <i className="fas fa-edit"></i> THÊM VÀO PHIẾU
                                                     </button>
                                                 )
                                             }
@@ -686,9 +694,9 @@ const Transfer = () => {
                                                         <td>{item.nameToWarehouse}</td>
                                                         <td>{item.nameToShelf}</td>
                                                         <td>
-                                                            <button class="btn btn-sm btn-danger" onClick={(e) => {
+                                                            <button className="btn btn-sm btn-danger" onClick={(e) => {
                                                                 onRemoveRow(e, index)
-                                                                setKD(parseInt(kd) + parseInt(item.amount))
+                                                                setKD(parseInt(kd))
                                                             }}>
                                                                 X
                                                             </button>

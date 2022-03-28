@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { delData, getData } from '../../components/utils/Api'
 import { getAllPermissions, getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 
-const Notification = () => {
+const SendNotification = () => {
     const [notification, setNotification] = useState([])
     const [countNotification, setCountNotification] = useState(0)
 
@@ -15,7 +15,7 @@ const Notification = () => {
     }
 
     const handleReload = () => {
-        Promise.all([getData('/api/admin/notification/' + getUserID()),
+        Promise.all([getData('/api/admin/notification/send/' + getUserID()),
         ]).then(function (res) {
             setNotification(res[0].data)
         }).catch(error => {
@@ -36,7 +36,7 @@ const Notification = () => {
     useEffect(() => {
 
         Promise.all([
-            getData('/api/admin/notification/' + getUserID())
+            getData('/api/admin/notification/send/' + getUserID())
         ]).then(function (res) {
             setNotification(res[0].data)
             setCountNotification(res[0].count)
@@ -46,7 +46,8 @@ const Notification = () => {
         })
 
     }, []);
-    console.log(notification)
+console.log(notification)
+
     return (
         <div className="content-wrapper">
             <section className="content-header">
@@ -68,11 +69,7 @@ const Notification = () => {
             <section className="content">
                 <div className="row">
                     <div className="col-md-3">
-                        {
-                            getAllPermissions().includes("Thêm thông báo") && (
-                                <Link to={"/notification-add"} className="btn btn-primary btn-block mb-3">Tạo thông báo</Link>
-                            )
-                        }
+                        <Link to={"/notification"} className="btn btn-primary btn-block mb-3">Các thông báo</Link>
                         <div className="card">
                             <div className="card-header">
                                 <h3 className="card-title">Mục</h3>
@@ -97,60 +94,25 @@ const Notification = () => {
                                     </li>
                                 </ul>
                             </div>
-                            {/* /.card-body */}
                         </div>
-                        {/* /.card */}
-                        <div className="card">
-                            <div className="card-header">
-                                <h3 className="card-title">Labels</h3>
-                                <div className="card-tools">
-                                    <button type="button" className="btn btn-tool" data-card-widget="collapse">
-                                        <i className="fas fa-minus" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="card-body p-0">
-                                <ul className="nav nav-pills flex-column">
-                                    <li className="nav-item">
-                                        <Link className="nav-link" to={"/notification-send"}>
-                                            <i className="far fa-circle text-primary" /> Đã gửi
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                            {/* /.card-body */}
-                        </div>
-                        {/* /.card */}
                     </div>
-                    {/* /.col */}
                     <div className="col-md-9">
                         <div className="card card-primary card-outline">
                             <div className="card-header">
                                 <h3 className="card-title">Bảng</h3>
                             </div>
-                            {/* /.card-header */}
                             <div className="card-body">
                                 <table id="item" className="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th style={{ width: 10 }}>STT</th>
-                                            <th>Người gửi</th>
+                                            <th>Người nhận</th>
                                             <th>Tiêu đề</th>
                                             <th>Thời gian</th>
                                             <th style={{ width: 10 }}>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* {
-                                            dataTable.map((item, index) => (
-                                                <tr>
-                                                    <td>{index + 1}</td>
-                                                    <td>{item.name}</td>
-                                                    <td>{item.note}</td>
-                                                    <td>Button</td>
-                                                </tr>
-                                            ))
-                                        } */}
                                         {notification && notification.map((item, index) => (
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
@@ -193,4 +155,4 @@ const Notification = () => {
     )
 }
 
-export default Notification
+export default SendNotification

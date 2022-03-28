@@ -22,6 +22,9 @@ const DetailExport = React.lazy(() => import('./views/coupon/DetailExport'))
 const PrintImport = React.lazy(() => import('./views/coupon/PrintImport'))
 const PrintExport = React.lazy(() => import('./views/coupon/PrintExport'))
 const PrintTransfer = React.lazy(() => import('./views/coupon/PrintTransfer'))
+const CouponInventory = React.lazy(() => import('./views/coupon/CouponInventory'))
+const DetailInventory = React.lazy(() => import('./views/coupon/DetailInventory'))
+const PrintInventory = React.lazy(() => import('./views/coupon/PrintInventory'))
 
 const Transfer = React.lazy(() => import('./views/transfer/Transfer'))
 
@@ -54,6 +57,7 @@ const Category = React.lazy(() => import('./views/category/Category'))
 const Notification = React.lazy(() => import('./views/notification/Notification'))
 const AddNotification = React.lazy(() => import('./views/notification/AddNotification'))
 const ReadNotification = React.lazy(() => import('./views/notification/ReadNotification'))
+const SendNotification = React.lazy(() => import('./views/notification/SendNotification'))
 
 // //Supplier
 const Supplier = React.lazy(() => import('./views/supplier/Supplier'))
@@ -62,6 +66,7 @@ const Supplier = React.lazy(() => import('./views/supplier/Supplier'))
 
 //Inventory
 const Inventory = React.lazy(() => import('./views/inventory/Inventory'))
+// const ListProduct = React.lazy(() => import('./views/listproduct/ListProduct'))
 
 // //Role
 const Role = React.lazy(() => import('./views/role/Role'))
@@ -110,16 +115,22 @@ const routes = [
   //   { path: '/detail_item-edit/:id', name: 'Chỉnh sửa vật tư', component: EditDetailItem },
 
   { path: '/notification', name: 'Thông báo', component: Notification },
-  { path: '/notification-add', name: 'Tạo thông báo', component: AddNotification },
-  { path: '/notification-read/:id', name: 'Tạo thông báo', component: ReadNotification },
+  { path: '/notification-add', name: 'Thông báo', component: AddNotification },
+  { path: '/notification-read/:id', name: 'Thông báo', component: ReadNotification },
+  { path: '/notification-send', name: 'Thông báo', component: SendNotification },
 
   { path: '/supplier', name: 'Nhà cung cấp', component: Supplier },
   //   { path: '/supplier-add', name: 'Tạo mới nhà cung cấp', component: AddSuppliers },
   //   { path: '/supplier-edit/:id', name: 'Chỉnh sửa nhà cung cấp', component: EditSuppliers },
 
-  { path: '/inventory', name: 'Kiểm kê', component: Inventory }
+  { path: '/inventory', name: 'Kiểm kê', component: Inventory },
+  { path: '/detail_inventory/:code', name: 'Chi tiết phiếu xuất', component: DetailInventory },
+  { path: '/coupon_inventory', name: 'Phiếu xuất', component: CouponInventory },
+  { path: '/print_inventory/:code', name: 'In phiếu nhập', component: PrintInventory },
 
   //   { path: '/role', name: 'Phân quyền', component: Role },
+
+  // { path: '/listproduct', name: 'In phiếu nhập', component: ListProduct },
 ]
 
 export default routes

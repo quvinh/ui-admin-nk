@@ -5,19 +5,19 @@ import { Link } from 'react-router-dom'
 import { delData, getData, putData } from '../../components/utils/Api'
 import { getAllPermissions, getToken } from '../../components/utils/Common'
 
-const PrintExport = (props) => {
-    const [detailExport, setDetailExport] = useState([])
+const PrintInventory = (props) => {
+    const [detailInventory, setDetailInventory] = useState([])
 
     useEffect(() => {
-        Promise.all([getData('/api/admin/inventory/showHistoryExport/' + props.match.params.code)])
+        Promise.all([getData('/api/admin/inventory/showHistoryInventory/' + props.match.params.code)])
             .then(function (res) {
                 console.log(res[0].data)
-                setDetailExport(res[0].data)
+                setDetailInventory(res[0].data)
             })
             .catch((error) => {
                 console.log(error)
             })
-        
+
     }, [])
 
     return (
@@ -31,8 +31,8 @@ const PrintExport = (props) => {
                                 <div className="row">
                                     <div className="col-12">
                                         <h4>
-                                            <i className="fas fa-globe" /> {detailExport.length > 0 && detailExport[0].tenKho}
-                                            <small className="float-right">Date: {detailExport.length > 0 && detailExport[0].created_at} </small>
+                                            <i className="fas fa-globe" /> {detailInventory.length > 0 && detailInventory[0].tenKho}
+                                            <small className="float-right">Date: {detailInventory.length > 0 && detailInventory[0].created_at} </small>
                                         </h4>
                                     </div>
                                     {/* /.col */}
@@ -63,7 +63,7 @@ const PrintExport = (props) => {
                                     {/* /.col */}
                                     <div className="col-sm-4 invoice-col">
                                         <b>Mã Phiếu: {props.match.params.code}</b><br />
-                                        <b>Người tạo: {detailExport.length > 0 && detailExport[0].fullname}</b>
+                                        <b>Người tạo: {detailInventory.length > 0 && detailInventory[0].fullname}</b>
                                         {/* <br />
                                                             
                                                             <b>Order ID:</b> 4F3S8J<br />
@@ -76,26 +76,26 @@ const PrintExport = (props) => {
                                 <table id="example1" className="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th style={{ width: 10 }}>STT</th>
+                                        <th style={{ width: 10 }}>STT</th>
                                             <th>Mã vật tư</th>
                                             <th>Tên vật tư</th>
-                                            <th>Mã kệ</th>
-                                            <th>Giá xuất</th>
-                                            <th>SL</th>
                                             <th>ĐVT</th>
+                                            <th>Giá/Kệ</th>
+                                            <th>SL</th>
+                                            <th>SL Chênh</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
-                                            detailExport.map((item, index) => (
+                                            detailInventory.map((item, index) => (
                                                 <tr>
                                                     <td>{index + 1}</td>
                                                     <td>{item.item_id}</td>
                                                     <td>{item.name}</td>
-                                                    <td>{item.tenKe}</td>
-                                                    <td>{item.price}</td>
-                                                    <td>{item.luongXuat}</td>
                                                     <td>{item.unit}</td>
+                                                    <td>{item.shelf_name}</td>
+                                                    <td>{item.amount}</td>
+                                                    <td>{item.difference}</td>
                                                 </tr>
                                             ))
                                         }
@@ -108,8 +108,9 @@ const PrintExport = (props) => {
                 </div>
             </section>
             <button className='btn btn-sm btn-primary' onClick={(e) => window.print()}>Print</button>
+            
         </div>
     )
 }
 
-export default PrintExport
+export default PrintInventory;

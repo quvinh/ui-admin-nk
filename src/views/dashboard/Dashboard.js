@@ -1,3 +1,5 @@
+/* eslint-disable no-lone-blocks */
+/* eslint-disable no-useless-concat */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react'
@@ -27,24 +29,24 @@ const Dashboard = () => {
   const year = new Date().getFullYear().toString()
   const [dataWarehouse, setDataWarehouse] = useState([])
   const [warehouse, setWarehouse] = useState('')
-  const [totalItem, setTotalItem] = useState('')
-  const [amountItem, setAmountItem] = useState('')
-  const [status, setStatus] = useState('')
+  // const [totalItem, setTotalItem] = useState('')
+  // const [amountItem, setAmountItem] = useState('')
+  // const [status, setStatus] = useState('')
 
   const arrImportAmount = []
-  importVT.map((item, index) => {
+  importVT && importVT.map((item, index) => {
     arrImportAmount.push(item.importAmount)
   })
   const arrImportMonth = []
-  importVT.map((item, index) => {
+  importVT && importVT.map((item, index) => {
     arrImportMonth.push(item.month)
   })
   const arrExportMonth = []
-  exportVT.map((item, index) => {
+  exportVT && exportVT.map((item, index) => {
     arrExportMonth.push(item.month)
   })
   const arrExportAmount = []
-  exportVT.map((item, index) => {
+  exportVT && exportVT.map((item, index) => {
     arrExportAmount.push(item.exportAmount)
   })
 
@@ -90,8 +92,8 @@ const Dashboard = () => {
 
   const onChangeWarehouse = (e) => {
     Promise.all([
-      getData('http://127.0.0.1:8000/api/admin/dashboard/importByWarehouse/' + e.target.value + '/' + year + '?token=' + getToken()),
-      getData('http://127.0.0.1:8000/api/admin/dashboard/exportByWarehouse/' + e.target.value + '/' + year + '?token=' + getToken()),
+      getData('/api/admin/dashboard/importByWarehouse/' + e.target.value + '/' + year),
+      getData('/api/admin/dashboard/exportByWarehouse/' + e.target.value + '/' + year),
     ]).then(function (res) {
       setImportVT(res[0].data)
       setExportVT(res[1].data)
@@ -102,10 +104,10 @@ const Dashboard = () => {
     {
       getRoleNames() === 'admin' ? (
         Promise.all([
-          getData('http://127.0.0.1:8000/api/admin/dashboard/tongTonKho?token=' + getToken()),
-          getData('http://127.0.0.1:8000/api/admin/dashboard/import/' + year + '?token=' + getToken()),
-          getData('http://127.0.0.1:8000/api/admin/dashboard/export/' + year + '?token=' + getToken()),
-          getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
+          getData('/api/admin/dashboard/tongTonKho'),
+          getData('/api/admin/dashboard/import/' + year),
+          getData('/api/admin/dashboard/export/' + year),
+          getData('/api/admin/warehouse/show/' + getUserID()),
         ])
           .then(function (res) {
             setTonKho(res[0].data)
@@ -119,10 +121,10 @@ const Dashboard = () => {
 
       ) : getDataWarehouseID().length > 0 && (
         Promise.all([
-          getData('http://127.0.0.1:8000/api/admin/dashboard/tonKho/' + getUserID() + '/' + '?token=' + getToken()),
-          getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
-          getData('http://127.0.0.1:8000/api/admin/dashboard/importByWarehouse/' + getDataWarehouseID()[0] + '/' + year + '?token=' + getToken()),
-          getData('http://127.0.0.1:8000/api/admin/dashboard/exportByWarehouse/' + getDataWarehouseID()[0] + '/' + year + '?token=' + getToken()),
+          getData('/api/admin/dashboard/tonKho/' + getUserID() + '/'),
+          getData('/api/admin/warehouse/show/' + getUserID()),
+          getData('/api/admin/dashboard/importByWarehouse/' + getDataWarehouseID()[0] + '/' + year),
+          getData('/api/admin/dashboard/exportByWarehouse/' + getDataWarehouseID()[0] + '/' + year),
         ])
           .then(function (res) {
             console.log('user', res[0].data, getUserID())
@@ -164,19 +166,17 @@ const Dashboard = () => {
                 <div className="card-body">
                   <div className='row'>
                     {
-                      tonKho.map((item, index) => (
+                      tonKho && tonKho.map((item, index) => (
                         <div className="col-md-3 small-box bg-white card-warning card-outline ml-1" >
                           <div className="inner">
                             <h5 className="info-box-text">Nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
-                            <p className="info-box-number">Giá trị kho : {item.total}</p>
+                            <p className="info-box-number">Giá trị kho : {parseInt(item.total).toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
                           </div>
                           <div className='icon'>
                             <i className="far fa-home"></i>
                           </div>
-                          <Link to={"/warehouse-show/" + item.warehouse_id} class="small-box-footer">Chi tiết kho<i class="fas fa-arrow-circle-right"></i></Link>
-                          {/* /.info-box-content */}
+                          <Link to={"/warehouse-show/" + item.warehouse_id} className="small-box-footer">Chi tiết kho<i className="fas fa-arrow-circle-right"></i></Link>
                         </div>
-
                       ))
                     }
                   </div>
@@ -184,7 +184,6 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          {/* /.col-md-6 */}
           <div className="row">
             <div className="col-lg-6">
               <div className="card">
@@ -205,7 +204,7 @@ const Dashboard = () => {
                               setWarehouse(e.target.value)
                             }}
                           >
-                            {dataWarehouse.map((item, index) => (
+                            {dataWarehouse && dataWarehouse.map((item, index) => (
                               <MenuItem key={index} value={item.id}>{item.name}</MenuItem>
                             ))}
                           </Select>
@@ -220,13 +219,13 @@ const Dashboard = () => {
               </div>
             </div>
             <div className='col-lg-6'>
-              <div className='card'>
+              {/* <div className='card'>
                 <div className='card-body'>
                   <table>
                     <th>a</th>
                   </table>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

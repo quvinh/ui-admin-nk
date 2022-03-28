@@ -42,28 +42,33 @@ const WarehouseShow = (props) => {
     }
 
     const handleReloadShelf = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + props.match.params.id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + props.match.params.id)])
             .then(function (res) {
                 setDataShelf(res[0].data)
+                script()
             })
     }
     const handleAddShelf = (e) => {
         const data = {
             name: nameShelf,
             position: position,
-            warehouse_id: props.match.params.id,}
+            warehouse_id: props.match.params.id,
+        }
         console.log(data)
-        Promise.all([postData('http://127.0.0.1:8000/api/admin/shelf/store/?token=' + getToken(), data)])
+        Promise.all([postData('/api/admin/shelf/store/', data)])
             .then(function (res) {
                 console.log('Added succesfully', res)
                 handleReloadShelf()
                 // setDataShelf([...dataShelf, data])
                 setIsSelected(false)
                 setNullShelf()
+                
             }).catch(error => {
                 console.log(error)
                 showValidationMessage(true)
             })
+
+
     }
 
     const handleUpdateShelf = (e) => {
@@ -72,7 +77,7 @@ const WarehouseShow = (props) => {
             position: position,
             status: status,
         }
-        Promise.all([putData('http://127.0.0.1:8000/api/admin/shelf/update/' + idShelf + '?token=' + getToken(), shelf)])
+        Promise.all([putData('/api/admin/shelf/update/' + idShelf, shelf)])
             .then(response => {
                 console.log(response)
                 console.log('Edited successfully ^^')
@@ -87,7 +92,7 @@ const WarehouseShow = (props) => {
 
     const handleDeleteShelf = (e, shelf_id) => {
         // if (count === 0) {
-        Promise.all([delData('http://127.0.0.1:8000/api/admin/shelf/delete/' + shelf_id + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/shelf/delete/' + shelf_id)])
             .then(function (res) {
                 handleReloadShelf()
             })
@@ -132,7 +137,7 @@ const WarehouseShow = (props) => {
     }
 
     const handleReloadItem = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/listItem/' + props.match.params.id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/listItem/' + props.match.params.id)])
             .then(response => {
                 setListItem(response[0].data)
             })
@@ -147,7 +152,7 @@ const WarehouseShow = (props) => {
             status: 0,
         }
         console.log(dataItem)
-        Promise.all([putData('http://127.0.0.1:8000/api/admin/detail_item/update/' + shelfIdItem + '?token=' + getToken(), dataItem)])
+        Promise.all([putData('/api/admin/detail_item/update/' + shelfIdItem, dataItem)])
             .then(response => {
                 console.log('Edited successfully ^^')
                 // handleClick(shelfId)
@@ -164,8 +169,8 @@ const WarehouseShow = (props) => {
         console.log(shelfid)
         console.log(warehouseid)
         if (id !== '') {
-            Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/amountItemKKD/' + id + '/' + shelfid + '/' + warehouseid + '?token=' + getToken(), { delay: false })])
-                // getData('http://127.0.0.1:8000/api/admin/warehouse/amountItemKKDTransfer' + id + '/' + shelfid + '/' + warehouseid +'?token=' + getToken(),
+            Promise.all([getData('/api/admin/warehouse/amountItemKKD/' + id + '/' + shelfid + '/' + warehouseid, { delay: false })])
+                // getData('/api/admin/warehouse/amountItemKKDTransfer' + id + '/' + shelfid + '/' + warehouseid +'',
                 .then(function (response) {
                     console.log(response[0].data)
                     setAmountNotValid(response[0].data)
@@ -180,7 +185,7 @@ const WarehouseShow = (props) => {
         console.log(id)
         console.log(shelfid)
         console.log(warehouseid)
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/detailItemId/' + id + '/' + shelfid + '/' + warehouseid + '?token=' + getToken(), { delay: false })])
+        Promise.all([getData('/api/admin/warehouse/detailItemId/' + id + '/' + shelfid + '/' + warehouseid, { delay: false })])
             .then(function (response) {
                 console.log(response[0].data)
                 setIdItem(response[0].data[0].id)
@@ -219,7 +224,7 @@ const WarehouseShow = (props) => {
     }
 
     const handleReload = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + props.match.params.id + '?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse/show/' + props.match.params.id)])
             .then(response => {
                 setName(response[0].data.name)
                 setLocation(response[0].data.location)
@@ -236,7 +241,7 @@ const WarehouseShow = (props) => {
         }
         console.log(warehouse)
         console.log(props)
-        Promise.all([putData('http://127.0.0.1:8000/api/admin/warehouse/update/' + props.match.params.id + '?token=' + getToken(), warehouse)])
+        Promise.all([putData('/api/admin/warehouse/update/' + props.match.params.id, warehouse)])
             .then(response => {
                 // console.log(data)
                 console.log('Edited successfully ^^')
@@ -254,10 +259,10 @@ const WarehouseShow = (props) => {
     useEffect(() => {
         // console.log(props)
         Promise.all([
-            getData('http://127.0.0.1:8000/api/admin/warehouse/show2/' + props.match.params.id + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + props.match.params.id + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse/listItem/' + props.match.params.id + '?token=' + getToken()),
-            getData('http://127.0.0.1:8000/api/admin/warehouse/managerShow/' + props.match.params.id + '?token=' + getToken())
+            getData('/api/admin/warehouse/show2/' + props.match.params.id),
+            getData('/api/admin/warehouse/shelfWarehouse/' + props.match.params.id),
+            getData('/api/admin/warehouse/listItem/' + props.match.params.id),
+            getData('/api/admin/warehouse/managerShow/' + props.match.params.id)
         ])
             .then(function (response) {
                 setName(response[0].data.name)
@@ -286,10 +291,10 @@ const WarehouseShow = (props) => {
         // {
         //     getRoleNames() === 'admin' ? (
         //         Promise.all([
-        //             getData('http://127.0.0.1:8000/api/admin/warehouse/show2/' + props.match.params.id + '?token=' + getToken()),
-        //             getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + props.match.params.id + '?token=' + getToken()),
-        //             getData('http://127.0.0.1:8000/api/admin/warehouse/listItem/' + props.match.params.id + '?token=' + getToken()),
-        //             getData('http://127.0.0.1:8000/api/admin/warehouse/managerShow/' + props.match.params.id + '?token=' + getToken()),
+        //             getData('/api/admin/warehouse/show2/' + props.match.params.id),
+        //             getData('/api/admin/warehouse/shelfWarehouse/' + props.match.params.id),
+        //             getData('/api/admin/warehouse/listItem/' + props.match.params.id),
+        //             getData('/api/admin/warehouse/managerShow/' + props.match.params.id),
         //         ])
         //             .then(function (response) {
         //                 setName(response[0].data.name)
@@ -306,10 +311,10 @@ const WarehouseShow = (props) => {
 
         //     ) : getDataWarehouseID().length > 0 && (
         //         Promise.all([
-        //             getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + props.match.params.id + '?token=' + getToken()),
-        //             getData('http://127.0.0.1:8000/api/admin/warehouse/shelfWarehouse/' + props.match.params.id + '?token=' + getToken()),
-        //             getData('http://127.0.0.1:8000/api/admin/warehouse/listItem/' + props.match.params.id + '?token=' + getToken()),
-        //             getData('http://127.0.0.1:8000/api/admin/warehouse/managerShow/' + props.match.params.id + '?token=' + getToken()),
+        //             getData('/api/admin/warehouse/show/' + props.match.params.id),
+        //             getData('/api/admin/warehouse/shelfWarehouse/' + props.match.params.id),
+        //             getData('/api/admin/warehouse/listItem/' + props.match.params.id),
+        //             getData('/api/admin/warehouse/managerShow/' + props.match.params.id),
         //         ])
         //             .then(function (res) {
         //                 // res.header('Access-Control-Allow-Origin: *')
@@ -365,7 +370,7 @@ const WarehouseShow = (props) => {
                                         <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
 
                                             <form className="form-horizontal">
-                                                <hr style={{ border: "1px solid red" }} />
+                                            <hr style={{ border: "1px solid gray" }} />
                                                 {/* <div className="row"> */}
                                                 <div className="row">
                                                     <div className="col">
@@ -431,7 +436,7 @@ const WarehouseShow = (props) => {
                                             </form>
                                             <hr />
                                             <br />
-                                            <hr style={{ border: "1px solid blue" }} />
+                                            <hr style={{ border: "1px solid gray" }} />
                                             <div className="row">
                                                 <div className="col">
                                                     <h6><strong>Danh sách kệ</strong></h6>
@@ -501,8 +506,8 @@ const WarehouseShow = (props) => {
                                                 <thead>
                                                     <tr>
                                                         <th className='text-center'>STT</th>
-                                                        <th className='text-center'>Mã nhân viên</th>
-                                                        <th className='text-center'>Tên nhân viên</th>
+                                                        {/* <th className='text-center'>Mã nhân viên</th> */}
+                                                        <th className='text-center'>Họ và tên</th>
                                                         <th className='text-center'>Email</th>
                                                         <th className='text-center'>Số điện thoại</th>
                                                     </tr>
@@ -512,8 +517,8 @@ const WarehouseShow = (props) => {
                                                         dataManager.map((item, index) => (
                                                             <tr key={index}>
                                                                 <td className='text-center'>{String(index + 1)}</td>
-                                                                <td className='text-center'>{item.userid}</td>
-                                                                <td className='text-center'>{item.fullname}</td>
+                                                                {/* <td className='text-center'>{item.user_id}</td> */}
+                                                                <td className='text-center'><span className="badge badge-primary">{item.fullname}</span></td>
                                                                 <td className='text-center'>{item.email}</td>
                                                                 <td className='text-center'>{item.phone}</td>
                                                             </tr>
@@ -550,7 +555,7 @@ const WarehouseShow = (props) => {
                                                             <tr key={index}>
                                                                 <td className='text-center'>{String(index + 1)}</td>
                                                                 <td className='text-center'>{item.id}</td>
-                                                                <td className='text-center'>{item.itemname}</td>
+                                                                <td className='text-center'><b>{item.itemname}</b></td>
                                                                 <td className='text-center'>{item.categoryname}</td>
                                                                 <td className='text-center'>{item.shelfname}</td>
                                                                 <td className='text-center'>{item.amount}</td>

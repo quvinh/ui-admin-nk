@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { getAllPermissions, getToken } from '../../components/utils/Common'
 import { Link } from 'react-router-dom'
 
-const CouponExport = () => {
+const CouponInventory = () => {
 
-    const [codeExport, setCodeExport] = useState([])
+    const [codeInventory, setCodeInventory] = useState([])
 
     const script = () => {
         const compile = document.createElement("script")
@@ -14,9 +14,9 @@ const CouponExport = () => {
         document.body.appendChild(compile)
     }
     const handleReload = () => {
-        Promise.all([getData('/api/admin/inventory/showCodeExport')])
+        Promise.all([getData('/api/admin/inventory/showCodeInventory')])
             .then(function (res) {
-                setCodeExport(res[0].data)
+                setCodeInventory(res[0].data)
             })
             .catch(err => {
                 console.log(err)
@@ -24,7 +24,7 @@ const CouponExport = () => {
     }
 
     const handleDelete = (code) => {
-        Promise.all([delData('/api/admin/export/deleteCode/' + code)])
+        Promise.all([delData('/api/admin/inventory/deleteCode/' + code)])
             .then(function (res) {
                 console.log("Deleted", code)
                 handleReload()
@@ -35,9 +35,10 @@ const CouponExport = () => {
     }
 
     useEffect(() => {
-        Promise.all([getData('/api/admin/inventory/showCodeExport')])
+        Promise.all([getData('/api/admin/inventory/showCodeInventory')])
             .then(function (res) {
-                setCodeExport(res[0].data)
+                setCodeInventory(res[0].data)
+                console.log(res[0].data)
             })
             .catch((error) => {
                 console.log(error)
@@ -45,7 +46,7 @@ const CouponExport = () => {
 
     }, [])
 
-    console.log('table', codeExport)
+    console.log('table', codeInventory)
 
     return (
         <div className="content-wrapper">
@@ -53,12 +54,12 @@ const CouponExport = () => {
                 <div className="container-fluid">
                     <div className="row mb-2">
                         <div className="col-sm-6">
-                            <h1>Phiếu Xuất</h1>
+                            <h1>Phiếu kiểm kê</h1>
                         </div>
                         <div className="col-sm-6">
                             <ol className="breadcrumb float-sm-right">
                                 <li className="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                                <li className="breadcrumb-item active">Phiếu xuất</li>
+                                <li className="breadcrumb-item active">Phiếu kiểm kê</li>
                             </ol>
                         </div>
                     </div>
@@ -87,17 +88,17 @@ const CouponExport = () => {
                                         </thead>
                                         <tbody>
                                             {
-                                                codeExport.map((item, index) => (
+                                                codeInventory.map((item, index) => (
                                                     <tr>
                                                         <td>{index + 1}</td>
                                                         <td>{item.code}</td>
-                                                        <td>{item.tenKho}</td>
+                                                        <td>{item.warehouse_name}</td>
                                                         <td>{item.fullname}</td>
                                                         <td>{item.created_at}</td>
                                                         <td>{
-                                                            <span className={item.status === '2' ? "badge badge-success" :
-                                                                (item.status === '1' ? 'badge badge-primary' : 'badge badge-secondary')}>
-                                                                {item.status === '2' ? 'Đã duyệt' : (item.status === '1' ? 'Giao hàng' : 'Chờ duyệt')}
+                                                            <span className={item.status === 1 ? "badge badge-success" :
+                                                                 'badge badge-secondary'}>
+                                                                {item.status === 1 ? 'Đã xử lý' : 'Chờ xử lý'}
                                                             </span>
                                                         }
                                                         </td>
@@ -107,9 +108,9 @@ const CouponExport = () => {
                                                                     <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                                 </button>
                                                                 <div className="dropdown-menu" size='small'>
-                                                                    <Link className="dropdown-item" to={'/detail_export/' + item.code} size='small'>Chi tiết</Link>
+                                                                    <Link className="dropdown-item" to={'/detail_inventory/' + item.code} size='small'>Chi tiết</Link>
                                                                     {
-                                                                        getAllPermissions().includes("Xoá phiếu xuất") && (
+                                                                        getAllPermissions().includes("Xoá phiếu kiểm kê") && (
                                                                             <a className="dropdown-item" onClick={(e) => { handleDelete(item.code) }} size='small'>Xóa</a>
                                                                         )
                                                                     }
@@ -127,9 +128,8 @@ const CouponExport = () => {
                     </div>
                 </div>
             </section>
-
         </div>
     )
 }
 
-export default CouponExport
+export default CouponInventory

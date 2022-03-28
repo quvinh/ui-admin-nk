@@ -26,7 +26,7 @@ const AddAccount = () => {
                 phone: phone,
             }
             console.log(data)
-            Promise.all([postData('http://127.0.0.1:8000/api/auth/register', data)])
+            Promise.all([postData('/api/auth/register', data)])
                 .then(function (res) {
                     console.log("Successfully")
                     // history.push("/login")

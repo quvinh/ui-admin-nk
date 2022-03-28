@@ -34,7 +34,7 @@ const StatisticImport = () => {
             startDate: startDate.getDate() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getFullYear(),
             endDate: endDate.getDate() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getFullYear()
         }
-        Promise.all([postData('http://127.0.0.1:8000/api/admin/statistic/importByDay?token=' + getToken(), data)])
+        Promise.all([postData('/api/admin/statistic/importByDay', data)])
             .then(function (res) {
                 setDataTable(res[0].data.data)
             })
@@ -42,8 +42,8 @@ const StatisticImport = () => {
 
     useEffect(() => {
         Promise.all([
-            postData('http://127.0.0.1:8000/api/admin/statistic/importByYear?token=' + getToken(), data),
-            getData('http://127.0.0.1:8000/api/admin/warehouse/show/' + getUserID() + '?token=' + getToken()),
+            postData('/api/admin/statistic/importByYear', data),
+            getData('/api/admin/warehouse/show/' + getUserID()),
         ]).then(function (res) {
             console.log('ware', res[0].data, 'data', data)
             setDataTable(res[0].data.data)

@@ -82,7 +82,7 @@ const Warehouse = () => {
             status: status,
         }
         console.log(data);
-        Promise.all([postData('http://127.0.0.1:8000/api/admin/warehouse/store?token=' + getToken(), data)])
+        Promise.all([postData('/api/admin/warehouse/store', data)])
             .then(res => {
                 console.log('Added successfully', res)
                 handleReload()
@@ -106,7 +106,7 @@ const Warehouse = () => {
             note: note
         }
         console.log(warehouse)
-        Promise.all([putData('http://127.0.0.1:8000/api/admin/warehouse/update/' + id + '?token=' + getToken(), warehouse)])
+        Promise.all([putData('/api/admin/warehouse/update/' + id, warehouse)])
             .then(response => {
                 // console.log(data)
                 console.log('Edited successfully ^^')
@@ -127,7 +127,7 @@ const Warehouse = () => {
         }
         console.log(id)
         console.log(warehouse)
-        Promise.all([putData('http://127.0.0.1:8000/api/admin/warehouse/statusWarehouse/' + id + '?token=' + getToken(), warehouse)])
+        Promise.all([putData('/api/admin/warehouse/statusWarehouse/' + id, warehouse)])
             .then(response => {
                 // console.log(data)
                 console.log('Edited successfully ^^')
@@ -148,7 +148,7 @@ const Warehouse = () => {
     const history = useHistory()
 
     const handleReload = () => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken())])
+        Promise.all([getData('/api/admin/warehouse')])
             .then(function (res) {
                 setDataWarehouse(res[0].data)
             })
@@ -161,7 +161,7 @@ const Warehouse = () => {
     // };
 
     const handleCount = (id) => {
-        Promise.all([getData('http://127.0.0.1:8000/api/admin/warehouse/amountShelf/' + id + '?token=' + getToken()),])
+        Promise.all([getData('/api/admin/warehouse/amountShelf/' + id),])
             .then(function (res) {
                 setCount(res[0].data)
             })
@@ -169,7 +169,7 @@ const Warehouse = () => {
     const handleDelete = (e, id) => {
         // console.log(id)
         // if (count === 0) {
-        Promise.all([delData('http://127.0.0.1:8000/api/admin/warehouse/delete/' + id + '?token=' + getToken())])
+        Promise.all([delData('/api/admin/warehouse/delete/' + id)])
             .then(function (response) {
                 handleReload()
                 console.log(response)
@@ -193,13 +193,13 @@ const Warehouse = () => {
     useEffect(() => {
         Promise.all([
             getData(getRoleNames() === 'admin' ? (
-                'http://127.0.0.1:8000/api/admin/warehouse?token=' + getToken()
+                '/api/admin/warehouse'
             ) : getDataWarehouseID().length > 0 && (
-                'http://127.0.0.1:8000/api/admin/warehouse/'+ getUserID() +'?token=' + getToken()
+                '/api/admin/warehouse/'+ getUserID()
             )),
 
-            // getData('http://127.0.0.1:8000/api/admin/warehouse/warehouseShow?token=' + getToken()),
-            // getData('http://127.0.0.1:8000/api/admin/warehouse/countWarehouse')
+            // getData('/api/admin/warehouse/warehouseShow),
+            // getData('/api/admin/warehouse/countWarehouse')
         ])
             .then(function (res) {
                 console.log(res)
