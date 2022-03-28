@@ -55,7 +55,7 @@ const Login = () => {
                 <p className="login-card-description" style={{textAlign:"center"}}>Đăng nhập</p>
                 <form id="quickForm">
                   <div className="form-group" >
-                    <label htmlFor="email" className="sr-only">Email</label>
+                    <label htmlFor="username" className="sr-only">Username</label>
                     <input type="text" name="username" value={username} className="form-control" placeholder="Tên đăng nhập" onChange={(e) => setUsername(e.target.value)} />
                     
                   </div>
