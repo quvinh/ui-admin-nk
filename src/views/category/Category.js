@@ -49,7 +49,7 @@ const Category = () => {
                 console.log(err.response.status)
             })
     }
-    const handleUpdate = (id) => {
+    const handleUpdate = (e) => {
         Promise.all([putData('http://127.0.0.1:8000/api/admin/category/update/' + id + '?token=' + getToken(), data)])
             .then(function (res) {
                 handleReload()
