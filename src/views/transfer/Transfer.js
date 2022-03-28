@@ -11,7 +11,7 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { styled } from '@mui/material/styles';
 import '../export/select-search.css'
-import SelectSearch, {fuzzySearch} from 'react-select-search'
+import SelectSearch, { fuzzySearch } from 'react-select-search'
 
 const Transfer = () => {
     const history = useHistory()
@@ -245,8 +245,11 @@ const Transfer = () => {
     const getAmountValid = () => {
         var amount = 0
         if (dataTable.length > 0) {
-            const value = dataTable.filter(item => item.item_id === item_id && item.fromShelf === fromShelf && item.toWarehouse === toWarehouse)
-            value.length > 0 ? amount = value[0].amount : amount = 0
+            const value = dataTable.filter(item => item.item_id === item_id && item.fromShelf === fromShelf && item.fromWarehouse === fromWarehouse)
+            console.log(value)
+            if (value.length > 0) { 
+                value.map(i => {amount += parseInt(i.amount)}) 
+            } else amount = 0
         }
         console.log(amount)
         return parseInt(amount)

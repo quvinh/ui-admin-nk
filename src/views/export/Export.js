@@ -214,6 +214,7 @@ const Export = (props) => {
         setNameSelect('')
         setAmount(0)
         setAmountCurrent(0)
+        setKD(0)
     }
 
     const onRemoveRow = (e, index) => {
