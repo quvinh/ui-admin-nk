@@ -245,7 +245,7 @@ const Transfer = () => {
     const getAmountValid = () => {
         var amount = 0
         if (dataTable.length > 0) {
-            const value = dataTable.filter(item => item.item_id === item_id && item.fromShelf === fromShelf && item.fromWarehouse === fromWarehouse)
+            const value = dataTable.filter(item => item.item_id === item_id && item.fromShelf === fromShelf && item.toWarehouse === toWarehouse)
             value.length > 0 ? amount = value[0].amount : amount = 0
         }
         console.log(amount)
