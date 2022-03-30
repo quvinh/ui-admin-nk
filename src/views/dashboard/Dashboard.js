@@ -168,7 +168,7 @@ const Dashboard = () => {
                     {
                       tonKho && tonKho.map((item, index) => (
                         <div className="col-lg-3 col-6">
-                          <div className="small-box bg-info">
+                          <div className="small-box bg-light">
                             <div className="inner">
                               <h5 className="info-box-text">Nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
                               <p className="info-box-number">Giá trị kho : {parseInt(item.total).toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
