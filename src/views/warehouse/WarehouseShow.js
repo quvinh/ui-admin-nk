@@ -14,6 +14,7 @@ const WarehouseShow = (props) => {
         compile.async = true
         document.body.appendChild(compile)
     }
+
     const [validator, showValidationMessage] = Validator()
     const [value, setValue] = React.useState(0);
     const [isSelected, setIsSelected] = useState(false);
@@ -42,10 +43,11 @@ const WarehouseShow = (props) => {
     }
 
     const handleReloadShelf = () => {
+        // history.push('/warehouse-show/' + props.match.params.id)
         Promise.all([getData('/api/admin/warehouse/shelfWarehouse/' + props.match.params.id)])
             .then(function (res) {
                 setDataShelf(res[0].data)
-                script()
+                // script()
             })
     }
     const handleAddShelf = (e) => {
@@ -62,7 +64,7 @@ const WarehouseShow = (props) => {
                 // setDataShelf([...dataShelf, data])
                 setIsSelected(false)
                 setNullShelf()
-                
+                // history.push('/404')
             }).catch(error => {
                 console.log(error)
                 showValidationMessage(true)
@@ -273,64 +275,8 @@ const WarehouseShow = (props) => {
                 setListItem(response[2].data)
                 console.log(response[3].data)
                 setDataManager(response[3].data)
-                script()
-
-
-                // console.log(response[0].data)
-                // setName(response[0].data[0].name)
-                // setLocation(response[0].data[0].location)
-                // setNote(response[0].data[0].note)
-                // setDataShelf(response[1].data)
-                // console.log('-------')
-                // setListItem(response[2].data)
-                // console.log(response[0].data)
-                // setDataManager(response[3].data)
                 // script()
-                // console.log(response[1].data)
             })
-        // {
-        //     getRoleNames() === 'admin' ? (
-        //         Promise.all([
-        //             getData('/api/admin/warehouse/show2/' + props.match.params.id),
-        //             getData('/api/admin/warehouse/shelfWarehouse/' + props.match.params.id),
-        //             getData('/api/admin/warehouse/listItem/' + props.match.params.id),
-        //             getData('/api/admin/warehouse/managerShow/' + props.match.params.id),
-        //         ])
-        //             .then(function (response) {
-        //                 setName(response[0].data.name)
-        //                 setLocation(response[0].data.location)
-        //                 setNote(response[0].data.note)
-        //                 setDataShelf(response[1].data)
-        //                 setListItem(response[2].data)
-        //                 setDataManager(response[3].data)
-        //                 script()
-        //             })
-        //             .catch((error) => {
-        //                 console.log(error)
-        //             })
-
-        //     ) : getDataWarehouseID().length > 0 && (
-        //         Promise.all([
-        //             getData('/api/admin/warehouse/show/' + props.match.params.id),
-        //             getData('/api/admin/warehouse/shelfWarehouse/' + props.match.params.id),
-        //             getData('/api/admin/warehouse/listItem/' + props.match.params.id),
-        //             getData('/api/admin/warehouse/managerShow/' + props.match.params.id),
-        //         ])
-        //             .then(function (res) {
-        //                 // res.header('Access-Control-Allow-Origin: *')
-        //                 setName(response[0].data[0].name)
-        //                 setLocation(response[0].data[0].location)
-        //                 setNote(response[0].data[0].note)
-        //                 setDataShelf(response[1].data)
-        //                 setListItem(response[2].data)
-        //                 setDataManager(response[3].data)
-        //                 script()
-        //             })
-        //             .catch((error) => {
-        //                 console.log(error)
-        //             })
-        //     )
-        // }
     }, []);
     return (
         < div className="content-wrapper" >
@@ -370,7 +316,7 @@ const WarehouseShow = (props) => {
                                         <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
 
                                             <form className="form-horizontal">
-                                            <hr style={{ border: "1px solid gray" }} />
+                                                <hr style={{ border: "1px solid gray" }} />
                                                 {/* <div className="row"> */}
                                                 <div className="row">
                                                     <div className="col">
@@ -439,7 +385,7 @@ const WarehouseShow = (props) => {
                                             <hr style={{ border: "1px solid gray" }} />
                                             <div className="row">
                                                 <div className="col">
-                                                    <h6><strong>Danh sách kệ</strong></h6>
+                                                    <h6><strong>Danh sách giá</strong></h6>
                                                 </div>
                                                 <div className="col">
                                                     <div style={{ textAlign: "end" }}>
@@ -450,7 +396,7 @@ const WarehouseShow = (props) => {
                                                 </div>
                                             </div>
                                             <br />
-                                            <table id="shelf" className="table table-hover">
+                                            <table id="shelf" className="table table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th>STT</th>
@@ -500,7 +446,7 @@ const WarehouseShow = (props) => {
                                             </table>
 
                                             <hr style={{ border: "1px solid gray" }} />
-                                            <h6>Danh sách nhân viên phụ trách</h6>
+                                            <h3>Danh sách người phụ trách</h3>
                                             <hr />
                                             <table id="manager" className="table table-hover">
                                                 <thead>
@@ -666,7 +612,7 @@ const WarehouseShow = (props) => {
                                                     }
                                                 })}
                                             </div>
-                                            {
+                                            {/* {
                                                 (isSelected) ? (
                                                     <>
                                                         <div className="form-group row">
@@ -677,7 +623,7 @@ const WarehouseShow = (props) => {
                                                         </div>
                                                     </>
                                                 ) : (<></>)
-                                            }
+                                            } */}
                                         </div>
                                     </form>
                                 </div>

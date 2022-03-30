@@ -82,13 +82,13 @@ const DetailTransfer = (props) => {
                 <div className="container-fluid">
                     <div className="row mb-2">
                         <div className="col-sm-6">
-                            <h1>Phiếu Xuất</h1>
+                            <h1>Phiếu luân chuyển</h1>
                         </div>
                         <div className="col-sm-6">
                             <ol className="breadcrumb float-sm-right">
                                 <li className="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                                <li className="breadcrumb-item"><Link to='/coupon_transfer/'>Phiếu xuất</Link></li>
-                                <li className="breadcrumb-item active">Chi tiết phiếu xuất</li>
+                                <li className="breadcrumb-item"><Link to='/coupon_transfer/'>Phiếu luân chuyển</Link></li>
+                                <li className="breadcrumb-item active">Chi tiết phiếu luân chuyển</li>
                             </ol>
                         </div>
                     </div>
@@ -101,17 +101,25 @@ const DetailTransfer = (props) => {
                             <div className="card">
                                 <div className="card-header">
                                     <h3 className="card-title"></h3>
-                                    <Link className='btn btn-sm btn-primary' to={'/print_transfer/' + code}>Xem phiếu</Link>
-                                    {
-                                        getAllPermissions().includes("Duyệt phiếu chuyển") && (
-                                            <div style={{ textAlign: "end" }} >
-                                                {detailTransfer.length > 0 && (detailTransfer[0].status === '0' ? (<button className="btn btn-sm btn-primary toastrDefaultSuccess" onClick={(e) => handleDStatus()}>Duyệt</button>)
-                                                    : (detailTransfer[0].status === '1' ? (<button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={(e) => handleUpdateStatus()}>Duyệt</button>)
-                                                        : <></>
-                                                    ))}
+                                    <div className="row">
+                                        <div className="col">
+                                            <Link className='btn btn-sm btn-primary' to={'/print_transfer/' + code}>Xem phiếu</Link>
+                                        </div>
+                                        <div className="col">
+                                            <div style={{ textAlign: "end" }}>
+                                                {
+                                                    getAllPermissions().includes("Duyệt phiếu chuyển") && (
+                                                        <div style={{ textAlign: "end" }} >
+                                                            {detailTransfer.length > 0 && (detailTransfer[0].status === '0' ? (<button className="btn btn-sm btn-primary toastrDefaultSuccess" onClick={(e) => handleDStatus()}>Xác nhận</button>)
+                                                                : (detailTransfer[0].status === '1' ? (<button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={(e) => handleUpdateStatus()}>Hoàn thành</button>)
+                                                                    : <></>
+                                                                ))}
+                                                        </div>
+                                                    )
+                                                }
                                             </div>
-                                        )
-                                    }
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="card-body">
                                     <table id="example1" className="table table-bordered table-striped">
@@ -147,7 +155,7 @@ const DetailTransfer = (props) => {
                                                         <td>{
                                                             <span className={item.status === '2' ? "badge badge-success" :
                                                                 (item.status === '1' ? 'badge badge-primary' : 'badge badge-secondary')}>
-                                                                {item.status === '2' ? 'Đã duyệt' : (item.status === '1' ? 'Giao hàng' : 'Chờ duyệt')}
+                                                                {item.status === '2' ? 'Hoàn thành' : (item.status === '1' ? 'Đang luân chuyển' : 'Chờ duyệt')}
                                                             </span>
                                                         }
                                                         </td>

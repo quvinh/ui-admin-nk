@@ -358,9 +358,9 @@ const Import = () => {
             </section>
             <section className="content">
                 <div className="container-fluid">
-                    <div className="card card-default">
+                    <div className="card card-info card-outline">
                         <div className="card-header">
-                            <h4 className="card-title">Form</h4>
+                            <h4 className="card-title">Điền thông tin vật tư cần nhập</h4>
                             <div className="card-tools">
                                 <button type="button" className="btn btn-tool" data-card-widget="collapse">
                                     <i className="fas fa-minus" />
@@ -401,7 +401,7 @@ const Import = () => {
                                             </LocalizationProvider>
                                         </div>
                                         <div className="col-md-4">
-                                            <button type="button" class="btn btn-block btn-secondary" onClick={(e) => setNull()}>Làm mới</button>
+                                            <button type="button" className="btn btn-block btn-secondary" onClick={(e) => setNull()}>Làm mới</button>
                                         </div>
                                     </div>
                                 </div>
@@ -739,12 +739,12 @@ const Import = () => {
                             </div>
                         </div>
                         <div className="card-footer" style={{ textAlign: "end" }}>
-                            <button class="btn btn-sm btn-primary" style={{ width: 200 }} onClick={(e) => onAddTable(e)}>
-                                <i class="fas fa-edit"></i> Thêm vào DS
+                            <button className="btn btn-sm btn-primary" style={{ width: 200 }} onClick={(e) => onAddTable(e)}>
+                                <i className="fas fa-edit"></i> Thêm vào DS
                             </button>
                         </div>
                     </div>
-                    <div className="card">
+                    <div className="card card-info card-outline">
                         <div className="card-header">
                             <div className="row">
                                 <div className="col" style={{ textAlign: "start" }}>

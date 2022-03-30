@@ -121,7 +121,7 @@ const Dashboard = () => {
 
       ) : getDataWarehouseID().length > 0 && (
         Promise.all([
-          getData('/api/admin/dashboard/tonKho/' + getUserID() + '/'),
+          getData('/api/admin/dashboard/tonKho/' + getUserID()),
           getData('/api/admin/warehouse/show/' + getUserID()),
           getData('/api/admin/dashboard/importByWarehouse/' + getDataWarehouseID()[0] + '/' + year),
           getData('/api/admin/dashboard/exportByWarehouse/' + getDataWarehouseID()[0] + '/' + year),
@@ -167,15 +167,17 @@ const Dashboard = () => {
                   <div className='row'>
                     {
                       tonKho && tonKho.map((item, index) => (
-                        <div className="col-md-3 small-box bg-white card-warning card-outline ml-1" >
-                          <div className="inner">
-                            <h5 className="info-box-text">Nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
-                            <p className="info-box-number">Giá trị kho : {parseInt(item.total).toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
+                        <div className="col-lg-3 col-6">
+                          <div className="small-box bg-info">
+                            <div className="inner">
+                              <h5 className="info-box-text">Nhà kho : {item.name}<span className="float-right badge bg-success">Active</span></h5>
+                              <p className="info-box-number">Giá trị kho : {parseInt(item.total).toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
+                            </div>
+                            <div className='icon'>
+                              <i className="far fa-home"></i>
+                            </div>
+                            <Link to={"/warehouse-show/" + item.warehouse_id} className="small-box-footer">Chi tiết kho <i className="fas fa-arrow-circle-right"></i></Link>
                           </div>
-                          <div className='icon'>
-                            <i className="far fa-home"></i>
-                          </div>
-                          <Link to={"/warehouse-show/" + item.warehouse_id} className="small-box-footer">Chi tiết kho<i className="fas fa-arrow-circle-right"></i></Link>
                         </div>
                       ))
                     }

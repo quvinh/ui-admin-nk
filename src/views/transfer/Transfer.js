@@ -247,8 +247,8 @@ const Transfer = () => {
         if (dataTable.length > 0) {
             const value = dataTable.filter(item => item.item_id === item_id && item.fromShelf === fromShelf && item.fromWarehouse === fromWarehouse)
             console.log(value)
-            if (value.length > 0) { 
-                value.map(i => {amount += parseInt(i.amount)}) 
+            if (value.length > 0) {
+                value.map(i => { amount += parseInt(i.amount) })
             } else amount = 0
         }
         console.log(amount)
@@ -444,12 +444,10 @@ const Transfer = () => {
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-12">
-                            <div className="card">
+                            <div className="card card-info card-outline">
                                 <div className="card-header">
-                                    <h3 className="card-title">Luân chuyển kho</h3>
+                                    <h3 className="card-title">Điền thông tin vật tư cần luân chuyển</h3>
                                 </div>
-                            </div>
-                            <div className="card">
                                 <div className="card-body">
                                     <div className='row'>
                                         <div className="col-md-6">
@@ -649,7 +647,7 @@ const Transfer = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='card'>
+                            <div className='card card-info card-outline'>
                                 <div className='card-body'>
                                     <div className="row">
                                         <div className="col" style={{ textAlign: "end" }}>

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { getData, putData } from './utils/Api'
-import { getDataWarehouseID, getRoleNames, getToken, getUserID, removeUserSession } from './utils/Common'
+import { getAllPermissions, getDataWarehouseID, getRoleNames, getToken, getUserID, removeUserSession } from './utils/Common'
 
 const AppHeader = (props) => {
     console.log(props)
@@ -84,9 +84,27 @@ const AppHeader = (props) => {
                     <li className="nav-item d-none d-sm-inline-block">
                         <a href="#" className="nav-link">Trang chủ</a>
                     </li>
-                    <li className="nav-item d-none d-sm-inline-block">
-                        <a href="#" className="nav-link">Liên hệ</a>
-                    </li>
+                    {
+                        getAllPermissions().includes("Thêm phiếu nhập") && (
+                            <li className="nav-item d-none d-sm-inline-block">
+                                <a href="#/import" className="nav-link">Nhập kho</a>
+                            </li>
+                        )
+                    }
+                    {
+                        getAllPermissions().includes("Thêm phiếu xuất") && (
+                            <li className="nav-item d-none d-sm-inline-block">
+                                <a href="#/export" className="nav-link">Xuất kho</a>
+                            </li>
+                        )
+                    }
+                    {
+                        getAllPermissions().includes("Thêm phiếu chuyển") && (
+                            <li className="nav-item d-none d-sm-inline-block">
+                                <a href="#/transfer" className="nav-link">Luân chuyển kho</a>
+                            </li>
+                        )
+                    }
                 </ul>
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
@@ -121,7 +139,7 @@ const AppHeader = (props) => {
                                 countNotification.data && countNotification.data.map((item, index) => (
                                     <Link to={"/notification-read/" + item.id} key={index}
                                         className="dropdown-item" onClick={() => handleClickNotify(item.id)}>
-                                        <i className="fas fa-bell" /> {item.fullname} đã gửi thông báo cho bạn.  {item.status === 0 && <i style={{color: "blue"}} className="fas fa-circle" />}
+                                        <i className="fas fa-bell" /> {item.fullname} đã gửi thông báo cho bạn.  {item.status === 0 && <i style={{ color: "blue" }} className="fas fa-circle" />}
                                         <p><b>{item.title}</b> {String(item.content).substring(0, 8) + "..."}<span className="float-right text-muted text-sm">{handleShowTime(new Date(), item.created_at)}</span></p>
                                     </Link>
                                 ))

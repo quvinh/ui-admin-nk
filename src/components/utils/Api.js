@@ -3,7 +3,7 @@ import { getToken } from "./Common"
 
 const path = 'http://127.0.0.1:8000'
 // const path = 'https://nkgarage.herokuapp.com'
-const token =  '?token=' + getToken()
+const token = '?token=' + getToken()
 
 const api = axios.create({
   // baseURL: '/',

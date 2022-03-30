@@ -104,18 +104,26 @@ const DetailImport = (props) => {
                             <div className="card">
                                 <div className="card-header">
                                     <h3 className="card-title"></h3>
-                                    <Link className='btn btn-sm btn-primary' to={'/print_import/' + code}>Xem Phiếu</Link>
-                                    {
-                                        getAllPermissions().includes("Duyệt phiếu nhập") && (
-                                            <div style={{ textAlign: "end" }} >
-                                                {detailImport.length > 0 && (detailImport[0].status === '0' ? (<button className="btn btn-sm btn-primary toastrDefaultSuccess" onClick={(e) => handleDStatus()}>Duyệt</button>)
-                                                    : (detailImport[0].status === '1' ? (<button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={(e) => handleUpdateStatus()}>Duyệt</button>)
-                                                        : <></>
-                                                    ))}
-                                            </div>
-                                        )
+                                    <div className="row">
+                                        <div className="col">
+                                            <Link className='btn btn-sm btn-primary' to={'/print_import/' + code}>Xem Phiếu</Link>
+                                        </div>
+                                        <div className="col">
+                                            <div style={{ textAlign: "end" }}>
+                                                {
+                                                    getAllPermissions().includes("Duyệt phiếu nhập") && (
+                                                        <div style={{ textAlign: "end" }} >
+                                                            {detailImport.length > 0 && (detailImport[0].status === '0' ? (<button className="btn btn-sm btn-primary toastrDefaultSuccess" onClick={(e) => handleDStatus()}>Xác nhận</button>)
+                                                                : (detailImport[0].status === '1' ? (<button className="btn btn-sm btn-success toastrDefaultSuccess" onClick={(e) => handleUpdateStatus()}>Hoàn thành</button>)
+                                                                    : <></>
+                                                                ))}
+                                                        </div>
+                                                    )
 
-                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="card-body">
                                     <table id="example1" className="table table-bordered table-striped">
@@ -147,7 +155,7 @@ const DetailImport = (props) => {
                                                         <td>{
                                                             <span className={item.status === '2' ? "badge badge-success" :
                                                                 (item.status === '1' ? 'badge badge-primary' : 'badge badge-secondary')}>
-                                                                {item.status === '2' ? 'Đã duyệt' : (item.status === '1' ? 'Giao hàng' : 'Chờ duyệt')}
+                                                                {item.status === '2' ? 'Hoàn thành' : (item.status === '1' ? 'Đang nhập kho' : 'Chờ duyệt')}
                                                             </span>
                                                         }
                                                         </td>

@@ -378,7 +378,7 @@ const Export = (props) => {
                 <div className="container-fluid">
                     <div className="card card-info card-outline">
                         <div className="card-header">
-                            <h4 className="card-title">Nhập thông tin vật tư</h4>
+                            <h4 className="card-title">Điền thông tin vật tư cần xuất</h4>
                             <div className="card-tools">
                                 <button type="button" className="btn btn-tool" data-card-widget="collapse">
                                     <i className="fas fa-minus" />
@@ -523,7 +523,7 @@ const Export = (props) => {
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-12">
-                            <div className="card card-success card-outline">
+                            <div className="card card-info card-outline">
                                 <div className="card-header">
                                     <h3 className="card-title">Thông tin xuất kho</h3>
                                     <div className="col" style={{ textAlign: "end" }}>

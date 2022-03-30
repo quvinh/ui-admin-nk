@@ -348,12 +348,12 @@ const Inventory = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Phiếu kiểm kê</h1>
+                                <h1>Kiểm kê</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                                    <li className="breadcrumb-item active">Inventory</li>
+                                    <li className="breadcrumb-item active">Kiểm kê</li>
                                 </ol>
                             </div>
                         </div>
@@ -376,7 +376,7 @@ const Inventory = () => {
 
                                     </div>
                                 </div> */}
-                                <div className="card card-success card-outline">
+                                <div className="card card-info card-outline">
                                     <div className="card-header">
                                         <h4 className="card-title">Vật tư</h4>
                                         <div className="card-tools">
@@ -594,7 +594,7 @@ const Inventory = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="card card-warning card-outline">
+                                <div className="card card-info card-outline">
                                     <div className="card-header">
                                         <h4 className="card-title">Danh sách vật tư</h4>
                                         <div className="card-tools">
