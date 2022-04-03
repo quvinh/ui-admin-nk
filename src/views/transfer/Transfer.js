@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { getData, postData } from '../../components/utils/Api'
-import { getRoleNames, getToken, getUserID } from '../../components/utils/Common'
+import { getDataWarehouseID, getRoleNames, getToken, getUserID } from '../../components/utils/Common'
 import Validator from '../../components/utils/Validation'
 import { Autocomplete, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Paper } from '@mui/material'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -354,14 +354,6 @@ const Transfer = () => {
         }
     }
 
-    const getIdWarehouseRole = () => {
-        var nameRole = ''
-        getRoleNames().split(' ').map((item) => {
-            if (!isNaN(item)) nameRole = item
-        })
-        return nameRole
-    }
-
     const alert = () => {
         const compile = document.createElement("script")
         compile.src = $(function () {
@@ -388,7 +380,7 @@ const Transfer = () => {
         Promise.all([
             getData(getRoleNames() === 'admin' ?
                 '/api/admin/items/itemInWarehouse' :
-                '/api/admin/items/searchItem/' + getIdWarehouseRole()),
+                '/api/admin/items/searchItem/' + getDataWarehouseID()[0]),
             getData('/api/admin/warehouse/show/' + getUserID()),
             getData('/api/admin/warehouse'),
             getData('/api/auth/user-profile')
@@ -401,7 +393,7 @@ const Transfer = () => {
                 setDataToWarehouse(res[1].data)
                 setCreatedBy(res[2].data[0].fullname)
                 if (getRoleNames() !== 'admin') {
-                    setFromWarehouse(getIdWarehouseRole())
+                    setFromWarehouse(getDataWarehouseID()[0])
                     // getDataShelf(getIdWarehouseRole())
                     setIsFromWarehouseSelected(true)
                     setShowWarehouse(true)

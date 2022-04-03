@@ -55,7 +55,7 @@ const EditAccount = (props) => {
             getData('/api/auth/get-user/' + props.match.params.id),
             getData('/api/admin/auth_model/roles'),
             getData('/api/admin/warehouse'),
-            getData('/api/auth/get-user/' + getUserID())
+            getData('/api/admin/warehouse/managerWarehouse/' + props.match.params.id),
         ])
             .then(function (res) {
                 // console.log(res)
@@ -63,7 +63,8 @@ const EditAccount = (props) => {
                 setRoleID(res[0].role_id)
                 setRoles(res[1].data)
                 setDataWarehouse(res[2].data)
-                setIsCheckedWarehouse(res[2].data.map(item => item.id))
+                console.log(res[2].data.map(item => item.id))
+                setIsCheckedWarehouse(res[3].data.map(item => item.warehouse_id))
             })
             .catch(error => {
 

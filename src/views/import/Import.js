@@ -122,7 +122,7 @@ const Import = () => {
                     setCategory(item.category_id)
                     setUnit(item.unit)
                     setName(item.name)
-                    setIsWarehouseSelected(false)
+                    setIsWarehouseSelected(true)
                     setIsItemSelected(true)
                 }
             })
